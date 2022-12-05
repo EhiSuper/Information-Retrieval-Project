@@ -1,5 +1,7 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject;
 
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -41,13 +43,18 @@ public class Index {
         this.documentIndex = documentIndex;
     }
 
+
+
+
     public void processCollection(String file, String outputFile){
         try {
             File myFile = new File(file);
-            Scanner myReader = new Scanner(myFile);
+            Scanner myReader = new Scanner(myFile, "UTF-8");
             while (myReader.hasNextLine()) {
-                String document = myReader.nextLine();
-                invertedIndex.createIndex(document, lexicon, documentIndex);
+                String[] line = myReader.nextLine().split("\t",2);
+                int docNo = Integer.parseInt(line[0]);
+                String document = TextPreprocessing.parse(line[1]);
+                invertedIndex.createIndex(document, docNo, lexicon, documentIndex);
             }
             myReader.close();
         } catch (FileNotFoundException e) {

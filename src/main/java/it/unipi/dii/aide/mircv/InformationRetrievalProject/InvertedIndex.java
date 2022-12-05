@@ -3,6 +3,7 @@ package it.unipi.dii.aide.mircv.InformationRetrievalProject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,8 +12,8 @@ public class InvertedIndex {
     public int blockCounter = 0;
     public HashMap<String, ArrayList<Posting>> index = new HashMap<>();
 
-    public void createIndex(String document, Lexicon lexicon, DocumentIndex documentIndex){
-        if (getMemoryUsage() >= 17){
+    public void createIndex(String document, int docNo, Lexicon lexicon, DocumentIndex documentIndex){
+        if (getMemoryUsage() >= 30 ){
             writeBlock(lexicon.sortLexicon());
             lexicon.lexicon = new HashMap<>();
             index = new HashMap<>();
@@ -58,7 +59,7 @@ public class InvertedIndex {
         }
 
         try {
-            FileWriter myWriter = new FileWriter("Data/Output/block" + blockCounter + ".txt");
+            FileWriter myWriter = new FileWriter("Data/Output/block" + blockCounter + ".txt", StandardCharsets.UTF_8);
             for (String term : sortedTerms){
                 myWriter.write(term + "" + index.get(term) + "\n");
             }

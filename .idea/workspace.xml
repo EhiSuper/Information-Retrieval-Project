@@ -5,150 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Start">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Data/Output/block0.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block10.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block100.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block101.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block102.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block103.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block104.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block105.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block106.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block107.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block108.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block109.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block11.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block110.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block111.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block112.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block113.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block114.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block115.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block116.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block117.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block118.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block119.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block12.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block120.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block121.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block122.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block123.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block124.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block125.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block126.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block127.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block128.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block129.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block13.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block130.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block131.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block132.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block133.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block134.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block14.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block15.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block16.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block17.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block18.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block19.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block20.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block21.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block22.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block23.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block24.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block25.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block26.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block27.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block28.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block29.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block30.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block31.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block32.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block33.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block34.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block35.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block36.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block37.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block38.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block39.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block4.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block40.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block41.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block42.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block43.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block44.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block45.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block46.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block47.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block48.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block49.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block5.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block50.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block51.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block52.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block53.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block54.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block55.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block56.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block57.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block58.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block59.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block6.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block60.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block61.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block62.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block63.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block64.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block65.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block66.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block67.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block68.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block69.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block7.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block70.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block71.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block72.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block73.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block74.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block75.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block76.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block77.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block78.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block79.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block8.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block80.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block81.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block82.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block83.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block84.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block85.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block86.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block87.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block88.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block89.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block9.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block90.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block91.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block92.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block93.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block94.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block95.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block96.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block97.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block98.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/block99.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/document_collection.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/DocumentIndex.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Index.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/InvertedIndex.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Lexicon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Posting.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/test.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/Stemmer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/StopWordsRemover.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/TextPreprocessing.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Index.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/InvertedIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/InvertedIndex.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,27 +41,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propDebugger&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "/Users/massalore/Development /Github/Information-Retrieval-Project",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Indexing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="19" />
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing" />
-      <module name="Information Retrieval Project" />
-      <option name="PROGRAM_PARAMETERS" value="Data/document_collection.txt Data/Output/inverted_index.txt" />
+      <module name="Information-Retrieval-Project" />
+      <option name="PROGRAM_PARAMETERS" value="Data/test.tsv Data/Output/inverted_index.txt" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.*" />
+          <option name="PATTERN" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
