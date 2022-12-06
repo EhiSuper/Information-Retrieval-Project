@@ -62,9 +62,9 @@ public class Index {
             e.printStackTrace();
         }
 
-        lexicon.sortLexicon();
         invertedIndex.writeBlock(lexicon.sortLexicon());
         invertedIndex.index = new HashMap<>();
+        lexicon.lexicon = new HashMap<>();
         invertedIndex.blockCounter += 1;
         System.gc();
 

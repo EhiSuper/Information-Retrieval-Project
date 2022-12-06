@@ -9,19 +9,20 @@ public class Lexicon {
     public HashMap<String, PostingListInformation> lexicon = new HashMap<>();
 
     class PostingListInformation{
-        public int postingListOffset;
+        public int postingListOffsetDocId;
+        public int postingListOffsetFreq;
         public int postingListLength;
 
         public PostingListInformation(){
 
         }
 
-        public int getPostingListOffset() {
-            return postingListOffset;
+        public int getPostingListOffsetDocId() {
+            return postingListOffsetDocId;
         }
 
         public void setPostingListOffset(int postingListOffset) {
-            this.postingListOffset = postingListOffset;
+            this.postingListOffsetDocId = postingListOffset;
         }
 
         public int getPostingListLength() {
@@ -30,6 +31,12 @@ public class Lexicon {
 
         public void setPostingListLength(int postingListLength) {
             this.postingListLength = postingListLength;
+        }
+
+        public int getPostingListOffsetFreq() { return postingListOffsetFreq; }
+
+        public void setPostingListOffsetFreq(int postingListOffsetFreq) {
+            this.postingListOffsetFreq = postingListOffsetFreq;
         }
     }
 

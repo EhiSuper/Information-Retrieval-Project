@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InvertedIndex {
-    public static int docId = 0;
+    public int docId = 0;
     public int blockCounter = 0;
     public HashMap<String, ArrayList<Posting>> index = new HashMap<>();
 
@@ -21,7 +21,7 @@ public class InvertedIndex {
             System.gc();
         }
         String[] terms = document.split(" ");
-        InvertedIndex.docId += 1;
+        docId += 1;
         HashMap<String, Integer> counter = new HashMap<>();
         for (String term : terms){
             counter.put(term, counter.containsKey(term) ? counter.get(term) + 1 : 1);

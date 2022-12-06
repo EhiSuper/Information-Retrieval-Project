@@ -5,15 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Start">
-      <change afterPath="$PROJECT_DIR$/Data/Output/block0.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/test.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/Stemmer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/StopWordsRemover.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/TextPreprocessing.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Index.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/InvertedIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/InvertedIndex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Lexicon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Lexicon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,20 +36,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "/Users/massalore/Development /Github/Information-Retrieval-Project",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/massalore/Development /Github/Information-Retrieval-Project&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Indexing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="19" />
