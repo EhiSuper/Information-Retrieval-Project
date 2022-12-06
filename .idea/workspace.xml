@@ -5,10 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Start">
+      <change afterPath="$PROJECT_DIR$/Data/Output/block0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block10.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block11.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block12.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block13.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block14.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block15.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block16.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block17.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block18.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block19.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block20.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block21.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block3.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block4.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block5.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block6.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block7.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block8.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/block9.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/InvertedIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/InvertedIndex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Lexicon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Lexicon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/TextPreprocessing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/TextPreprocessing.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
