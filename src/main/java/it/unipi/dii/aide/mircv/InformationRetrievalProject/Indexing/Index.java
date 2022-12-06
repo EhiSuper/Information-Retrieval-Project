@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.InformationRetrievalProject;
+package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
 
@@ -62,7 +62,7 @@ public class Index {
             e.printStackTrace();
         }
 
-        invertedIndex.writeBlock(lexicon.sortLexicon());
+        invertedIndex.writeBlock(lexicon, lexicon.sortLexicon());
         invertedIndex.index = new HashMap<>();
         lexicon.lexicon = new HashMap<>();
         invertedIndex.blockCounter += 1;

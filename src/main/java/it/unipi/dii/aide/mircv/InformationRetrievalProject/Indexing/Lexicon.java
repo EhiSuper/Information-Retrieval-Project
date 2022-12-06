@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.InformationRetrievalProject;
+package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +37,11 @@ public class Lexicon {
 
         public void setPostingListOffsetFreq(int postingListOffsetFreq) {
             this.postingListOffsetFreq = postingListOffsetFreq;
+        }
+
+        @Override
+        public String toString() {
+            return "[ " + postingListOffsetDocId + " " + postingListOffsetFreq + " " + postingListLength + " ]";
         }
     }
 

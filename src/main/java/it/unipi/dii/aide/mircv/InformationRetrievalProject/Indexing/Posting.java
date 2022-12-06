@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.InformationRetrievalProject;
+package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 
 public class Posting {
 
