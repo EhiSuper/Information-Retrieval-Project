@@ -1,6 +1,6 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 
-public class Indexing {
+public class main {
     public static void main(String[] args) {
 
         System.out.println("Welcome");

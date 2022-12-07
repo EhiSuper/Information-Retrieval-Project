@@ -8,12 +8,10 @@ public class DocumentIndex {
 
     class DocumentInformation{
         public int docNo;
-        public String URL;
         public int size;
 
         public DocumentInformation(int docNo, String URL, int size) {
             this.docNo = docNo;
-            this.URL = URL;
             this.size = size;
         }
 
@@ -23,14 +21,6 @@ public class DocumentIndex {
 
         public void setDocNo(int docNo) {
             this.docNo = docNo;
-        }
-
-        public String getURL() {
-            return URL;
-        }
-
-        public void setURL(String URL) {
-            this.URL = URL;
         }
 
         public int getSize() {

@@ -12,7 +12,7 @@ public class InvertedIndex {
     public HashMap<String, ArrayList<Posting>> index = new HashMap<>();
 
     public void createIndex(String document, int docNo, Lexicon lexicon, DocumentIndex documentIndex){
-        if (getMemoryUsage() >= 13 ){
+        if (getMemoryUsage() >= 75 ){
             writeBlock(lexicon, lexicon.sortLexicon());
             lexicon.lexicon = new HashMap<>();
             index = new HashMap<>();
