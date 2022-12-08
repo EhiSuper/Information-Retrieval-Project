@@ -4,13 +4,20 @@ import java.util.HashMap;
 
 public class DocumentIndex {
 
-    public HashMap<Integer, DocumentInformation> index;
+    public HashMap<Integer, DocumentInformation> documentIndex;
+
+    public DocumentIndex(){
+        documentIndex = new HashMap<>();
+    }
+
+    public void setDocumentIndex(HashMap<Integer, DocumentInformation> documentIndex){ this.documentIndex = documentIndex;}
+    public HashMap<Integer, DocumentInformation> getDocumentIndex(){ return this.documentIndex; }
 
     class DocumentInformation{
         public int docNo;
         public int size;
 
-        public DocumentInformation(int docNo, String URL, int size) {
+        public DocumentInformation(int docNo, int size) {
             this.docNo = docNo;
             this.size = size;
         }
@@ -31,4 +38,9 @@ public class DocumentIndex {
             this.size = size;
         }
     }
+
+    public void addDocument(int docId, int docNo, int size ){
+        documentIndex.put(docId, new DocumentInformation(docNo, size));
+    }
+
 }

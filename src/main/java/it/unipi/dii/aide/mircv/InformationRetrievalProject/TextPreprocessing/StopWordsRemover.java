@@ -1,9 +1,10 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class StopWordsRemover {
-    static String[] stopWords = { "a", "about", "above", "across", "after", "again",
+    static List<String> stopWords = Arrays.asList( "a", "about", "above", "across", "after", "again",
             "against", "all", "almost", "alone", "along", "already", "also",
             "although", "always", "among", "an", "and", "another", "any",
             "anybody", "anyone", "anything", "anywhere", "are", "area",
@@ -62,12 +63,18 @@ public class StopWordsRemover {
             "who", "whole", "whose", "why", "will", "with", "within",
             "without", "work", "worked", "working", "works", "would", "x", "y",
             "year", "years", "yet", "you", "young", "younger", "youngest",
-            "your", "yours", "z" };
+            "your", "yours", "z");
 
     public static String removeStopWords(String document){
-        for(String stop : stopWords){
-            document = document.replaceAll("\\b"+ stop + "\\b","");
+        StringBuilder result = new StringBuilder(); //StringBuilder to rebuild the document after split and stemming
+        String[] tokens = document.split(" "); //Split the string using " " as splitter
+
+        for(String token : tokens){
+            if(!stopWords.contains(token)){
+                result.append(token).append(" ");
+            }
         }
-        return document;
+
+        return result.toString();
     }
 }

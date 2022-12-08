@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class Lexicon {
 
-    public HashMap<String, PostingListInformation> lexicon = new HashMap<>();
+    private HashMap<String, PostingListInformation> lexicon = new HashMap<>();
 
     class PostingListInformation{
         public int postingListOffsetDocId;
@@ -44,6 +44,9 @@ public class Lexicon {
             return "[ " + postingListOffsetDocId + " " + postingListOffsetFreq + " " + postingListLength + " ]";
         }
     }
+
+    public void setLexicon(HashMap<String, PostingListInformation> lexicon){ this.lexicon = lexicon; }
+    public HashMap<String, PostingListInformation> getLexicon(){ return lexicon; }
 
     public void addTerm(String term){
         if(!lexicon.containsKey(term)){
