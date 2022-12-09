@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -52,10 +53,10 @@ public class Index {
 
 
 
-    public void processCollection(String file, String outputFile){
+    public void processCollection(String file){
         try{
             File myFile = new File(file);
-            Scanner myReader = new Scanner(myFile, "UTF-8");
+            Scanner myReader = new Scanner(myFile, StandardCharsets.UTF_8);
             while (myReader.hasNextLine()) {
                 String[] line = myReader.nextLine().split("\t",2); //Read the line and split it (cause the line is composed by (docNo \t document))
 
@@ -68,6 +69,8 @@ public class Index {
         }catch (FileNotFoundException e) {
             System.out.println("The specified file is not found. Please try again.");
             e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         writeBlock(lexicon, lexicon.sortLexicon());
@@ -76,11 +79,11 @@ public class Index {
         blockCounter += 1;
         System.gc();
 
-        mergeBlocks(outputFile);
+        mergeBlocks();
     }
 
     public void createIndex(String document, int docNo){
-        if (Utils.getMemoryUsage() >= 75 ){
+        if (Utils.getMemoryUsage() >= 17 ){
             writeBlock(lexicon, lexicon.sortLexicon());
             lexicon.setLexicon(new HashMap<>());
             invertedIndex.setInvertedIndex(new HashMap<>());
@@ -114,16 +117,12 @@ public class Index {
                 lexicon.getLexicon().get(term).setPostingListOffset(offsetDocId);
                 lexicon.getLexicon().get(term).setPostingListOffsetFreq(offsetFreq);
                 myWriterLexicon.write(term + " " + lexicon.getLexicon().get(term).toString() + "\n");
-                myWriterDocIds.write(term + " ");
-                myWriterFreq.write(term + " ");
                 for (Posting posting : invertedIndex.getInvertedIndex().get(term)){
-                    myWriterDocIds.write(String.valueOf(posting.getDocId()) + " ");
-                    myWriterFreq.write(String.valueOf(posting.getFreq()) + " ");
+                    myWriterDocIds.write(posting.getDocId() + " ");
+                    myWriterFreq.write(posting.getFreq() + " ");
                     offsetDocId += 1;
                     offsetFreq += 1;
                 }
-                myWriterDocIds.write("\n");
-                myWriterFreq.write("\n");
             }
             myWriterDocIds.close();
             myWriterFreq.close();
@@ -135,8 +134,113 @@ public class Index {
         }
     }
 
-    public void mergeBlocks(String outputFile){
+    public void mergeBlocks(){
+        Scanner[] lexiconScanners = new Scanner[blockCounter];
+        Scanner[] docIdsScanners = new Scanner[blockCounter];
+        Scanner[] freqScanners = new Scanner[blockCounter];
+        String[][] terms = new String[blockCounter][];
+        boolean[] scannerToRead = new boolean[blockCounter];
+        boolean[] scannerFinished = new boolean[blockCounter];
+        for(int i = 0; i<blockCounter; i++){
+            scannerToRead[i] = true;
+            scannerFinished[i] = false;
+        }
+        int localPostingListLength;
+        int postingListLength;
+        int offsetDocIds = 0;
+        int offsetFreq = 0;
+        String minTerm;
 
+        createFinalFiles();
+        try{
+            FileWriter lexiconWriter = new FileWriter("Data/Output/Lexicon/lexicon.txt");
+            FileWriter docIdsWriter = new FileWriter("Data/Output/DocIds/docIds.txt");
+            FileWriter freqWriter = new FileWriter("Data/Output/Frequencies/freq.txt");
+            initializeScanners(lexiconScanners, docIdsScanners, freqScanners);
+
+            while(true){
+                advancePointers(lexiconScanners, scannerToRead, terms, scannerFinished);
+                if(!continueMerging(scannerFinished)){break;}
+                minTerm = minTerm(terms, scannerFinished);
+                postingListLength = 0;
+                lexiconWriter.write(minTerm + " " + offsetDocIds + " " + offsetFreq + " ");
+                for(int i = 0; i<blockCounter; i++){
+                    if(terms[i][0].equals(minTerm)){
+                        scannerToRead[i] = true;
+                        localPostingListLength = Integer.parseInt(terms[i][3]);
+                        postingListLength += localPostingListLength;
+                        for(int j = 0; j<localPostingListLength; j++){
+                            docIdsWriter.write(docIdsScanners[i].next() + " ");
+                            offsetDocIds += 1; // successivamente sarà la dimensione scritta in bytes.
+                            freqWriter.write(freqScanners[i].next() + " ");
+                            offsetFreq += 1;
+                        }
+                    }
+                    else{
+                        scannerToRead[i] = false;
+                    }
+                }
+                lexiconWriter.write(postingListLength + "\n");
+            }
+            lexiconWriter.close();
+            docIdsWriter.close();
+            freqWriter.close();
+            closeScanners(lexiconScanners, docIdsScanners, freqScanners);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public boolean continueMerging(boolean[] scannerFinished){
+        boolean continueMerging;
+        continueMerging = false;
+        for(int i = 0; i<blockCounter; i++){
+            if (!scannerFinished[i]) {
+                continueMerging = true;
+                break;
+            }
+        }
+        return continueMerging;
+    }
+
+    public void advancePointers(Scanner[] lexiconScanners, boolean[] scannerToRead, String[][] terms, boolean[] scannerFinished){
+        for(int i = 0; i<blockCounter; i++){
+            if(scannerToRead[i]) {
+                if(lexiconScanners[i].hasNextLine()){
+                    terms[i] = lexiconScanners[i].nextLine().split(" ");
+                }
+                else{
+                    scannerFinished[i] = true;
+                }
+            }
+        }
+    }
+
+    public void initializeScanners(Scanner[] lexiconScanners, Scanner[] docIdsScanners, Scanner[] freqScanners) throws IOException {
+        for(int i = 0; i<blockCounter; i++){
+            lexiconScanners[i] = new Scanner(new File("Data/Output/Lexicon/lexicon" + i + ".txt"));
+            docIdsScanners[i] = new Scanner(new File("Data/Output/DocIds/docIds" + i + ".txt"));
+            freqScanners[i] = new Scanner(new File("Data/Output/Frequencies/freq" + i + ".txt"));
+        }
+    }
+
+    public void closeScanners(Scanner[] lexiconScanners, Scanner[] docIdsScanners, Scanner[] freqScanners) throws IOException {
+        for (int i = 0; i<blockCounter; i++){
+            lexiconScanners[i].close();
+            docIdsScanners[i].close();
+            freqScanners[i].close();
+        }
+    }
+
+    public String minTerm(String[][] terms, boolean[] scannerFinished){
+        String minTerm = "}";
+        for(int i=0; i<blockCounter; i++){
+            if(terms[i][0].compareTo(minTerm) < 0 && !scannerFinished[i]){
+                minTerm = terms[i][0];
+            }
+        }
+        return minTerm;
     }
 
     public void createFileBlock (){
@@ -166,6 +270,44 @@ public class Index {
 
         try {
             File myObj = new File("Data/Output/Lexicon/lexicon" + blockCounter + ".txt");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred during the creation of the output file.");
+            e.printStackTrace();
+        }
+    }
+
+    public void createFinalFiles(){
+        try {
+            File myObj = new File("Data/Output/DocIds/docIds.txt");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred during the creation of the output file.");
+            e.printStackTrace();
+        }
+
+        try {
+            File myObj = new File("Data/Output/Frequencies/freq.txt");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred during the creation of the output file.");
+            e.printStackTrace();
+        }
+
+        try {
+            File myObj = new File("Data/Output/Lexicon/lexicon.txt");
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
             } else {

@@ -5,9 +5,8 @@ public class main {
 
         System.out.println("Welcome");
         String file = args[0];
-        String outputFile = args[1];
 
         Index index = new Index();
-        index.processCollection(file, outputFile);
+        index.processCollection(file);
     }
 }

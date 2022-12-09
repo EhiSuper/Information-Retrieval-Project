@@ -4,19 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Start">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/Scoring/BM25.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/Scoring/ScoringFunction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Utils.java" afterDir="false" />
+    <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Added merging of blocks">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/DocumentIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/DocumentIndex.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/InvertedIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/InvertedIndex.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Lexicon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Lexicon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/QueryProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/QueryProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/Stemmer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/Stemmer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/StopWordsRemover.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/StopWordsRemover.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/TextPreprocessing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/TextPreprocessing.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,10 +24,18 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="compression-encoding-decoding" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2GP6QXzkE4feltDENSu595lK1G8" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -45,21 +45,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/utente/Desktop/Information-Retrieval-Project",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/utente/Desktop/Information-Retrieval-Project&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\utente\Desktop\Information-Retrieval-Project\Data\Output" />
@@ -74,6 +74,19 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Indexing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Indexing" />
+      <module name="Information Retrieval Project" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -96,7 +109,7 @@
     </configuration>
     <configuration name="main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.main" />
-      <module name="Information-Retrieval-Project" />
+      <module name="Information Retrieval Project" />
       <option name="PROGRAM_PARAMETERS" value="Data/test.tsv Data/Output/inverted_index.txt" />
       <extension name="coverage">
         <pattern>
@@ -109,6 +122,7 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Indexing" />
       <item itemvalue="Application.it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.main" />
       <item itemvalue="Application.main" />
       <item itemvalue="Application.Indexing" />
@@ -116,8 +130,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.main" />
+        <item itemvalue="Application.Indexing" />
         <item itemvalue="Application.it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.main" />
         <item itemvalue="Application.Indexing" />
+        <item itemvalue="Application.main" />
       </list>
     </recent_temporary>
   </component>
@@ -173,7 +189,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="compression-encoding-decoding" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -182,7 +210,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Start" />
-    <option name="LAST_COMMIT_MESSAGE" value="Start" />
+    <MESSAGE value="Added merging of blocks" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added merging of blocks" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

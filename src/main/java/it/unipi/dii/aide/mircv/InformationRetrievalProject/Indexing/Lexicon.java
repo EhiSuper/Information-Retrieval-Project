@@ -41,7 +41,7 @@ public class Lexicon {
 
         @Override
         public String toString() {
-            return "[ " + postingListOffsetDocId + " " + postingListOffsetFreq + " " + postingListLength + " ]";
+            return postingListOffsetDocId + " " + postingListOffsetFreq + " " + postingListLength;
         }
     }
 

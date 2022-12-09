@@ -16,9 +16,7 @@ public class TextPreprocessing {
         }
         if(STEMMING){
             document = Stemmer.stemming(document); //Apply stemming
-
         }
-
 
         return document;
     }
