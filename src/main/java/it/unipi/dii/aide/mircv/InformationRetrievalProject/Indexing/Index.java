@@ -2,10 +2,7 @@ package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Utils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +16,13 @@ public class Index {
     public InvertedIndex invertedIndex;
     public Lexicon lexicon;
     public DocumentIndex documentIndex;
+    public FileManager fileManager;
 
     public Index(){
         this.invertedIndex = new InvertedIndex();
         this.lexicon = new Lexicon();
         this.documentIndex = new DocumentIndex();
+        this.fileManager = new FileManager();
     }
 
     public InvertedIndex getInvertedIndex() {
@@ -50,8 +49,13 @@ public class Index {
         this.documentIndex = documentIndex;
     }
 
+    public FileManager getFileManager() {
+        return fileManager;
+    }
 
-
+    public void setFileManager(FileManager fileManager) {
+        this.fileManager = fileManager;
+    }
 
     public void processCollection(String file){
         try{
@@ -62,7 +66,6 @@ public class Index {
 
                 int docNo = Integer.parseInt(line[0]); //Get docNo
                 String document = TextPreprocessing.parse(line[1]); //Get document
-                //invertedIndex.createIndex(document, docNo, lexicon, documentIndex);
                 createIndex(document, docNo);
             }
             myReader.close();
@@ -73,71 +76,65 @@ public class Index {
             throw new RuntimeException(e);
         }
 
-        writeBlock(lexicon, lexicon.sortLexicon());
+        writeBlock(lexicon, lexicon.sortLexicon(), documentIndex.sortDocumentIndex());
         invertedIndex.setInvertedIndex(new HashMap<>());
         lexicon.setLexicon(new HashMap<>());
+        documentIndex.setDocumentIndex(new HashMap<>());
         blockCounter += 1;
         System.gc();
 
         mergeBlocks();
+        String[] query = {"00"};
+        lookup(query);
     }
 
     public void createIndex(String document, int docNo){
-        if (Utils.getMemoryUsage() >= 17 ){
-            writeBlock(lexicon, lexicon.sortLexicon());
+        if (Utils.getMemoryUsage() >= 50 ){
+            writeBlock(lexicon, lexicon.sortLexicon(), documentIndex.sortDocumentIndex());
             lexicon.setLexicon(new HashMap<>());
             invertedIndex.setInvertedIndex(new HashMap<>());
+            documentIndex.setDocumentIndex(new HashMap<>());
             blockCounter += 1;
             System.gc();
         }
         String[] terms = document.split(" ");
-        docId += 1;
         HashMap<String, Integer> counter = new HashMap<>();
         for (String term : terms){
             counter.put(term, counter.containsKey(term) ? counter.get(term) + 1 : 1);
         }
         for (String term : counter.keySet()) {
-            lexicon.addTerm(term);
+            lexicon.addInformation(term, 0, 0, 0);
             invertedIndex.addPosting(term, docId, counter.get(term));
         }
         documentIndex.addDocument(docId, docNo, terms.length);
+        docId += 1;
     }
 
 
-    public void writeBlock(Lexicon lexicon, ArrayList<String> sortedTerms){
-        createFileBlock();
-        int offsetDocId = 0;
-        int offsetFreq = 0;
-        try {
-            FileWriter myWriterDocIds = new FileWriter("Data/Output/DocIds/docIds" + blockCounter + ".txt");
-            FileWriter myWriterFreq = new FileWriter("Data/Output/Frequencies/freq" + blockCounter + ".txt");
-            FileWriter myWriterLexicon = new FileWriter("Data/Output/Lexicon/lexicon" + blockCounter + ".txt");
-            for (String term : sortedTerms){
-                lexicon.getLexicon().get(term).setPostingListLength(invertedIndex.getInvertedIndex().get(term).size());
-                lexicon.getLexicon().get(term).setPostingListOffset(offsetDocId);
-                lexicon.getLexicon().get(term).setPostingListOffsetFreq(offsetFreq);
-                myWriterLexicon.write(term + " " + lexicon.getLexicon().get(term).toString() + "\n");
-                for (Posting posting : invertedIndex.getInvertedIndex().get(term)){
-                    myWriterDocIds.write(posting.getDocId() + " ");
-                    myWriterFreq.write(posting.getFreq() + " ");
-                    offsetDocId += 1;
-                    offsetFreq += 1;
-                }
-            }
-            myWriterDocIds.close();
-            myWriterFreq.close();
-            myWriterLexicon.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+    public void writeBlock(Lexicon lexicon, ArrayList<String> sortedTerms, ArrayList<Integer> sortedDocIds){
+        fileManager.createBlockFiles(blockCounter);
+        fileManager.openBlockFiles(blockCounter);
+        for(Integer docId : sortedDocIds){
+            fileManager.writeOnFile(fileManager.getMyWriterDocumentIndex(), String.valueOf(docId) + " " + documentIndex.getDocumentIndex().get(docId) + "\n");
+            fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), docId);
+            fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), documentIndex.getDocumentIndex().get(docId).getDocNo());
+            fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), documentIndex.getDocumentIndex().get(docId).getSize());
         }
+        for (String term : sortedTerms){
+            lexicon.getLexicon().get(term).setPostingListLength(invertedIndex.getInvertedIndex().get(term).size());
+            fileManager.writeOnFile(fileManager.getMyWriterLexicon(), term + " " + lexicon.getLexicon().get(term).toString() + "\n");
+            for (Posting posting : invertedIndex.getInvertedIndex().get(term)){
+                fileManager.writeOnFile(fileManager.getMyWriterDocIds(), posting.getDocId() + " ");
+                fileManager.writeOnFile(fileManager.getMyWriterDocIdsEncoded(), posting.getDocId());
+                fileManager.writeOnFile(fileManager.getMyWriterFreq(), posting.getFreq() + " ");
+                fileManager.writeOnFile(fileManager.getMyWriterFreqEncoded(), posting.getFreq());
+            }
+        }
+        fileManager.closeBlockFiles();
+        System.out.println("Successfully wrote to the files.");
     }
 
     public void mergeBlocks(){
-        Scanner[] lexiconScanners = new Scanner[blockCounter];
-        Scanner[] docIdsScanners = new Scanner[blockCounter];
-        Scanner[] freqScanners = new Scanner[blockCounter];
         String[][] terms = new String[blockCounter][];
         boolean[] scannerToRead = new boolean[blockCounter];
         boolean[] scannerFinished = new boolean[blockCounter];
@@ -151,45 +148,50 @@ public class Index {
         int offsetFreq = 0;
         String minTerm;
 
-        createFinalFiles();
-        try{
-            FileWriter lexiconWriter = new FileWriter("Data/Output/Lexicon/lexicon.txt");
-            FileWriter docIdsWriter = new FileWriter("Data/Output/DocIds/docIds.txt");
-            FileWriter freqWriter = new FileWriter("Data/Output/Frequencies/freq.txt");
-            initializeScanners(lexiconScanners, docIdsScanners, freqScanners);
-
-            while(true){
-                advancePointers(lexiconScanners, scannerToRead, terms, scannerFinished);
-                if(!continueMerging(scannerFinished)){break;}
-                minTerm = minTerm(terms, scannerFinished);
-                postingListLength = 0;
-                lexiconWriter.write(minTerm + " " + offsetDocIds + " " + offsetFreq + " ");
-                for(int i = 0; i<blockCounter; i++){
-                    if(terms[i][0].equals(minTerm)){
-                        scannerToRead[i] = true;
-                        localPostingListLength = Integer.parseInt(terms[i][3]);
-                        postingListLength += localPostingListLength;
-                        for(int j = 0; j<localPostingListLength; j++){
-                            docIdsWriter.write(docIdsScanners[i].next() + " ");
-                            offsetDocIds += 1; // successivamente sarà la dimensione scritta in bytes.
-                            freqWriter.write(freqScanners[i].next() + " ");
-                            offsetFreq += 1;
-                        }
-                    }
-                    else{
-                        scannerToRead[i] = false;
+        fileManager.createFinalFiles();
+        fileManager.openScanners(blockCounter);
+        fileManager.openMergeFiles();
+        for(int i = 0; i<blockCounter; i++){
+            while(fileManager.getDocumentIndexScanners()[i].hasNextLine()){
+                fileManager.writeLineOnFile(fileManager.getMyWriterDocumentIndex(), fileManager.readLineFromFile(fileManager.getDocumentIndexScanners()[i]));
+                for(int j = 0; j<3; j++) // 3 times because a documentIndex is saved as 3 int.
+                {
+                    fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), fileManager.readFromFile(fileManager.getDocumentIndexEncodedScanners()[i]));
+                }
+            }
+        }
+        while(true){
+            advancePointers(fileManager.getLexiconScanners(), scannerToRead, terms, scannerFinished);
+            if(!continueMerging(scannerFinished)){break;}
+            minTerm = minTerm(terms, scannerFinished);
+            postingListLength = 0;
+            fileManager.writeOnFile(fileManager.getMyWriterLexicon(), minTerm + " " + offsetDocIds + " " + offsetFreq + " ");
+            for(int i = 0; i<blockCounter; i++){
+                if(terms[i][0].equals(minTerm)){
+                    scannerToRead[i] = true;
+                    localPostingListLength = Integer.parseInt(terms[i][3]);
+                    postingListLength += localPostingListLength;
+                    for(int j = 0; j<localPostingListLength; j++){
+                        fileManager.writeOnFile(fileManager.getMyWriterDocIds(),
+                                fileManager.readFromFile(fileManager.getDocIdsScanners()[i]) + " ");
+                        fileManager.writeOnFile(fileManager.getMyWriterDocIdsEncoded(),
+                                fileManager.readFromFile(fileManager.getDocIdsEncodedScanners()[i]));
+                        offsetDocIds += 4;
+                        fileManager.writeOnFile(fileManager.getMyWriterFreq(),
+                                fileManager.readFromFile(fileManager.getFreqScanners()[i]) + " ");
+                        fileManager.writeOnFile(fileManager.getMyWriterFreqEncoded(),
+                                fileManager.readFromFile(fileManager.getFreqEncodedScanners()[i]));
+                        offsetFreq += 4;
                     }
                 }
-                lexiconWriter.write(postingListLength + "\n");
+                else{
+                    scannerToRead[i] = false;
+                }
             }
-            lexiconWriter.close();
-            docIdsWriter.close();
-            freqWriter.close();
-            closeScanners(lexiconScanners, docIdsScanners, freqScanners);
+            fileManager.writeOnFile(fileManager.getMyWriterLexicon(), postingListLength + "\n");
         }
-        catch (IOException e){
-            e.printStackTrace();
-        }
+        fileManager.closeMergeFiles();
+        fileManager.closeScanners();
     }
 
     public boolean continueMerging(boolean[] scannerFinished){
@@ -217,22 +219,6 @@ public class Index {
         }
     }
 
-    public void initializeScanners(Scanner[] lexiconScanners, Scanner[] docIdsScanners, Scanner[] freqScanners) throws IOException {
-        for(int i = 0; i<blockCounter; i++){
-            lexiconScanners[i] = new Scanner(new File("Data/Output/Lexicon/lexicon" + i + ".txt"));
-            docIdsScanners[i] = new Scanner(new File("Data/Output/DocIds/docIds" + i + ".txt"));
-            freqScanners[i] = new Scanner(new File("Data/Output/Frequencies/freq" + i + ".txt"));
-        }
-    }
-
-    public void closeScanners(Scanner[] lexiconScanners, Scanner[] docIdsScanners, Scanner[] freqScanners) throws IOException {
-        for (int i = 0; i<blockCounter; i++){
-            lexiconScanners[i].close();
-            docIdsScanners[i].close();
-            freqScanners[i].close();
-        }
-    }
-
     public String minTerm(String[][] terms, boolean[] scannerFinished){
         String minTerm = "}";
         for(int i=0; i<blockCounter; i++){
@@ -243,79 +229,45 @@ public class Index {
         return minTerm;
     }
 
-    public void createFileBlock (){
-        try {
-            File myObj = new File("Data/Output/DocIds/docIds" + blockCounter + ".txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred during the creation of the output file.");
-            e.printStackTrace();
-        }
-
-        try {
-            File myObj = new File("Data/Output/Frequencies/freq" + blockCounter + ".txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred during the creation of the output file.");
-            e.printStackTrace();
-        }
-
-        try {
-            File myObj = new File("Data/Output/Lexicon/lexicon" + blockCounter + ".txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred during the creation of the output file.");
-            e.printStackTrace();
+    public void obtainLexicon(){
+        String line;
+        String[] terms;
+        while(fileManager.getLexiconScanners()[0].hasNextLine()){
+            line = fileManager.readLineFromFile(fileManager.getLexiconScanners()[0]);
+            terms = line.split(" ");
+            lexicon.addInformation(terms[0], Integer.parseInt(terms[1]), Integer.parseInt(terms[2]), Integer.parseInt(terms[3]));
         }
     }
 
-    public void createFinalFiles(){
-        try {
-            File myObj = new File("Data/Output/DocIds/docIds.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
+    public HashMap<String, ArrayList<Posting>> lookup(String[] queryTerms){
+        int offsetDocId = 0;
+        int offsetFreq = 0;
+        int postingListLength = 0;
+        int docId = 0;
+        int freq = 0;
+        fileManager.openLookupFiles();
+        obtainLexicon();
+        HashMap<String, ArrayList<Posting>> postingLists = new HashMap<>();
+        for(String term : queryTerms){
+            offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
+            offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
+            postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
+            fileManager.goToOffset(fileManager.getDocIdsEncodedScanners()[0], offsetDocId);
+            fileManager.goToOffset(fileManager.getFreqEncodedScanners()[0], offsetFreq);
+            for(int i = 0; i<postingListLength; i++){
+                docId = fileManager.readFromFile(fileManager.getDocIdsEncodedScanners()[0]);
+                freq = fileManager.readFromFile(fileManager.getFreqEncodedScanners()[0]);
+                addPosting(postingLists, term, docId, freq);
             }
-        } catch (IOException e) {
-            System.out.println("An error occurred during the creation of the output file.");
-            e.printStackTrace();
         }
+        fileManager.closeLookupFiles();
+        return postingLists;
+    }
 
-        try {
-            File myObj = new File("Data/Output/Frequencies/freq.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred during the creation of the output file.");
-            e.printStackTrace();
+    public void addPosting(HashMap<String, ArrayList<Posting>> postingLists, String term, int docId, int freq){
+        if (!postingLists.containsKey(term)){
+            postingLists.put(term, new ArrayList<>());
         }
-
-        try {
-            File myObj = new File("Data/Output/Lexicon/lexicon.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred during the creation of the output file.");
-            e.printStackTrace();
-        }
+        postingLists.get(term).add(new Posting(docId, freq));
     }
 }

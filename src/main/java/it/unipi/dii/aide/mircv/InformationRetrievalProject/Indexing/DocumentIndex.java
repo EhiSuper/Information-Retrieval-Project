@@ -1,5 +1,7 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class DocumentIndex {
@@ -37,10 +39,21 @@ public class DocumentIndex {
         public void setSize(int size) {
             this.size = size;
         }
+
+        @Override
+        public String toString() {
+            return docNo + " " + size;
+        }
     }
 
     public void addDocument(int docId, int docNo, int size ){
         documentIndex.put(docId, new DocumentInformation(docNo, size));
+    }
+
+    public ArrayList<Integer> sortDocumentIndex(){
+        ArrayList<Integer> sortedDocIds = new ArrayList<>(documentIndex.keySet());
+        Collections.sort(sortedDocIds);
+        return sortedDocIds;
     }
 
 }

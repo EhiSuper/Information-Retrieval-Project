@@ -4,17 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Start">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/FinalScore.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/PostingListIterator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/Scoring/TFIDF.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Added merging of blocks">
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIds.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIds0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIds0Encoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIdsEncoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndex.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndex0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndex0Encoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndexEncoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freq.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freq0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freq0Encoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freqEncoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Lexicon/lexicon.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Lexicon/lexicon0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Compressor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/QueryProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/QueryProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/Scoring/BM25.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/Scoring/BM25.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/Scoring/ScoringFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/Scoring/ScoringFunction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/TextPreprocessing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/TextPreprocessing/TextPreprocessing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/DocumentIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/DocumentIndex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Index.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/InvertedIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/InvertedIndex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Lexicon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Lexicon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +81,7 @@
       <recent name="C:\Users\utente\Desktop\Information-Retrieval-Project\Data\Output" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.main">
+  <component name="RunManager" selected="Application.main">
     <configuration name="Indexing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="19" />
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing" />
@@ -134,9 +145,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.main" />
         <item itemvalue="Application.main" />
         <item itemvalue="Application.Indexing" />
+        <item itemvalue="Application.it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.main" />
         <item itemvalue="Application.Indexing" />
         <item itemvalue="Application.main" />
       </list>
@@ -186,7 +197,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666350699930</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Added merging of blocks">
+      <created>1670609842922</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1670609842922</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -219,6 +237,14 @@
     <option name="LAST_COMMIT_MESSAGE" value="Added merging of blocks" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.io.EOFException" package="java.io" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="it.unipi.dii.aide.mircv.InformationRetrievalProject.Index" memberName="invertedIndex" />
