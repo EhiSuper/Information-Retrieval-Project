@@ -6,22 +6,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class BM25 {
+public class BM25{
+    private long nDocuments;
+    private long avgDocumentLength;
+    private double k1;
+    private double b;
 
-
-
-
-
-    public static  HashMap<Integer, Double> score(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists){
-        HashMap<Integer, Double> final_scores = new HashMap<>();
-
-
-
-        return null;
+    public BM25(double k1, double b, long nDocuments, long avgDocumentLength){
+        this.nDocuments = nDocuments;
+        this.avgDocumentLength = avgDocumentLength;
+        this.k1 = k1;
+        this.b = b;
     }
 
-
-
-
-
+    public double score(String term, Posting posting){
+        return 0;
+    }
 }

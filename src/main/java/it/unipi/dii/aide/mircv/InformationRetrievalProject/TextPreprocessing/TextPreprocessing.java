@@ -3,7 +3,7 @@ package it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing;
 
 public class TextPreprocessing {
     static Boolean REMOVE_STOPWORDS= true;
-    static Boolean STEMMING= true;
+    static Boolean STEMMING= false;
 
     public static String parse(String document){
         document = document.toLowerCase(); //Lowercase text
