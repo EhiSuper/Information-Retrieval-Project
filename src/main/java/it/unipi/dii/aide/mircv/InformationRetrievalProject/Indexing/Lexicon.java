@@ -13,8 +13,10 @@ public class Lexicon {
         public int postingListOffsetFreq;
         public int postingListLength;
 
-        public PostingListInformation(){
-
+        public PostingListInformation(int postingListOffsetDocId, int postingListOffsetFreq, int postingListLength) {
+            this.postingListOffsetDocId = postingListOffsetDocId;
+            this.postingListOffsetFreq = postingListOffsetFreq;
+            this.postingListLength = postingListLength;
         }
 
         public int getPostingListOffsetDocId() {
@@ -48,9 +50,9 @@ public class Lexicon {
     public void setLexicon(HashMap<String, PostingListInformation> lexicon){ this.lexicon = lexicon; }
     public HashMap<String, PostingListInformation> getLexicon(){ return lexicon; }
 
-    public void addTerm(String term){
+    public void addInformation(String term, int offsetDocIds, int offsetFreq, int postingListLength){
         if(!lexicon.containsKey(term)){
-            lexicon.put(term, new PostingListInformation());
+            lexicon.put(term, new PostingListInformation(offsetDocIds, offsetFreq, postingListLength));
         }
     }
 
