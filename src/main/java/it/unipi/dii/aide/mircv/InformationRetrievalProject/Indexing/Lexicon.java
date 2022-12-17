@@ -8,7 +8,7 @@ public class Lexicon {
 
     private HashMap<String, PostingListInformation> lexicon = new HashMap<>();
 
-    class PostingListInformation{
+    public class PostingListInformation{
         public int postingListOffsetDocId;
         public int postingListOffsetFreq;
         public int postingListLength;

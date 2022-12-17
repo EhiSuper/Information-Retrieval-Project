@@ -64,7 +64,10 @@ public class Index {
             while (myReader.hasNextLine()) {
                 String[] line = myReader.nextLine().split("\t",2); //Read the line and split it (cause the line is composed by (docNo \t document))
 
-                int docNo = Integer.parseInt(line[0]); //Get docNo
+                int docNo;
+                try{
+                    docNo = Integer.parseInt(line[0]); //Get docNo
+                }catch (NumberFormatException e){ continue; }
                 String document = TextPreprocessing.parse(line[1]); //Get document
                 createIndex(document, docNo);
             }
@@ -84,12 +87,10 @@ public class Index {
         System.gc();
 
         mergeBlocks();
-        String[] query = {"00"};
-        lookup(query);
     }
 
     public void createIndex(String document, int docNo){
-        if (Utils.getMemoryUsage() >= 50 ){
+        if (Utils.getMemoryUsage() >= 75 ){
             writeBlock(lexicon, lexicon.sortLexicon(), documentIndex.sortDocumentIndex());
             lexicon.setLexicon(new HashMap<>());
             invertedIndex.setInvertedIndex(new HashMap<>());
@@ -108,6 +109,7 @@ public class Index {
         }
         documentIndex.addDocument(docId, docNo, terms.length);
         docId += 1;
+        System.out.println("Document Processed: " + docId);
     }
 
 
@@ -229,45 +231,5 @@ public class Index {
         return minTerm;
     }
 
-    public void obtainLexicon(){
-        String line;
-        String[] terms;
-        while(fileManager.getLexiconScanners()[0].hasNextLine()){
-            line = fileManager.readLineFromFile(fileManager.getLexiconScanners()[0]);
-            terms = line.split(" ");
-            lexicon.addInformation(terms[0], Integer.parseInt(terms[1]), Integer.parseInt(terms[2]), Integer.parseInt(terms[3]));
-        }
-    }
 
-    public HashMap<String, ArrayList<Posting>> lookup(String[] queryTerms){
-        int offsetDocId = 0;
-        int offsetFreq = 0;
-        int postingListLength = 0;
-        int docId = 0;
-        int freq = 0;
-        fileManager.openLookupFiles();
-        obtainLexicon();
-        HashMap<String, ArrayList<Posting>> postingLists = new HashMap<>();
-        for(String term : queryTerms){
-            offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
-            offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
-            postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
-            fileManager.goToOffset(fileManager.getDocIdsEncodedScanners()[0], offsetDocId);
-            fileManager.goToOffset(fileManager.getFreqEncodedScanners()[0], offsetFreq);
-            for(int i = 0; i<postingListLength; i++){
-                docId = fileManager.readFromFile(fileManager.getDocIdsEncodedScanners()[0]);
-                freq = fileManager.readFromFile(fileManager.getFreqEncodedScanners()[0]);
-                addPosting(postingLists, term, docId, freq);
-            }
-        }
-        fileManager.closeLookupFiles();
-        return postingLists;
-    }
-
-    public void addPosting(HashMap<String, ArrayList<Posting>> postingLists, String term, int docId, int freq){
-        if (!postingLists.containsKey(term)){
-            postingLists.put(term, new ArrayList<>());
-        }
-        postingLists.get(term).add(new Posting(docId, freq));
-    }
 }

@@ -1,6 +1,10 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing;
 
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Lexicon;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.DAAT;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.BM25;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.TFIDF;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
 
@@ -8,94 +12,96 @@ import java.util.*;
 
 public class QueryProcessor {
     private int k;
-    private int nDocuments = 3;
-    private double avdl = 3;
-    private TFIDF tfidf;
+    private int nDocuments = 8841822; //Needed by BM25 and TFIDF -> Taken from collection statistics
+    private double avdl = 2.6; //Needed by BM25 -> Taken from collection statistics
+    public FileManager fileManager;
+    public Lexicon lexicon;
 
-    public QueryProcessor(int nResults, int nDocuments, double avdl){
+    public QueryProcessor(int nResults){
         this.k = nResults;
-        this.nDocuments = nDocuments;
-        this.avdl = avdl;
+        this.fileManager = new FileManager();
+        this.lexicon = new Lexicon();
+        fileManager.openLookupFiles();
+        obtainLexicon();
     }
 
-    public PriorityQueue<FinalScore> processQuery(String query){
+    public BoundedPriorityQueue processQuery(String query){
         String[] queryTerms = TextPreprocessing.parse(query).split(" "); //Parse the query
-
-        //Lookup example
+        /*Lookup example
         HashMap<String,ArrayList<Posting>> postingLists = new HashMap<String,ArrayList<Posting>>();
-        postingLists.put("beijing", new ArrayList<Posting>(Arrays.asList(new Posting(1,2), new Posting(4,1))));
-        postingLists.put("duck", new ArrayList<Posting>(Arrays.asList(new Posting(0,4), new Posting(1,2), new Posting(2,2), new Posting(4,1))));
+        postingLists.put("beijing", new ArrayList<Posting>(Arrays.asList(new Posting(1,1), new Posting(4,1))));
+        postingLists.put("duck", new ArrayList<Posting>(Arrays.asList(new Posting(0,3), new Posting(1,2), new Posting(2,2), new Posting(4,1))));
         postingLists.put("recipe", new ArrayList<Posting>(Arrays.asList(new Posting(2,1), new Posting(3,1), new Posting(4,1))));
 
-        HashMap<Integer,Integer> documentsSize = new HashMap<>();
-        documentsSize.put(0, 4);
-        documentsSize.put(1,4);
+        HashMap<Integer,Integer> documentsSize = new HashMap<>(); //Needed by BM25 -> Taken from DocumentIndex foreach DocID in PostingLists
+        documentsSize.put(0, 3);
+        documentsSize.put(1,3);
         documentsSize.put(2,3);
         documentsSize.put(3,1);
         documentsSize.put(4,3);
+         */
 
+        HashMap<String, ArrayList<Posting>> postingLists = lookup(queryTerms); //Retrieve candidate postinglists
+        for(String term : queryTerms){
+            System.out.println(term + ": " + postingLists.get(term).size());
+        }
 
-        //HashMap<String, ArrayList<Posting>> postingLists = lookup(queryTerms); //Retrieve candidate postinglists
-        PriorityQueue<FinalScore> final_scores = score(queryTerms, postingLists, documentsSize); //Rank documents
+        TFIDF tfidf = new TFIDF(postingLists, nDocuments);
+        //BM25 bm25 = new BM25(postingLists, documentsSize, 1.2, 0.75, nDocuments, avdl);
+        DAAT daat = new DAAT();
+        BoundedPriorityQueue final_scores = daat.scoreDocuments(queryTerms, postingLists, tfidf, k);
 
         return final_scores; //Return scores
     }
 
-
-    public HashMap<String,ArrayList<Posting>> lookup(String[] queryTerms){
-        return null;
-
+    public void exitQueryProcessing(){
+        fileManager.closeLookupFiles();
     }
 
 
-    //Get the minimum docID over all the posting lists
-    public int minDocId(ArrayList<PostingListIterator> postingIterators){
-        int minDocId = nDocuments; //N° docs in the collection (maximum docID)
-        for(PostingListIterator postingIterator : postingIterators){
-            if(postingIterator.docid() < minDocId){
-                minDocId = postingIterator.docid();
-            }
+
+
+
+    public void obtainLexicon(){
+        String line;
+        String[] terms;
+        while(fileManager.getLexiconScanners()[0].hasNextLine()){
+            line = fileManager.readLineFromFile(fileManager.getLexiconScanners()[0]);
+            terms = line.split(" ");
+            lexicon.addInformation(terms[0], Integer.parseInt(terms[1]), Integer.parseInt(terms[2]), Integer.parseInt(terms[3]));
         }
-        return minDocId;
     }
 
-    //Check if the query processing is finished, i.e all the posting lists has been fully processed
-    public boolean notFinished(ArrayList<PostingListIterator> postingIterators){
-        boolean finished = true;
-        for(PostingListIterator postingIterator : postingIterators){
-            if(postingIterator.hasNext()){
-                finished = false;
-            }
-        }
-        return finished;
-    }
-
-
-    public PriorityQueue<FinalScore> score(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists, HashMap<Integer, Integer> documentsSize){
-        PriorityQueue<FinalScore> scores = new PriorityQueue<>(k);
-        TFIDF tfidf = new TFIDF(queryTerms, postingLists, documentsSize, nDocuments);
-
-        ArrayList<PostingListIterator> postingIterators = new ArrayList<>(); //List of iterators
-        //Create an iterator foreach posting list related to each query term (like a pointer)
+    public HashMap<String, ArrayList<Posting>> lookup(String[] queryTerms){
+        int offsetDocId = 0;
+        int offsetFreq = 0;
+        int postingListLength = 0;
+        int docId = 0;
+        int freq = 0;
+        HashMap<String, ArrayList<Posting>> postingLists = new HashMap<>();
         for(String term : queryTerms){
-            postingIterators.add(new PostingListIterator(postingLists.get(term), tfidf));
-        }
-
-        while(!notFinished(postingIterators)){
-            int minDocid = minDocId(postingIterators); //Get minimum docID over all posting lists
-            double score = 0.0;
-            for(int i = 0; i < queryTerms.length; i++){ //Foreach posting list check if the current posting correspond to the minimum docID
-                PostingListIterator term_iterator = postingIterators.get(i);
-                if(term_iterator.docid() == minDocid){ //If the current posting has the docID equal to the minimum docID
-                    score += term_iterator.score(queryTerms[i]); //Compute the score using the posting score function
-                    term_iterator.next(); //Go to the next element of the posting list
+            try {
+                offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
+                offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
+                postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
+                fileManager.goToOffset(fileManager.getDocIdsEncodedScanners()[0], offsetDocId);
+                fileManager.goToOffset(fileManager.getFreqEncodedScanners()[0], offsetFreq);
+                for (int i = 0; i < postingListLength; i++) {
+                    docId = fileManager.readFromFile(fileManager.getDocIdsEncodedScanners()[0]);
+                    freq = fileManager.readFromFile(fileManager.getFreqEncodedScanners()[0]);
+                    addPosting(postingLists, term, docId, freq);
                 }
-
+            }catch (NullPointerException e){
+                postingLists.put(term, new ArrayList<>());
             }
-            scores.add(new FinalScore(minDocid,score)); //Add the final score to the priorityQueue
-
         }
+        return postingLists;
+    }
 
-        return scores; //Return the top K scores
+    public void addPosting(HashMap<String, ArrayList<Posting>> postingLists, String term, int docId, int freq){
+        if (!postingLists.containsKey(term)){
+            postingLists.put(term, new ArrayList<>());
+        }
+        postingLists.get(term).add(new Posting(docId, freq));
     }
 }

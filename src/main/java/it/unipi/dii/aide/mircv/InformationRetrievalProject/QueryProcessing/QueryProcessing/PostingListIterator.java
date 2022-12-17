@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing;
+package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing;
 
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.ScoringFunction;
@@ -13,11 +13,12 @@ public class PostingListIterator implements Iterator<Posting> {
     private ScoringFunction scoringFunction;
 
     // The current position of the iterator
-    private int position = 0;
+    private int position;
 
     // Constructor
     public PostingListIterator(ArrayList<Posting> PostingList, ScoringFunction scoringFunction) {
         this.PostingList = PostingList;
+        this.position = 0;
         this.scoringFunction = scoringFunction;
     }
 
@@ -34,6 +35,12 @@ public class PostingListIterator implements Iterator<Posting> {
         return scoringFunction.score(term,PostingList.get(position));
     }
 
+    public boolean isFinished(){
+        if (position>=PostingList.size()){
+            return true;
+        }
+        else return false;
+    }
 
     // Returns the next element in the iteration
     public Posting next() {
