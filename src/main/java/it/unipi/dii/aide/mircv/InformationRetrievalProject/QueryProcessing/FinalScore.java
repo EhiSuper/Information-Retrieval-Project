@@ -22,7 +22,7 @@ public class FinalScore implements Comparable<FinalScore>{
     //Used to compare the value of the priorityQueue
     @Override
     public int compareTo(FinalScore other) {
-        return Double.compare(other.getValue(),this.value);
+        return Double.compare(this.value, other.getValue());
     }
 
     @Override

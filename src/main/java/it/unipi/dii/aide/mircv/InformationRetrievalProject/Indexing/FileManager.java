@@ -397,6 +397,9 @@ public class FileManager {
     }
 
     public void openLookupFiles(){
+        lexiconScanners = new Scanner[1];
+        docIdsEncodedScanners = new RandomAccessFile[1];
+        freqEncodedScanners = new RandomAccessFile[1];
         try{
             lexiconScanners[0] = new Scanner(new File("Data/Output/Lexicon/lexicon.txt"));
             docIdsEncodedScanners[0] = new RandomAccessFile("Data/Output/DocIds/docIdsEncoded.txt", "r");
