@@ -4,28 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Added merging of blocks">
-      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIds.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIds0.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIds0Encoded.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIdsEncoded.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndex.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndex0.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndex0Encoded.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndexEncoded.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freq.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freq0.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freq0Encoded.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freqEncoded.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/Lexicon/lexicon.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data/Output/Lexicon/lexicon0.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Compressor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager.java" afterDir="false" />
+    <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Addedd encoding in bynary and query processing lookup">
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/CollectionStatistics.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/DocumentIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/DocumentIndex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/InvertedIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/InvertedIndex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Lexicon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Lexicon.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

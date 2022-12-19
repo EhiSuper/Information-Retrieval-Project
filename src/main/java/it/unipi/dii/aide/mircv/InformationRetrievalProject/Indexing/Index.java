@@ -17,12 +17,30 @@ public class Index {
     public Lexicon lexicon;
     public DocumentIndex documentIndex;
     public FileManager fileManager;
+    public CollectionStatistics collectionStatistics;
 
     public Index(){
         this.invertedIndex = new InvertedIndex();
         this.lexicon = new Lexicon();
         this.documentIndex = new DocumentIndex();
         this.fileManager = new FileManager();
+        this.collectionStatistics = new CollectionStatistics(0, 0, 0, 0);
+    }
+
+    public int getDocId() {
+        return docId;
+    }
+
+    public void setDocId(int docId) {
+        this.docId = docId;
+    }
+
+    public int getBlockCounter() {
+        return blockCounter;
+    }
+
+    public void setBlockCounter(int blockCounter) {
+        this.blockCounter = blockCounter;
     }
 
     public InvertedIndex getInvertedIndex() {
@@ -57,6 +75,14 @@ public class Index {
         this.fileManager = fileManager;
     }
 
+    public CollectionStatistics getCollectionStatistics() {
+        return collectionStatistics;
+    }
+
+    public void setCollectionStatistics(CollectionStatistics collectionStatistics) {
+        this.collectionStatistics = collectionStatistics;
+    }
+
     public void processCollection(String file){
         try{
             File myFile = new File(file);
@@ -87,6 +113,7 @@ public class Index {
         System.gc();
 
         mergeBlocks();
+        saveCollectionStatistics();
     }
 
     public void createIndex(String document, int docNo){
@@ -106,10 +133,13 @@ public class Index {
         for (String term : counter.keySet()) {
             lexicon.addInformation(term, 0, 0, 0);
             invertedIndex.addPosting(term, docId, counter.get(term));
+            collectionStatistics.setPostings(collectionStatistics.getPostings() + 1);
         }
         documentIndex.addDocument(docId, docNo, terms.length);
         docId += 1;
         System.out.println("Document Processed: " + docId);
+        collectionStatistics.setDocuments(collectionStatistics.getDocuments() + 1);
+        collectionStatistics.setAvgDocumentLength(collectionStatistics.getAvgDocumentLength() + terms.length);
     }
 
 
@@ -231,5 +261,16 @@ public class Index {
         return minTerm;
     }
 
+    public void saveCollectionStatistics(){
+        collectionStatistics.setAvgDocumentLength(collectionStatistics.getAvgDocumentLength() / collectionStatistics.getDocuments());
+        try{
+            FileWriter writer = new FileWriter("Data/Output/CollectionStatistics/collectionStatistics.txt");
+            writer.write(collectionStatistics.getDocuments() + " "
+                    + collectionStatistics.getAvgDocumentLength() + " " + collectionStatistics.getPostings());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+    }
 }

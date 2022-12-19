@@ -272,6 +272,12 @@ public class FileManager {
             } else {
                 System.out.println("File already exists.");
             }
+            myObj = new File("Data/Output/CollectionStatistics/collectionStatistics.txt");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
         } catch (IOException e) {
             System.out.println("An error occurred during the creation of the output file.");
             e.printStackTrace();
