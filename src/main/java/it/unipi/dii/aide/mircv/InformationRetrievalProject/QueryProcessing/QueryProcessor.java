@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing;
 
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.CollectionStatistics;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Lexicon;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
@@ -8,6 +9,8 @@ import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scori
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.TFIDF;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class QueryProcessor {
@@ -16,6 +19,7 @@ public class QueryProcessor {
     private double avdl = 2.6; //Needed by BM25 -> Taken from collection statistics
     public FileManager fileManager;
     public Lexicon lexicon;
+    public CollectionStatistics collectionStatistics;
 
     public QueryProcessor(int nResults){
         this.k = nResults;
@@ -23,6 +27,7 @@ public class QueryProcessor {
         this.lexicon = new Lexicon();
         fileManager.openLookupFiles();
         obtainLexicon();
+        obtainCollectionStatistics();
     }
 
     public BoundedPriorityQueue processQuery(String query){
@@ -69,6 +74,23 @@ public class QueryProcessor {
             line = fileManager.readLineFromFile(fileManager.getLexiconScanners()[0]);
             terms = line.split(" ");
             lexicon.addInformation(terms[0], Integer.parseInt(terms[1]), Integer.parseInt(terms[2]), Integer.parseInt(terms[3]));
+        }
+    }
+
+    public void obtainCollectionStatistics(){
+        String line;
+        String[] terms;
+        try{
+            Scanner scanner = new Scanner(new File("Data/Output/CollectionStatistics/collectionStatistics.txt"));
+            line = fileManager.readLineFromFile(scanner);
+            terms = line.split(" ");
+            collectionStatistics.setDocuments(Integer.valueOf(terms[0]));
+            collectionStatistics.setAvgDocumentLength(Double.valueOf(terms[1]));
+            collectionStatistics.setPostings(Integer.valueOf(terms[2]));
+            collectionStatistics.setTerms(lexicon.getLexicon().size());
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
