@@ -17,12 +17,32 @@ public class Index {
     public Lexicon lexicon;
     public DocumentIndex documentIndex;
     public FileManager fileManager;
+    public CollectionStatistics collectionStatistics;
+    public Compressor compressor;
 
     public Index(){
         this.invertedIndex = new InvertedIndex();
         this.lexicon = new Lexicon();
         this.documentIndex = new DocumentIndex();
         this.fileManager = new FileManager();
+        this.collectionStatistics = new CollectionStatistics(0, 0, 0, 0);
+        this.compressor = new Compressor();
+    }
+
+    public int getDocId() {
+        return docId;
+    }
+
+    public void setDocId(int docId) {
+        this.docId = docId;
+    }
+
+    public int getBlockCounter() {
+        return blockCounter;
+    }
+
+    public void setBlockCounter(int blockCounter) {
+        this.blockCounter = blockCounter;
     }
 
     public InvertedIndex getInvertedIndex() {
@@ -57,6 +77,22 @@ public class Index {
         this.fileManager = fileManager;
     }
 
+    public CollectionStatistics getCollectionStatistics() {
+        return collectionStatistics;
+    }
+
+    public void setCollectionStatistics(CollectionStatistics collectionStatistics) {
+        this.collectionStatistics = collectionStatistics;
+    }
+
+    public Compressor getCompressor() {
+        return compressor;
+    }
+
+    public void setCompressor(Compressor compressor) {
+        this.compressor = compressor;
+    }
+
     public void processCollection(String file){
         try{
             File myFile = new File(file);
@@ -87,6 +123,7 @@ public class Index {
         System.gc();
 
         mergeBlocks();
+        saveCollectionStatistics();
     }
 
     public void createIndex(String document, int docNo){
@@ -106,10 +143,13 @@ public class Index {
         for (String term : counter.keySet()) {
             lexicon.addInformation(term, 0, 0, 0);
             invertedIndex.addPosting(term, docId, counter.get(term));
+            collectionStatistics.setPostings(collectionStatistics.getPostings() + 1);
         }
         documentIndex.addDocument(docId, docNo, terms.length);
         docId += 1;
         System.out.println("Document Processed: " + docId);
+        collectionStatistics.setDocuments(collectionStatistics.getDocuments() + 1);
+        collectionStatistics.setAvgDocumentLength(collectionStatistics.getAvgDocumentLength() + terms.length);
     }
 
 
@@ -121,6 +161,9 @@ public class Index {
             fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), docId);
             fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), documentIndex.getDocumentIndex().get(docId).getDocNo());
             fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), documentIndex.getDocumentIndex().get(docId).getSize());
+            compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), docId);
+            compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), documentIndex.getDocumentIndex().get(docId).getDocNo());
+            compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), documentIndex.getDocumentIndex().get(docId).getSize());
         }
         for (String term : sortedTerms){
             lexicon.getLexicon().get(term).setPostingListLength(invertedIndex.getInvertedIndex().get(term).size());
@@ -128,8 +171,10 @@ public class Index {
             for (Posting posting : invertedIndex.getInvertedIndex().get(term)){
                 fileManager.writeOnFile(fileManager.getMyWriterDocIds(), posting.getDocId() + " ");
                 fileManager.writeOnFile(fileManager.getMyWriterDocIdsEncoded(), posting.getDocId());
+                compressor.writeBytes(fileManager.getMyWriterDocIdsCompressed(), posting.getDocId());
                 fileManager.writeOnFile(fileManager.getMyWriterFreq(), posting.getFreq() + " ");
                 fileManager.writeOnFile(fileManager.getMyWriterFreqEncoded(), posting.getFreq());
+                compressor.writeBytes(fileManager.getMyWriterFreqCompressed(), posting.getFreq());
             }
         }
         fileManager.closeBlockFiles();
@@ -159,6 +204,7 @@ public class Index {
                 for(int j = 0; j<3; j++) // 3 times because a documentIndex is saved as 3 int.
                 {
                     fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), fileManager.readFromFile(fileManager.getDocumentIndexEncodedScanners()[i]));
+                    compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[i]));
                 }
             }
         }
@@ -178,12 +224,15 @@ public class Index {
                                 fileManager.readFromFile(fileManager.getDocIdsScanners()[i]) + " ");
                         fileManager.writeOnFile(fileManager.getMyWriterDocIdsEncoded(),
                                 fileManager.readFromFile(fileManager.getDocIdsEncodedScanners()[i]));
-                        offsetDocIds += 4;
+                        offsetDocIds += compressor.writeBytes(fileManager.getMyWriterDocIdsCompressed(),
+                                compressor.readBytes(fileManager.getDocIdsCompressedScanners()[i]));
+
                         fileManager.writeOnFile(fileManager.getMyWriterFreq(),
                                 fileManager.readFromFile(fileManager.getFreqScanners()[i]) + " ");
                         fileManager.writeOnFile(fileManager.getMyWriterFreqEncoded(),
                                 fileManager.readFromFile(fileManager.getFreqEncodedScanners()[i]));
-                        offsetFreq += 4;
+                        offsetFreq += compressor.writeBytes(fileManager.getMyWriterFreqCompressed(),
+                                compressor.readBytes(fileManager.getFreqCompressedScanners()[i]));
                     }
                 }
                 else{
@@ -231,5 +280,16 @@ public class Index {
         return minTerm;
     }
 
+    public void saveCollectionStatistics(){
+        collectionStatistics.setAvgDocumentLength(collectionStatistics.getAvgDocumentLength() / collectionStatistics.getDocuments());
+        try{
+            FileWriter writer = new FileWriter("Data/Output/CollectionStatistics/collectionStatistics.txt");
+            writer.write(collectionStatistics.getDocuments() + " "
+                    + collectionStatistics.getAvgDocumentLength() + " " + collectionStatistics.getPostings());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+    }
 }
