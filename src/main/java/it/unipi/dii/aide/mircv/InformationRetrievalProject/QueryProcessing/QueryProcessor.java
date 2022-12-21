@@ -1,11 +1,8 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing;
 
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.CollectionStatistics;
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager;
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Lexicon;
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.*;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.DAAT;
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.MaxScore;
+//import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.MaxScore;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.BM25;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.TFIDF;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
@@ -21,14 +18,19 @@ public class QueryProcessor {
     public FileManager fileManager;
     public Lexicon lexicon;
     public CollectionStatistics collectionStatistics;
+    public Compressor compressor;
+    public DocumentIndex documentIndex;
 
     public QueryProcessor(int nResults){
         this.k = nResults;
         this.fileManager = new FileManager();
         this.lexicon = new Lexicon();
+        this.compressor = new Compressor();
+        this.documentIndex = new DocumentIndex();
         fileManager.openLookupFiles();
         obtainLexicon();
         obtainCollectionStatistics();
+        obtainDocumentIndex();
     }
 
     public BoundedPriorityQueue processQuery(String query){
@@ -55,7 +57,7 @@ public class QueryProcessor {
         TFIDF tfidf = new TFIDF(postingLists, nDocuments);
         //BM25 bm25 = new BM25(postingLists, documentsSize, 1.2, 0.75, nDocuments, avdl);
         DAAT daat = new DAAT();
-        MaxScore maxScore = new MaxScore();
+        //MaxScore maxScore = new MaxScore();
         BoundedPriorityQueue final_scores = daat.scoreDocuments(queryTerms, postingLists, tfidf, k);
 
         return final_scores; //Return scores
@@ -65,10 +67,6 @@ public class QueryProcessor {
         fileManager.closeLookupFiles();
     }
 
-
-
-
-
     public void obtainLexicon(){
         String line;
         String[] terms;
@@ -76,6 +74,18 @@ public class QueryProcessor {
             line = fileManager.readLineFromFile(fileManager.getLexiconScanners()[0]);
             terms = line.split(" ");
             lexicon.addInformation(terms[0], Integer.parseInt(terms[1]), Integer.parseInt(terms[2]), Integer.parseInt(terms[3]));
+        }
+    }
+
+    public void obtainDocumentIndex(){
+        int docId = 0;
+        int docNo = 0;
+        int size = 0;
+        for(int i = 0; i<collectionStatistics.getDocuments(); i++){
+            docId = compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[0]);
+            docNo = compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[0]);
+            size = compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[0]);
+            documentIndex.addDocument(docId, docNo, size);
         }
     }
 
@@ -107,11 +117,11 @@ public class QueryProcessor {
                 offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
                 offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
                 postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
-                fileManager.goToOffset(fileManager.getDocIdsEncodedScanners()[0], offsetDocId);
-                fileManager.goToOffset(fileManager.getFreqEncodedScanners()[0], offsetFreq);
+                fileManager.goToOffset(fileManager.getDocIdsCompressedScanners()[0], offsetDocId);
+                fileManager.goToOffset(fileManager.getFreqCompressedScanners()[0], offsetFreq);
                 for (int i = 0; i < postingListLength; i++) {
-                    docId = fileManager.readFromFile(fileManager.getDocIdsEncodedScanners()[0]);
-                    freq = fileManager.readFromFile(fileManager.getFreqEncodedScanners()[0]);
+                    docId = compressor.readBytes(fileManager.getDocIdsCompressedScanners()[0]);
+                    freq = compressor.readBytes(fileManager.getFreqCompressedScanners()[0]);
                     addPosting(postingLists, term, docId, freq);
                 }
             }catch (NullPointerException e){

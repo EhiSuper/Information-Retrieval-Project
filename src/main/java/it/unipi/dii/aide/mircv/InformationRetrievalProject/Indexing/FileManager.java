@@ -516,10 +516,12 @@ public class FileManager {
         lexiconScanners = new Scanner[1];
         docIdsCompressedScanners = new RandomAccessFile[1];
         freqCompressedScanners = new RandomAccessFile[1];
+        documentIndexCompressedScanners = new RandomAccessFile[1];
         try{
             lexiconScanners[0] = new Scanner(new File("Data/Output/Lexicon/lexicon.txt"));
             docIdsCompressedScanners[0] = new RandomAccessFile("Data/Output/DocIds/docIdsCompressed.txt", "r");
             freqCompressedScanners[0] = new RandomAccessFile("Data/Output/Frequencies/freqCompressed.txt", "r");
+            documentIndexCompressedScanners[0] = new RandomAccessFile("Data/Output/DocumentIndex/documentIndexCompressed.txt", "r");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -530,6 +532,7 @@ public class FileManager {
             lexiconScanners[0].close();
             docIdsCompressedScanners[0].close();
             freqCompressedScanners[0].close();
+            documentIndexCompressedScanners[0].close();
         }catch (IOException e){
             e.printStackTrace();
         }

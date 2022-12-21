@@ -4,8 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Added Variable Byte Code Compression">
+    <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Bugfix">
+      <change afterPath="$PROJECT_DIR$/Data/Output/CollectionStatistics/collectionStatistics.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIds.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIds0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIds0Compressed.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIds0Encoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIdsCompressed.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocIds/docIdsEncoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndex.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndex0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndex0Compressed.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndex0Encoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndexCompressed.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/DocumentIndex/documentIndexEncoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freq.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freq0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freq0Compressed.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freq0Encoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freqCompressed.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Frequencies/freqEncoded.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Lexicon/lexicon.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Output/Lexicon/lexicon0.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/QueryProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/QueryProcessor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +84,7 @@
       <recent name="C:\Users\utente\Desktop\Information-Retrieval-Project\Data\Output" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.main">
+  <component name="RunManager" selected="Application.it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.main">
     <configuration name="Compressor" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Compressor" />
       <module name="Information Retrieval Project" />
@@ -106,7 +128,7 @@
     </configuration>
     <configuration name="it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.main" />
-      <module name="Information-Retrieval-Project" />
+      <module name="Information Retrieval Project" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.*" />
@@ -140,10 +162,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Compressor" />
-        <item itemvalue="Application.main" />
-        <item itemvalue="Application.Indexing" />
         <item itemvalue="Application.it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.main" />
+        <item itemvalue="Application.main" />
+        <item itemvalue="Application.Compressor" />
+        <item itemvalue="Application.Indexing" />
         <item itemvalue="Application.Indexing" />
       </list>
     </recent_temporary>
@@ -220,7 +242,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671528194446</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Bugfix">
+      <created>1671618048098</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1671618048098</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -252,7 +281,8 @@
     <MESSAGE value="Added merging of blocks" />
     <MESSAGE value="Addedd CollectionStatistics" />
     <MESSAGE value="Added Variable Byte Code Compression" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Variable Byte Code Compression" />
+    <MESSAGE value="Bugfix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bugfix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -261,6 +291,11 @@
           <properties class="java.io.EOFException" package="java.io" />
           <option name="timeStamp" value="1" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/QueryProcessor.java</url>
+          <line>87</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
