@@ -4,6 +4,7 @@ import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Lexicon;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.DAAT;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.MaxScore;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.BM25;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.TFIDF;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
@@ -49,6 +50,7 @@ public class QueryProcessor {
         TFIDF tfidf = new TFIDF(postingLists, nDocuments);
         //BM25 bm25 = new BM25(postingLists, documentsSize, 1.2, 0.75, nDocuments, avdl);
         DAAT daat = new DAAT();
+        MaxScore maxScore = new MaxScore();
         BoundedPriorityQueue final_scores = daat.scoreDocuments(queryTerms, postingLists, tfidf, k);
 
         return final_scores; //Return scores
@@ -79,7 +81,8 @@ public class QueryProcessor {
         int docId = 0;
         int freq = 0;
         HashMap<String, ArrayList<Posting>> postingLists = new HashMap<>();
-        for(String term : queryTerms){
+        Set<String> queryTermsSet = new HashSet(List.of(queryTerms));
+        for(String term : queryTermsSet){
             try {
                 offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
                 offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
