@@ -84,10 +84,8 @@ public class QueryProcessor {
             Scanner scanner = new Scanner(new File("Data/Output/CollectionStatistics/collectionStatistics.txt"));
             line = fileManager.readLineFromFile(scanner);
             terms = line.split(" ");
-            collectionStatistics.setDocuments(Integer.valueOf(terms[0]));
-            collectionStatistics.setAvgDocumentLength(Double.valueOf(terms[1]));
-            collectionStatistics.setPostings(Integer.valueOf(terms[2]));
-            collectionStatistics.setTerms(lexicon.getLexicon().size());
+            collectionStatistics = new CollectionStatistics(Integer.valueOf(terms[0]), Double.valueOf(terms[1]),
+                    Integer.valueOf(2), lexicon.getLexicon().size());
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
