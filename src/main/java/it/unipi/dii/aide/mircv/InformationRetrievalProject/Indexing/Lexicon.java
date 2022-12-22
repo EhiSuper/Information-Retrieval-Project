@@ -61,4 +61,7 @@ public class Lexicon {
         Collections.sort(sortedTerms);
         return sortedTerms;
     }
+
+
+
 }

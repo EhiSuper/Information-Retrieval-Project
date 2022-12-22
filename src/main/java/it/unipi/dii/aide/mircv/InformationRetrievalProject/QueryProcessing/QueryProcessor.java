@@ -1,140 +1,73 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing;
 
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.*;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.BoundedPriorityQueue;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.DAAT;
-//import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.MaxScore;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.MaxScore;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.BM25;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.TFIDF;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class QueryProcessor {
-    private int k;
-    private int nDocuments = 8841822; //Needed by BM25 and TFIDF -> Taken from collection statistics
-    private double avdl = 2.6; //Needed by BM25 -> Taken from collection statistics
-    public FileManager fileManager;
-    public Lexicon lexicon;
-    public CollectionStatistics collectionStatistics;
-    public Compressor compressor;
-    public DocumentIndex documentIndex;
+    private final int k;
+    public HandleIndex handleIndex;
+    public String scoringFunction;
+    public String documentProcessor;
 
-    public QueryProcessor(int nResults){
+    public QueryProcessor(int nResults, String scoringFunction, String documentProcessor){
         this.k = nResults;
-        this.fileManager = new FileManager();
-        this.lexicon = new Lexicon();
-        this.compressor = new Compressor();
-        this.documentIndex = new DocumentIndex();
-        fileManager.openLookupFiles();
-        obtainLexicon();
-        obtainCollectionStatistics();
-        obtainDocumentIndex();
+        this.scoringFunction = scoringFunction;
+        this.documentProcessor = documentProcessor;
+        this.handleIndex = new HandleIndex();
     }
 
     public BoundedPriorityQueue processQuery(String query){
         String[] queryTerms = TextPreprocessing.parse(query).split(" "); //Parse the query
-        /*Lookup example
-        HashMap<String,ArrayList<Posting>> postingLists = new HashMap<String,ArrayList<Posting>>();
-        postingLists.put("beijing", new ArrayList<Posting>(Arrays.asList(new Posting(1,1), new Posting(4,1))));
-        postingLists.put("duck", new ArrayList<Posting>(Arrays.asList(new Posting(0,3), new Posting(1,2), new Posting(2,2), new Posting(4,1))));
-        postingLists.put("recipe", new ArrayList<Posting>(Arrays.asList(new Posting(2,1), new Posting(3,1), new Posting(4,1))));
 
-        HashMap<Integer,Integer> documentsSize = new HashMap<>(); //Needed by BM25 -> Taken from DocumentIndex foreach DocID in PostingLists
-        documentsSize.put(0, 3);
-        documentsSize.put(1,3);
-        documentsSize.put(2,3);
-        documentsSize.put(3,1);
-        documentsSize.put(4,3);
-         */
-
-        HashMap<String, ArrayList<Posting>> postingLists = lookup(queryTerms); //Retrieve candidate postinglists
+        HashMap<String, ArrayList<Posting>> postingLists = handleIndex.lookup(queryTerms); //Retrieve candidate postinglists
         for(String term : queryTerms){
             System.out.println(term + ": " + postingLists.get(term).size());
         }
 
-        TFIDF tfidf = new TFIDF(postingLists, nDocuments);
-        //BM25 bm25 = new BM25(postingLists, documentsSize, 1.2, 0.75, nDocuments, avdl);
-        DAAT daat = new DAAT();
-        //MaxScore maxScore = new MaxScore();
-        BoundedPriorityQueue final_scores = daat.scoreDocuments(queryTerms, postingLists, tfidf, k);
-
-        return final_scores; //Return scores
+        return scoreDocuments(queryTerms, postingLists); //Return scores
     }
 
     public void exitQueryProcessing(){
-        fileManager.closeLookupFiles();
+        handleIndex.getFileManager().closeLookupFiles();
     }
 
-    public void obtainLexicon(){
-        String line;
-        String[] terms;
-        while(fileManager.getLexiconScanners()[0].hasNextLine()){
-            line = fileManager.readLineFromFile(fileManager.getLexiconScanners()[0]);
-            terms = line.split(" ");
-            lexicon.addInformation(terms[0], Integer.parseInt(terms[1]), Integer.parseInt(terms[2]), Integer.parseInt(terms[3]));
-        }
-    }
 
-    public void obtainDocumentIndex(){
-        int docId = 0;
-        int docNo = 0;
-        int size = 0;
-        for(int i = 0; i<collectionStatistics.getDocuments(); i++){
-            docId = compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[0]);
-            docNo = compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[0]);
-            size = compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[0]);
-            documentIndex.addDocument(docId, docNo, size);
-        }
-    }
-
-    public void obtainCollectionStatistics(){
-        String line;
-        String[] terms;
-        try{
-            Scanner scanner = new Scanner(new File("Data/Output/CollectionStatistics/collectionStatistics.txt"));
-            line = fileManager.readLineFromFile(scanner);
-            terms = line.split(" ");
-            collectionStatistics = new CollectionStatistics(Integer.valueOf(terms[0]), Double.valueOf(terms[1]),
-                    Integer.valueOf(2), lexicon.getLexicon().size());
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public HashMap<String, ArrayList<Posting>> lookup(String[] queryTerms){
-        int offsetDocId = 0;
-        int offsetFreq = 0;
-        int postingListLength = 0;
-        int docId = 0;
-        int freq = 0;
-        HashMap<String, ArrayList<Posting>> postingLists = new HashMap<>();
-        Set<String> queryTermsSet = new HashSet(List.of(queryTerms));
-        for(String term : queryTermsSet){
-            try {
-                offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
-                offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
-                postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
-                fileManager.goToOffset(fileManager.getDocIdsCompressedScanners()[0], offsetDocId);
-                fileManager.goToOffset(fileManager.getFreqCompressedScanners()[0], offsetFreq);
-                for (int i = 0; i < postingListLength; i++) {
-                    docId = compressor.readBytes(fileManager.getDocIdsCompressedScanners()[0]);
-                    freq = compressor.readBytes(fileManager.getFreqCompressedScanners()[0]);
-                    addPosting(postingLists, term, docId, freq);
-                }
-            }catch (NullPointerException e){
-                postingLists.put(term, new ArrayList<>());
+    public BoundedPriorityQueue scoreDocuments(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists){
+        if(documentProcessor.equals("daat")){
+            DAAT daat = new DAAT();
+            if(scoringFunction.equals("tfidf")) {
+                TFIDF tfidf = new TFIDF(postingLists, queryTerms, handleIndex.getCollectionStatistics().getDocuments());
+                return daat.scoreDocuments(queryTerms, postingLists, tfidf, k);
+            }else if(scoringFunction.equals("bm25")){
+                BM25 bm25 = new BM25(postingLists, queryTerms, handleIndex.getDocumentIndex().getDocumentIndex(), 1.2, 0.75, handleIndex.getCollectionStatistics().getDocuments(), handleIndex.getCollectionStatistics().getAvgDocumentLength());
+                return daat.scoreDocuments(queryTerms, postingLists, bm25, k);
+            }
+        }else if(documentProcessor.equals("maxscore")){
+            MaxScore maxScore = new MaxScore();
+            if(scoringFunction.equals("tfidf")) {
+                TFIDF tfidf = new TFIDF(postingLists, queryTerms, handleIndex.getCollectionStatistics().getDocuments());
+                return maxScore.scoreDocuments(queryTerms, postingLists, tfidf, k);
+            }else if(scoringFunction.equals("bm25")){
+                BM25 bm25 = new BM25(postingLists, queryTerms, handleIndex.getDocumentIndex().getDocumentIndex(), 1.2, 0.75, handleIndex.getCollectionStatistics().getDocuments(), handleIndex.getCollectionStatistics().getAvgDocumentLength());
+                return maxScore.scoreDocuments(queryTerms, postingLists, bm25, k);
             }
         }
-        return postingLists;
+        return null;
     }
 
-    public void addPosting(HashMap<String, ArrayList<Posting>> postingLists, String term, int docId, int freq){
-        if (!postingLists.containsKey(term)){
-            postingLists.put(term, new ArrayList<>());
-        }
-        postingLists.get(term).add(new Posting(docId, freq));
-    }
+
+
+
+
+
+
+
 }

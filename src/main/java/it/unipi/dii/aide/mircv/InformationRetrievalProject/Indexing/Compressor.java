@@ -1,12 +1,8 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Scanner;
 
 public class Compressor {
 
@@ -42,7 +38,7 @@ public class Compressor {
 
     public int readBytes(RandomAccessFile file){
         ArrayList<Integer> bytes = new ArrayList<>();
-        int byteRead = 0;
+        int byteRead;
         int n = 0;
         try{
             while(true){

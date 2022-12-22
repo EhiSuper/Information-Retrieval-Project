@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing;
+package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing;
 
 import java.util.PriorityQueue;
 import java.util.Stack;
@@ -8,7 +8,7 @@ public class BoundedPriorityQueue {
     int dimension;
     public BoundedPriorityQueue(int k){
         this.dimension = k;
-        this.queue = new PriorityQueue(k);
+        this.queue = new PriorityQueue<>(k);
     }
 
     public PriorityQueue<FinalScore> getQueue(){
@@ -17,6 +17,7 @@ public class BoundedPriorityQueue {
 
     public void add(FinalScore score){
         if(queue.size() == dimension){
+            assert queue.peek() != null;
             if(queue.peek().getValue() < score.getValue()){
                 queue.poll();
                 queue.add(score);
@@ -25,6 +26,14 @@ public class BoundedPriorityQueue {
         else{
             queue.add(score);
         }
+    }
+
+    public boolean isFull(){
+        return queue.size() == dimension;
+    }
+
+    public FinalScore peek(){
+        return queue.peek();
     }
 
     public void printResults() {

@@ -2,15 +2,14 @@ package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Quer
 
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.ScoringFunction;
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.TFIDF;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 //Custom iterator for traversing the posting lists
 public class PostingListIterator implements Iterator<Posting> {
-    private ArrayList<Posting> PostingList;
-    private ScoringFunction scoringFunction;
+    private final ArrayList<Posting> PostingList;
+    private final ScoringFunction scoringFunction;
 
     // The current position of the iterator
     private int position;
@@ -36,10 +35,7 @@ public class PostingListIterator implements Iterator<Posting> {
     }
 
     public boolean isFinished(){
-        if (position>=PostingList.size()){
-            return true;
-        }
-        else return false;
+        return position >= PostingList.size();
     }
 
     // Returns the next element in the iteration
@@ -48,14 +44,14 @@ public class PostingListIterator implements Iterator<Posting> {
     }
 
     // Returns the next element in the iteration
-    public Posting nextGEQ(int threshold) {
+    public Posting nextGEQ(int docId) {
         // Iterate through the remaining postings in the list
         while (hasNext()) {
             // Get the next posting in the list
             Posting posting = next();
 
             // If the posting is greater than or equal to the threshold, return it
-            if (docid() >= threshold) {
+            if (docid() >= docId) {
                 return posting;
             }
         }

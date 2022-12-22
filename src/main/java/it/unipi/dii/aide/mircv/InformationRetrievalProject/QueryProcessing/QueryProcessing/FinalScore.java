@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing;
+package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing;
 
 
 //Class used to save the pair (docID, final_score)

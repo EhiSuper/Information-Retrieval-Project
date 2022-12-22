@@ -1,7 +1,7 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.Evaluation;
 
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.BoundedPriorityQueue;
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.FinalScore;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.BoundedPriorityQueue;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.FinalScore;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessor;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
 
@@ -46,7 +46,7 @@ public class EvaluateSearchEngine {
         try {
             File myFile = new File(file);
             Scanner myReader = new Scanner(myFile, StandardCharsets.UTF_8);
-            QueryProcessor queryProcessor= new QueryProcessor(10);
+            QueryProcessor queryProcessor= new QueryProcessor(10, "tfidf", "daat");
             int counter = 0;
             while (myReader.hasNextLine()) {
                 System.out.println("Processing Query number: " + counter );

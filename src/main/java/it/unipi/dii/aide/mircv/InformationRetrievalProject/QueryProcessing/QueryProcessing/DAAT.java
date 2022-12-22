@@ -1,12 +1,9 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing;
 
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.BoundedPriorityQueue;
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.FinalScore;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.ScoringFunction;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.PriorityQueue;
 
 public class DAAT {
 
@@ -50,12 +47,13 @@ public class DAAT {
         return minDocId;
     }
 
-    //Check if the query processing is finished, i.e all the posting lists has been fully processed
+    //Check if the query processing is finished, i.e. all the posting lists has been fully processed
     public boolean notFinished(ArrayList<PostingListIterator> postingIterators){
         boolean finished = true;
         for(PostingListIterator postingIterator : postingIterators){
-            if(postingIterator.hasNext()){
+            if (postingIterator.hasNext()) {
                 finished = false;
+                break;
             }
         }
         return finished;

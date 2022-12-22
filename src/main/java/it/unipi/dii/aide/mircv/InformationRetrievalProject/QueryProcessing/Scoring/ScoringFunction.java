@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class ScoringFunction {
+    protected String[] queryTerms;
     protected HashMap<String, Double> idf;
 
-    public ScoringFunction(HashMap<String, ArrayList<Posting>> postingLists, long nDocuments) {
+    public ScoringFunction(HashMap<String, ArrayList<Posting>> postingLists, String[] queryTerms, long nDocuments) {
+
+        this.queryTerms = queryTerms;
 
         this.idf = new HashMap<>();
         for (String term : postingLists.keySet()){
@@ -17,5 +20,22 @@ public abstract class ScoringFunction {
         }
     }
 
-    public abstract double score(String term, Posting posting);
+    public double score(String term, Posting posting){
+        return termWeight(term) * documentWeight(term, posting);
+    }
+
+
+
+    public abstract double documentWeight(String term, Posting posting);
+
+    public double termWeight(String term){
+        int numOccurrences = 0;
+        for (String queryTerm : this.queryTerms) {
+            if (queryTerm.equals(term)) {
+                numOccurrences++;
+            }
+        }
+
+        return (double) numOccurrences / queryTerms.length;
+    }
 }
