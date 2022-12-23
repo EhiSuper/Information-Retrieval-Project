@@ -1,26 +1,29 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing;
 
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.*;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.Compressor;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.TextReader;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.VariableByteCode;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.FileManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.RandomAccessFile;
 import java.util.*;
 
 public class HandleIndex {
     public FileManager fileManager;
     public Lexicon lexicon;
     public CollectionStatistics collectionStatistics;
-    public Compressor compressor;
     public DocumentIndex documentIndex;
 
 
     public HandleIndex(){
         this.fileManager = new FileManager();
         this.lexicon = new Lexicon();
-        this.compressor = new Compressor();
         this.documentIndex = new DocumentIndex();
 
-        fileManager.openLookupFiles();
+        fileManager.openLookupFiles("text");
         obtainLexicon(lexicon, fileManager);
         obtainCollectionStatistics();
         obtainDocumentIndex();
@@ -39,11 +42,11 @@ public class HandleIndex {
                 offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
                 offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
                 postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
-                fileManager.goToOffset(fileManager.getDocIdsReader(), offsetDocId);
-                fileManager.goToOffset(fileManager.getFreqReader(), offsetFreq);
+                fileManager.goToOffset((RandomAccessFile) fileManager.getDocIdsReader(), offsetDocId);
+                fileManager.goToOffset((RandomAccessFile) fileManager.getFreqReader(), offsetFreq);
                 for (int i = 0; i < postingListLength; i++) {
-                    docId = compressor.readBytes(fileManager.getDocIdsReader());
-                    freq = compressor.readBytes(fileManager.getFreqReader());
+                    docId = fileManager.readFromFile(fileManager.getDocIdsReader());
+                    freq = fileManager.readFromFile(fileManager.getFreqReader());
                     addPosting(postingLists, term, docId, freq);
                 }
             }catch (NullPointerException e){
@@ -64,8 +67,8 @@ public class HandleIndex {
     public static void obtainLexicon(Lexicon lexicon, FileManager fileManager) {
         String line;
         String[] terms;
-        while (fileManager.getLexiconScanners()[0].hasNextLine()) {
-            line = fileManager.readLineFromFile(fileManager.getLexiconScanners()[0]);
+        while (fileManager.hasNextLine((TextReader) fileManager.getLexiconReader())) {
+            line = fileManager.readLineFromFile((TextReader) fileManager.getLexiconReader());
             terms = line.split(" ");
             lexicon.addInformation(terms[0], Integer.parseInt(terms[1]), Integer.parseInt(terms[2]), Integer.parseInt(terms[3]));
         }
@@ -76,26 +79,18 @@ public class HandleIndex {
         int docNo;
         int size;
         for(int i = 0; i<collectionStatistics.getDocuments(); i++){
-            docId = compressor.readBytes(fileManager.getDocIdsReader());
-            docNo = compressor.readBytes(fileManager.getFreqReader());
-            size = compressor.readBytes(fileManager.getDocumentIndexReader());
+            docId = fileManager.readFromFile(fileManager.getDocumentIndexReader());
+            docNo = fileManager.readFromFile(fileManager.getDocumentIndexReader());
+            size = fileManager.readFromFile(fileManager.getDocumentIndexReader());
             documentIndex.addDocument(docId, docNo, size);
         }
     }
 
     public void obtainCollectionStatistics(){
-        String line;
         String[] terms;
-        try{
-            Scanner scanner = new Scanner(new File("Data/Output/CollectionStatistics/collectionStatistics.txt"));
-            line = fileManager.readLineFromFile(scanner);
-            terms = line.split(" ");
-            collectionStatistics = new CollectionStatistics(Integer.parseInt(terms[0]), Double.parseDouble(terms[1]),
-                    2, lexicon.getLexicon().size());
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        terms = fileManager.readLineFromFile((TextReader) fileManager.getCollectionStatisticsReader()).split(" ");
+        collectionStatistics = new CollectionStatistics(Integer.parseInt(terms[0]), Double.parseDouble(terms[1]),
+                2, lexicon.getLexicon().size());
     }
 
     public CollectionStatistics getCollectionStatistics() {
@@ -106,21 +101,12 @@ public class HandleIndex {
         return documentIndex;
     }
 
-    public Compressor getCompressor() {
-        return compressor;
-    }
-
     public FileManager getFileManager() {
         return fileManager;
     }
 
     public Lexicon getLexicon() {
         return lexicon;
-    }
-
-
-    public void setCompressor(Compressor compressor) {
-        this.compressor = compressor;
     }
 
     public void setLexicon(Lexicon lexicon) {

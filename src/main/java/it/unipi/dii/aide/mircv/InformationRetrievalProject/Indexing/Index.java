@@ -1,11 +1,14 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.Reader;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.TextReader;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.TextWriter;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.FileManager;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Utils;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -19,7 +22,7 @@ public class Index {
     public DocumentIndex documentIndex;
     public FileManager fileManager;
     public CollectionStatistics collectionStatistics;
-    public Compressor compressor;
+    public String encodingType;
 
     public Index(){
         this.invertedIndex = new InvertedIndex();
@@ -27,7 +30,6 @@ public class Index {
         this.documentIndex = new DocumentIndex();
         this.fileManager = new FileManager();
         this.collectionStatistics = new CollectionStatistics(0, 0, 0, 0);
-        this.compressor = new Compressor();
     }
 
     public int getDocId() {
@@ -86,15 +88,16 @@ public class Index {
         this.collectionStatistics = collectionStatistics;
     }
 
-    public Compressor getCompressor() {
-        return compressor;
+    public String getEncodingType() {
+        return encodingType;
     }
 
-    public void setCompressor(Compressor compressor) {
-        this.compressor = compressor;
+    public void setEncodingType(String encodingType) {
+        this.encodingType = encodingType;
     }
 
-    public void processCollection(String file){
+    public void processCollection(String file, String type){
+        setEncodingType(type);
         try {
             // Open the compressed file
             BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
@@ -164,29 +167,24 @@ public class Index {
         }
         documentIndex.addDocument(docId, docNo, terms.length);
         docId += 1;
-        System.out.println("Document Processed: " + docId);
         collectionStatistics.setDocuments(collectionStatistics.getDocuments() + 1);
         collectionStatistics.setAvgDocumentLength(collectionStatistics.getAvgDocumentLength() + terms.length);
     }
 
 
     public void writeBlock(Lexicon lexicon, ArrayList<String> sortedTerms, ArrayList<Integer> sortedDocIds){
-        fileManager.createBlockFiles(blockCounter);
-        fileManager.openBlockFiles(blockCounter);
+        fileManager.openBlockFiles(blockCounter, encodingType);
         for(Integer docId : sortedDocIds){
-            fileManager.writeOnFile(fileManager.getMyWriterDocumentIndex(), String.valueOf(docId) + " " + documentIndex.getDocumentIndex().get(docId) + "\n");
-            compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), docId);
-            compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), documentIndex.getDocumentIndex().get(docId).getDocNo());
-            compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), documentIndex.getDocumentIndex().get(docId).getSize());
+            fileManager.writeOnFile(fileManager.getMyWriterDocumentIndex(), docId);
+            fileManager.writeOnFile(fileManager.getMyWriterDocumentIndex(), documentIndex.documentIndex.get(docId).getDocNo());
+            fileManager.writeOnFile(fileManager.getMyWriterDocumentIndex(), documentIndex.documentIndex.get(docId).getSize());
         }
         for (String term : sortedTerms){
             lexicon.getLexicon().get(term).setPostingListLength(invertedIndex.getInvertedIndex().get(term).size());
-            fileManager.writeOnFile(fileManager.getMyWriterLexicon(), term + " " + lexicon.getLexicon().get(term).toString() + "\n");
+            fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), term + " " + lexicon.getLexicon().get(term).toString() + "\n");
             for (Posting posting : invertedIndex.getInvertedIndex().get(term)){
-                fileManager.writeOnFile(fileManager.getMyWriterDocIds(), posting.getDocId() + " ");
-                compressor.writeBytes(fileManager.getMyWriterDocIdsCompressed(), posting.getDocId());
-                fileManager.writeOnFile(fileManager.getMyWriterFreq(), posting.getFreq() + " ");
-                compressor.writeBytes(fileManager.getMyWriterFreqCompressed(), posting.getFreq());
+                fileManager.writeOnFile(fileManager.getMyWriterDocIds(), posting.getDocId());
+                fileManager.writeOnFile(fileManager.getMyWriterFreq(), posting.getFreq());
             }
         }
         fileManager.closeBlockFiles();
@@ -207,16 +205,20 @@ public class Index {
         int offsetFreq = 0;
         String minTerm;
 
-        fileManager.createFinalFiles();
-        fileManager.openScanners(blockCounter);
-        fileManager.openMergeFiles();
-        for(int i = 0; i<blockCounter; i++){
-            while(fileManager.getDocumentIndexScanners()[i].hasNextLine()){
-                fileManager.writeLineOnFile(fileManager.getMyWriterDocumentIndex(), fileManager.readLineFromFile(fileManager.getDocumentIndexScanners()[i]));
-                for(int j = 0; j<3; j++) // 3 times because a documentIndex is saved as 3 int.
+        fileManager.openScanners(blockCounter, encodingType);
+        fileManager.openMergeFiles(encodingType);
+        for (int i = 0; i < blockCounter; i++) {
+            int number = fileManager.readFromFile(fileManager.getDocumentIndexScanners()[i]);
+            while(number != -1){
+                fileManager.writeOnFile(fileManager.getMyWriterDocumentIndex(), number);
+                for (int j = 0; j < 2; j++) // 3 times because a documentIndex is saved as 3 int.
                 {
-                    compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[i]));
+                    fileManager.writeOnFile(fileManager.getMyWriterDocumentIndex(), fileManager.readFromFile(fileManager.getDocumentIndexScanners()[i]));
                 }
+                if (encodingType.equals("text")) {
+                    fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterDocumentIndex(), "\n");
+                }
+                number = fileManager.readFromFile(fileManager.getDocumentIndexScanners()[i]);
             }
         }
         while(true){
@@ -224,29 +226,25 @@ public class Index {
             if(!continueMerging(scannerFinished)){break;}
             minTerm = minTerm(terms, scannerFinished);
             postingListLength = 0;
-            fileManager.writeOnFile(fileManager.getMyWriterLexicon(), minTerm + " " + offsetDocIds + " " + offsetFreq + " ");
+            fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), minTerm + " " + offsetDocIds + " " + offsetFreq + " ");
             for(int i = 0; i<blockCounter; i++){
                 if(terms[i][0].equals(minTerm)){
                     scannerToRead[i] = true;
                     localPostingListLength = Integer.parseInt(terms[i][3]);
                     postingListLength += localPostingListLength;
                     for(int j = 0; j<localPostingListLength; j++){
-                        fileManager.writeOnFile(fileManager.getMyWriterDocIds(),
-                                fileManager.readFromFile(fileManager.getDocIdsScanners()[i]) + " ");
-                        offsetDocIds += compressor.writeBytes(fileManager.getMyWriterDocIdsCompressed(),
-                                compressor.readBytes(fileManager.getDocIdsCompressedScanners()[i]));
+                        offsetDocIds += fileManager.writeOnFile(fileManager.getMyWriterDocIds(),
+                                fileManager.readFromFile(fileManager.getDocIdsScanners()[i]));
 
-                        fileManager.writeOnFile(fileManager.getMyWriterFreq(),
-                                fileManager.readFromFile(fileManager.getFreqScanners()[i]) + " ");
-                        offsetFreq += compressor.writeBytes(fileManager.getMyWriterFreqCompressed(),
-                                compressor.readBytes(fileManager.getFreqCompressedScanners()[i]));
+                        offsetFreq += fileManager.writeOnFile(fileManager.getMyWriterFreq(),
+                                fileManager.readFromFile(fileManager.getFreqScanners()[i]));
                     }
                 }
                 else{
                     scannerToRead[i] = false;
                 }
             }
-            fileManager.writeOnFile(fileManager.getMyWriterLexicon(), postingListLength + "\n");
+            fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), postingListLength + "\n");
         }
         fileManager.closeMergeFiles();
         fileManager.closeScanners();
@@ -264,11 +262,11 @@ public class Index {
         return continueMerging;
     }
 
-    public void advancePointers(Scanner[] lexiconScanners, boolean[] scannerToRead, String[][] terms, boolean[] scannerFinished){
+    public void advancePointers(Reader[] lexiconScanners, boolean[] scannerToRead, String[][] terms, boolean[] scannerFinished){
         for(int i = 0; i<blockCounter; i++){
             if(scannerToRead[i]) {
-                if(lexiconScanners[i].hasNextLine()){
-                    terms[i] = lexiconScanners[i].nextLine().split(" ");
+                if(fileManager.hasNextLine((TextReader) fileManager.getLexiconScanners()[i])){
+                    terms[i] = fileManager.readLineFromFile((TextReader) lexiconScanners[i]).split(" ");
                 }
                 else{
                     scannerFinished[i] = true;

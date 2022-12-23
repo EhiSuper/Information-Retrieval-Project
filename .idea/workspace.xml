@@ -4,14 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Bugfix">
+    <list default="true" id="622dc53f-f666-4b7a-aeff-5419f87e1d8d" name="Changes" comment="Remove encoded, Updated with bufferedInput">
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager/Beans/ByteReader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager/Beans/ByteWriter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager/Beans/RandomAccessByteReader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager/Beans/RandomAccessTextReader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager/Beans/Reader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager/Beans/TextReader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager/Beans/TextWriter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager/Beans/VariableByteCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager/Beans/Writer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Compressor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Compressor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Compressor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager/Beans/Compressor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/FileManager/FileManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Index.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/Indexing/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/HandleIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/HandleIndex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/QueryProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/aide/mircv/InformationRetrievalProject/QueryProcessing/QueryProcessor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +29,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -69,11 +78,11 @@
   </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Compressor" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Compressor" />
+      <option name="MAIN_CLASS_NAME" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.Compressor" />
       <module name="Information Retrieval Project" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.*" />
+          <option name="PATTERN" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -99,7 +108,7 @@
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Main" />
       <module name="Information Retrieval Project" />
-      <option name="PROGRAM_PARAMETERS" value="Data/test.tsv.zip" />
+      <option name="PROGRAM_PARAMETERS" value="Data/test.tsv.zip text" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.*" />
@@ -115,7 +124,7 @@
       <module name="Information Retrieval Project" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.*" />
+          <option name="PATTERN" value="it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -239,8 +248,18 @@
       <option name="project" value="LOCAL" />
       <updated>1671623108186</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Remove encoded, Updated with bufferedInput">
+      <created>1671816243905</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1671816243905</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.tsv" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -272,7 +291,8 @@
     <MESSAGE value="Addedd CollectionStatistics" />
     <MESSAGE value="Added Variable Byte Code Compression" />
     <MESSAGE value="Bugfix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bugfix" />
+    <MESSAGE value="Remove encoded, Updated with bufferedInput" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove encoded, Updated with bufferedInput" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

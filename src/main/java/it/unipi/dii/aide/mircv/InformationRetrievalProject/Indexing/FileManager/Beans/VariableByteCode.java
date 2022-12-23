@@ -1,4 +1,4 @@
-package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
+package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
-public class Compressor {
+public class VariableByteCode implements Compressor{
 
-    public ArrayList<Integer> vbEncode(int number){
+    public ArrayList<Integer> encode(int number){
         ArrayList<Integer> numbers = new ArrayList<>();
         ArrayList<Integer> reversed = new ArrayList<>();
         while(true){
@@ -25,7 +25,7 @@ public class Compressor {
         return reversed;
     }
 
-    public int vbDecode(ArrayList<Integer> bytes){
+    public int decode(ArrayList<Integer> bytes){
         int n = 0;
         for(Integer number : bytes){
             if (number < 128){
@@ -45,12 +45,14 @@ public class Compressor {
         try{
             while(true){
                 byteRead = file.read();
+                if(byteRead == -1) break;
                 bytes.add(byteRead);
                 if(byteRead >= 128){
                     break;
                 }
             }
-            n = vbDecode(bytes);
+            if (byteRead != -1) n = decode(bytes);
+            else n = -1;
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -69,7 +71,7 @@ public class Compressor {
                     break;
                 }
             }
-            n = vbDecode(bytes);
+            n = decode(bytes);
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -78,7 +80,7 @@ public class Compressor {
 
     public int writeBytes(BufferedOutputStream file, int number){
         ArrayList<Integer> bytes;
-        bytes = vbEncode(number);
+        bytes = encode(number);
         int numberOfBytesWritten = 0;
         try{
             for(Integer value : bytes){
@@ -91,3 +93,4 @@ public class Compressor {
         return  numberOfBytesWritten;
     }
 }
+
