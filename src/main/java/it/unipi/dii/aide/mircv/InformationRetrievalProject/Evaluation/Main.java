@@ -1,9 +1,9 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.Evaluation;
 
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Index;
+import java.io.IOException;
 
-public class main {
-    public static void main(String[] args) {
+public class Main {
+    public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Welcome to the Evaluation");
         String file = args[0];
 

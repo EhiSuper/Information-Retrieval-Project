@@ -24,7 +24,7 @@ public class Main {
             BoundedPriorityQueue results = queryProcessor.processQuery(query);
             long end = System.currentTimeMillis();
 
-            System.out.println("Elapsed Time in milli seconds: "+ (end-start));
+            System.out.println("Elapsed Time in milliseconds: "+ (end-start));
             results.printResults();
         }
     }

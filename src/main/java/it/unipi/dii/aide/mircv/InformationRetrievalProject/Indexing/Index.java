@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class Index {
 
@@ -94,25 +96,40 @@ public class Index {
     }
 
     public void processCollection(String file){
-        try{
-            File myFile = new File(file);
-            Scanner myReader = new Scanner(myFile, StandardCharsets.UTF_8);
-            while (myReader.hasNextLine()) {
-                String[] line = myReader.nextLine().split("\t",2); //Read the line and split it (cause the line is composed by (docNo \t document))
+        try {
+            // Open the compressed file
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+
+            // Create a zip input stream from the compressed file
+            ZipInputStream zin = new ZipInputStream(in);
+
+            // Read the first entry in the zip file
+            ZipEntry entry = zin.getNextEntry();
+
+            // Create a reader for reading the uncompressed data
+            BufferedReader reader = new BufferedReader(new InputStreamReader(zin, "UTF-8"));
+
+            // Read data from the zip file and process it
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] columns = line.split("\t",2); //Read the line and split it (cause the line is composed by (docNo \t document))
 
                 int docNo;
                 try{
-                    docNo = Integer.parseInt(line[0]); //Get docNo
+                    docNo = Integer.parseInt(columns[0]); //Get docNo
                 }catch (NumberFormatException e){ continue; }
-                String document = TextPreprocessing.parse(line[1]); //Get document
+                String document = TextPreprocessing.parse(columns[1]); //Get document
                 createIndex(document, docNo);
             }
-            myReader.close();
-        }catch (FileNotFoundException e) {
-            System.out.println("The specified file is not found. Please try again.");
+
+            // Close the zip input stream
+            zin.closeEntry();
+            zin.close();
+
+            // Close the input stream
+            in.close();
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
 
         writeBlock(lexicon, lexicon.sortLexicon(), documentIndex.sortDocumentIndex());
