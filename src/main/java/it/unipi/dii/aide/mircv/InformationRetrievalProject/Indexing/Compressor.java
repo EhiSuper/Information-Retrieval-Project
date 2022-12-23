@@ -1,5 +1,7 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -36,6 +38,25 @@ public class Compressor {
         return n;
     }
 
+    public int readBytes(BufferedInputStream file){
+        ArrayList<Integer> bytes = new ArrayList<>();
+        int byteRead;
+        int n = 0;
+        try{
+            while(true){
+                byteRead = file.read();
+                bytes.add(byteRead);
+                if(byteRead >= 128){
+                    break;
+                }
+            }
+            n = vbDecode(bytes);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return n;
+    }
+
     public int readBytes(RandomAccessFile file){
         ArrayList<Integer> bytes = new ArrayList<>();
         int byteRead;
@@ -55,7 +76,7 @@ public class Compressor {
         return n;
     }
 
-    public int writeBytes(RandomAccessFile file, int number){
+    public int writeBytes(BufferedOutputStream file, int number){
         ArrayList<Integer> bytes;
         bytes = vbEncode(number);
         int numberOfBytesWritten = 0;

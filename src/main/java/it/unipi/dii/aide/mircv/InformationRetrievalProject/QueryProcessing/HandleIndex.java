@@ -39,11 +39,11 @@ public class HandleIndex {
                 offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
                 offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
                 postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
-                fileManager.goToOffset(fileManager.getDocIdsCompressedScanners()[0], offsetDocId);
-                fileManager.goToOffset(fileManager.getFreqCompressedScanners()[0], offsetFreq);
+                fileManager.goToOffset(fileManager.getDocIdsReader(), offsetDocId);
+                fileManager.goToOffset(fileManager.getFreqReader(), offsetFreq);
                 for (int i = 0; i < postingListLength; i++) {
-                    docId = compressor.readBytes(fileManager.getDocIdsCompressedScanners()[0]);
-                    freq = compressor.readBytes(fileManager.getFreqCompressedScanners()[0]);
+                    docId = compressor.readBytes(fileManager.getDocIdsReader());
+                    freq = compressor.readBytes(fileManager.getFreqReader());
                     addPosting(postingLists, term, docId, freq);
                 }
             }catch (NullPointerException e){
@@ -76,9 +76,9 @@ public class HandleIndex {
         int docNo;
         int size;
         for(int i = 0; i<collectionStatistics.getDocuments(); i++){
-            docId = compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[0]);
-            docNo = compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[0]);
-            size = compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[0]);
+            docId = compressor.readBytes(fileManager.getDocIdsReader());
+            docNo = compressor.readBytes(fileManager.getFreqReader());
+            size = compressor.readBytes(fileManager.getDocumentIndexReader());
             documentIndex.addDocument(docId, docNo, size);
         }
     }

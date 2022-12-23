@@ -10,6 +10,6 @@ public class Main {
         long start = System.currentTimeMillis();
         index.processCollection(file);
         long end = System.currentTimeMillis();
-        System.out.println("Elapsed Time in milli seconds: "+ ((end-start)/1000));
+        System.out.println("Elapsed Time in milliseconds: "+ (end-start));
     }
 }

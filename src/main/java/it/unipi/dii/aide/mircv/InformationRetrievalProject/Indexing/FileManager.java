@@ -5,69 +5,81 @@ import java.util.Scanner;
 
 public class FileManager {
 
-    public FileWriter myWriterDocIds;
-    public FileWriter myWriterFreq;
-    public FileWriter myWriterLexicon;
-    public FileWriter myWriterDocumentIndex;
-    public RandomAccessFile myWriterDocIdsEncoded;
-    public RandomAccessFile myWriterFreqEncoded;
-    public RandomAccessFile myWriterDocumentIndexEncoded;
-    public RandomAccessFile myWriterDocIdsCompressed;
-    public RandomAccessFile myWriterFreqCompressed;
-    public RandomAccessFile myWriterDocumentIndexCompressed;
+    public BufferedWriter myWriterDocIds;
+    public BufferedWriter myWriterFreq;
+    public BufferedWriter myWriterLexicon;
+    public BufferedWriter myWriterDocumentIndex;
+    public BufferedOutputStream myWriterDocIdsCompressed;
+    public BufferedOutputStream myWriterFreqCompressed;
+    public BufferedOutputStream myWriterDocumentIndexCompressed;
 
     Scanner[] lexiconScanners;
     Scanner[] docIdsScanners;
     Scanner[] freqScanners;
-
     Scanner[] documentIndexScanners;
-    RandomAccessFile[] docIdsEncodedScanners;
-    RandomAccessFile[] freqEncodedScanners;
 
-    RandomAccessFile[] documentIndexEncodedScanners;
-    RandomAccessFile[] docIdsCompressedScanners;
-    RandomAccessFile[] freqCompressedScanners;
-    RandomAccessFile[] documentIndexCompressedScanners;
+    BufferedInputStream[] docIdsCompressedScanners;
+    BufferedInputStream[] freqCompressedScanners;
+    BufferedInputStream[] documentIndexCompressedScanners;
 
+    RandomAccessFile docIdsReader;
+    RandomAccessFile freqReader;
+    RandomAccessFile documentIndexReader;
 
-    public FileWriter getMyWriterDocIds() {
+    public BufferedWriter getMyWriterDocIds() {
         return myWriterDocIds;
     }
 
-    public void setMyWriterDocIds(FileWriter myWriterDocIds) {
+    public void setMyWriterDocIds(BufferedWriter myWriterDocIds) {
         this.myWriterDocIds = myWriterDocIds;
     }
 
-    public FileWriter getMyWriterFreq() {
+    public BufferedWriter getMyWriterFreq() {
         return myWriterFreq;
     }
 
-    public void setMyWriterFreq(FileWriter myWriterFreq) {
+    public void setMyWriterFreq(BufferedWriter myWriterFreq) {
         this.myWriterFreq = myWriterFreq;
     }
 
-    public FileWriter getMyWriterLexicon() {
+    public BufferedWriter getMyWriterLexicon() {
         return myWriterLexicon;
     }
 
-    public void setMyWriterLexicon(FileWriter myWriterLexicon) {
+    public void setMyWriterLexicon(BufferedWriter myWriterLexicon) {
         this.myWriterLexicon = myWriterLexicon;
     }
 
-    public RandomAccessFile getMyWriterDocIdsEncoded() {
-        return myWriterDocIdsEncoded;
+    public BufferedWriter getMyWriterDocumentIndex() {
+        return myWriterDocumentIndex;
     }
 
-    public void setMyWriterDocIdsEncoded(RandomAccessFile myWriterDocIdsEncoded) {
-        this.myWriterDocIdsEncoded = myWriterDocIdsEncoded;
+    public void setMyWriterDocumentIndex(BufferedWriter myWriterDocumentIndex) {
+        this.myWriterDocumentIndex = myWriterDocumentIndex;
     }
 
-    public RandomAccessFile getMyWriterFreqEncoded() {
-        return myWriterFreqEncoded;
+    public BufferedOutputStream getMyWriterDocIdsCompressed() {
+        return myWriterDocIdsCompressed;
     }
 
-    public void setMyWriterFreqEncoded(RandomAccessFile myWriterFreqEncoded) {
-        this.myWriterFreqEncoded = myWriterFreqEncoded;
+    public void setMyWriterDocIdsCompressed(BufferedOutputStream myWriterDocIdsCompressed) {
+        this.myWriterDocIdsCompressed = myWriterDocIdsCompressed;
+    }
+
+    public BufferedOutputStream getMyWriterFreqCompressed() {
+        return myWriterFreqCompressed;
+    }
+
+    public void setMyWriterFreqCompressed(BufferedOutputStream myWriterFreqCompressed) {
+        this.myWriterFreqCompressed = myWriterFreqCompressed;
+    }
+
+    public BufferedOutputStream getMyWriterDocumentIndexCompressed() {
+        return myWriterDocumentIndexCompressed;
+    }
+
+    public void setMyWriterDocumentIndexCompressed(BufferedOutputStream myWriterDocumentIndexCompressed) {
+        this.myWriterDocumentIndexCompressed = myWriterDocumentIndexCompressed;
     }
 
     public Scanner[] getLexiconScanners() {
@@ -94,38 +106,6 @@ public class FileManager {
         this.freqScanners = freqScanners;
     }
 
-    public RandomAccessFile[] getDocIdsEncodedScanners() {
-        return docIdsEncodedScanners;
-    }
-
-    public void setDocIdsEncodedScanners(RandomAccessFile[] docIdsEncodedScanners) {
-        this.docIdsEncodedScanners = docIdsEncodedScanners;
-    }
-
-    public RandomAccessFile[] getFreqEncodedScanners() {
-        return freqEncodedScanners;
-    }
-
-    public void setFreqEncodedScanners(RandomAccessFile[] freqEncodedScanners) {
-        this.freqEncodedScanners = freqEncodedScanners;
-    }
-
-    public FileWriter getMyWriterDocumentIndex() {
-        return myWriterDocumentIndex;
-    }
-
-    public void setMyWriterDocumentIndex(FileWriter myWriterDocumentIndex) {
-        this.myWriterDocumentIndex = myWriterDocumentIndex;
-    }
-
-    public RandomAccessFile getMyWriterDocumentIndexEncoded() {
-        return myWriterDocumentIndexEncoded;
-    }
-
-    public void setMyWriterDocumentIndexEncoded(RandomAccessFile myWriterDocumentIndexEncoded) {
-        this.myWriterDocumentIndexEncoded = myWriterDocumentIndexEncoded;
-    }
-
     public Scanner[] getDocumentIndexScanners() {
         return documentIndexScanners;
     }
@@ -134,74 +114,63 @@ public class FileManager {
         this.documentIndexScanners = documentIndexScanners;
     }
 
-    public RandomAccessFile[] getDocumentIndexEncodedScanners() {
-        return documentIndexEncodedScanners;
-    }
-
-    public void setDocumentIndexEncodedScanners(RandomAccessFile[] documentIndexEncodedScanners) {
-        this.documentIndexEncodedScanners = documentIndexEncodedScanners;
-    }
-
-    public RandomAccessFile getMyWriterDocIdsCompressed() {
-        return myWriterDocIdsCompressed;
-    }
-
-    public void setMyWriterDocIdsCompressed(RandomAccessFile myWriterDocIdsCompressed) {
-        this.myWriterDocIdsCompressed = myWriterDocIdsCompressed;
-    }
-
-    public RandomAccessFile getMyWriterFreqCompressed() {
-        return myWriterFreqCompressed;
-    }
-
-    public void setMyWriterFreqCompressed(RandomAccessFile myWriterFreqCompressed) {
-        this.myWriterFreqCompressed = myWriterFreqCompressed;
-    }
-
-    public RandomAccessFile getMyWriterDocumentIndexCompressed() {
-        return myWriterDocumentIndexCompressed;
-    }
-
-    public void setMyWriterDocumentIndexCompressed(RandomAccessFile myWriterDocumentIndexCompressed) {
-        this.myWriterDocumentIndexCompressed = myWriterDocumentIndexCompressed;
-    }
-
-    public RandomAccessFile[] getDocIdsCompressedScanners() {
+    public BufferedInputStream[] getDocIdsCompressedScanners() {
         return docIdsCompressedScanners;
     }
 
-    public void setDocIdsCompressedScanners(RandomAccessFile[] docIdsCompressedScanners) {
+    public void setDocIdsCompressedScanners(BufferedInputStream[] docIdsCompressedScanners) {
         this.docIdsCompressedScanners = docIdsCompressedScanners;
     }
 
-    public RandomAccessFile[] getFreqCompressedScanners() {
+    public BufferedInputStream[] getFreqCompressedScanners() {
         return freqCompressedScanners;
     }
 
-    public void setFreqCompressedScanners(RandomAccessFile[] freqCompressedScanners) {
+    public void setFreqCompressedScanners(BufferedInputStream[] freqCompressedScanners) {
         this.freqCompressedScanners = freqCompressedScanners;
     }
 
-    public RandomAccessFile[] getDocumentIndexCompressedScanners() {
+    public BufferedInputStream[] getDocumentIndexCompressedScanners() {
         return documentIndexCompressedScanners;
     }
 
-    public void setDocumentIndexCompressedScanners(RandomAccessFile[] documentIndexCompressedScanners) {
+    public void setDocumentIndexCompressedScanners(BufferedInputStream[] documentIndexCompressedScanners) {
         this.documentIndexCompressedScanners = documentIndexCompressedScanners;
+    }
+
+    public RandomAccessFile getDocIdsReader() {
+        return docIdsReader;
+    }
+
+    public void setDocIdsReader(RandomAccessFile docIdsReader) {
+        this.docIdsReader = docIdsReader;
+    }
+
+    public RandomAccessFile getFreqReader() {
+        return freqReader;
+    }
+
+    public void setFreqReader(RandomAccessFile freqReader) {
+        this.freqReader = freqReader;
+    }
+
+    public RandomAccessFile getDocumentIndexReader() {
+        return documentIndexReader;
+    }
+
+    public void setDocumentIndexReader(RandomAccessFile documentIndexReader) {
+        this.documentIndexReader = documentIndexReader;
     }
 
     public void openBlockFiles(int blockCounter){
         try{
-            myWriterDocIds = new FileWriter("Data/Output/DocIds/docIds" + blockCounter + ".txt");
-            myWriterFreq = new FileWriter("Data/Output/Frequencies/freq" + blockCounter + ".txt");
-            myWriterLexicon = new FileWriter("Data/Output/Lexicon/lexicon" + blockCounter + ".txt");
-            myWriterDocumentIndex = new FileWriter("Data/Output/DocumentIndex/documentIndex" + blockCounter + ".txt");
-            myWriterDocIdsEncoded = new RandomAccessFile("Data/Output/DocIds/docIds" + blockCounter + "Encoded.txt", "rw");
-            myWriterFreqEncoded = new RandomAccessFile("Data/Output/Frequencies/freq" + blockCounter + "Encoded.txt", "rw");
-            myWriterDocumentIndexEncoded = new RandomAccessFile("Data/Output/DocumentIndex/documentIndex" + blockCounter + "Encoded.txt", "rw");
-            myWriterDocIdsCompressed = new RandomAccessFile("Data/Output/DocIds/docIds" + blockCounter + "Compressed.txt", "rw");
-            myWriterFreqCompressed = new RandomAccessFile("Data/Output/Frequencies/freq" + blockCounter + "Compressed.txt", "rw");
-            myWriterDocumentIndexCompressed = new RandomAccessFile("Data/Output/DocumentIndex/documentIndex" + blockCounter + "Compressed.txt", "rw");
+            myWriterDocIds = new BufferedWriter(new FileWriter("Data/Output/DocIds/docIds" + blockCounter + ".txt"));
+            myWriterFreq = new BufferedWriter(new FileWriter("Data/Output/Frequencies/freq" + blockCounter + ".txt"));
+            myWriterLexicon = new BufferedWriter(new FileWriter("Data/Output/Lexicon/lexicon" + blockCounter + ".txt"));
+            myWriterDocumentIndex = new BufferedWriter(new FileWriter("Data/Output/DocumentIndex/documentIndex" + blockCounter + ".txt"));
+            myWriterDocIdsCompressed = new BufferedOutputStream(new FileOutputStream("Data/Output/DocIds/docIds" + blockCounter + "Compressed.txt"));
+            myWriterFreqCompressed = new BufferedOutputStream(new FileOutputStream("Data/Output/Frequencies/freq" + blockCounter + "Compressed.txt"));
+            myWriterDocumentIndexCompressed = new BufferedOutputStream(new FileOutputStream("Data/Output/DocumentIndex/documentIndex" + blockCounter + "Compressed.txt"));
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -213,9 +182,6 @@ public class FileManager {
             myWriterFreq.close();
             myWriterLexicon.close();
             myWriterDocumentIndex.close();
-            myWriterDocIdsEncoded.close();
-            myWriterFreqEncoded.close();
-            myWriterDocumentIndexEncoded.close();
             myWriterDocIdsCompressed.close();
             myWriterFreqCompressed.close();
             myWriterDocumentIndexCompressed.close();
@@ -224,7 +190,7 @@ public class FileManager {
         }
     }
 
-    public void writeOnFile(FileWriter file, String string){
+    public void writeOnFile(BufferedWriter file, String string){
         try{
             file.write(string);
         }
@@ -233,19 +199,11 @@ public class FileManager {
         }
     }
 
-    public void writeLineOnFile(FileWriter file, String string){
+    public void writeLineOnFile(BufferedWriter file, String string){
         try{
             file.write(string + "\n");
         }
         catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    public void writeOnFile(RandomAccessFile file, int number){
-        try{
-            file.writeInt(number);
-        }catch (IOException e){
             e.printStackTrace();
         }
     }
@@ -256,27 +214,6 @@ public class FileManager {
 
     public String readLineFromFile(Scanner scanner){
         return scanner.nextLine();
-    }
-
-    public int readFromFile(RandomAccessFile file){
-        try{
-            return file.readInt();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    public int readFromFile(RandomAccessFile file, int offset){
-        try{
-            file.seek(offset);
-            return file.readInt();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     public void goToOffset(RandomAccessFile file, int offset){
@@ -307,25 +244,7 @@ public class FileManager {
             } else {
                 System.out.println("File already exists.");
             }
-            myObj = new File("Data/Output/DocIds/docIdsEncoded.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-            myObj = new File("Data/Output/Frequencies/freqEncoded.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
             myObj = new File("Data/Output/DocumentIndex/documentIndex.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-            myObj = new File("Data/Output/DocumentIndex/documentIndexEncoded.txt");
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
             } else {
@@ -381,25 +300,7 @@ public class FileManager {
             } else {
                 System.out.println("File already exists.");
             }
-            myObj = new File("Data/Output/DocIds/docIds" + blockCounter + "Encoded.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-            myObj = new File("Data/Output/Frequencies/freq" + blockCounter + "Encoded.txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
             myObj = new File("Data/Output/DocumentIndex/documentIndex" + blockCounter + ".txt");
-            if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
-            } else {
-                System.out.println("File already exists.");
-            }
-            myObj = new File("Data/Output/DocumentIndex/documentIndex" + blockCounter + "Encoded.txt");
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
             } else {
@@ -434,24 +335,18 @@ public class FileManager {
         docIdsScanners = new Scanner[blockCounter];
         freqScanners = new Scanner[blockCounter];
         documentIndexScanners = new Scanner[blockCounter];
-        docIdsEncodedScanners = new RandomAccessFile[blockCounter];
-        freqEncodedScanners = new RandomAccessFile[blockCounter];
-        documentIndexEncodedScanners = new RandomAccessFile[blockCounter];
-        docIdsCompressedScanners = new RandomAccessFile[blockCounter];
-        freqCompressedScanners = new RandomAccessFile[blockCounter];
-        documentIndexCompressedScanners = new RandomAccessFile[blockCounter];
+        docIdsCompressedScanners = new BufferedInputStream[blockCounter];
+        freqCompressedScanners = new BufferedInputStream[blockCounter];
+        documentIndexCompressedScanners = new BufferedInputStream[blockCounter];
         try{
             for(int i = 0; i<blockCounter; i++){
                 lexiconScanners[i] = new Scanner(new File("Data/Output/Lexicon/lexicon" + i + ".txt"));
                 docIdsScanners[i] = new Scanner(new File("Data/Output/DocIds/docIds" + i + ".txt"));
                 freqScanners[i] = new Scanner(new File("Data/Output/Frequencies/freq" + i + ".txt"));
                 documentIndexScanners[i] = new Scanner(new File("Data/Output/DocumentIndex/documentIndex" + i + ".txt"));
-                docIdsEncodedScanners[i] = new RandomAccessFile("Data/Output/DocIds/docIds" + i + "Encoded.txt", "r");
-                freqEncodedScanners[i] = new RandomAccessFile("Data/Output/Frequencies/freq" + i + "Encoded.txt", "r");
-                documentIndexEncodedScanners[i] = new RandomAccessFile("Data/Output/DocumentIndex/documentIndex" + i + "Encoded.txt", "r");
-                docIdsCompressedScanners[i] = new RandomAccessFile("Data/Output/DocIds/docIds" + i + "Compressed.txt", "r");
-                freqCompressedScanners[i] = new RandomAccessFile("Data/Output/Frequencies/freq" + i + "Compressed.txt", "r");
-                documentIndexCompressedScanners[i] = new RandomAccessFile("Data/Output/DocumentIndex/documentIndex" + i + "Compressed.txt", "r");
+                docIdsCompressedScanners[i] = new BufferedInputStream(new FileInputStream("Data/Output/DocIds/docIds" + i + "Compressed.txt"));
+                freqCompressedScanners[i] = new BufferedInputStream(new FileInputStream("Data/Output/Frequencies/freq" + i + "Compressed.txt"));
+                documentIndexCompressedScanners[i] = new BufferedInputStream(new FileInputStream("Data/Output/DocumentIndex/documentIndex" + i + "Compressed.txt"));
             }
         }catch (IOException e){
             e.printStackTrace();
@@ -465,9 +360,6 @@ public class FileManager {
                 docIdsScanners[i].close();
                 freqScanners[i].close();
                 documentIndexScanners[i].close();
-                docIdsEncodedScanners[i].close();
-                freqEncodedScanners[i].close();
-                documentIndexEncodedScanners[i].close();
                 docIdsCompressedScanners[i].close();
                 freqCompressedScanners[i].close();
                 docIdsCompressedScanners[i].close();
@@ -480,16 +372,13 @@ public class FileManager {
 
     public void openMergeFiles(){
         try{
-            myWriterDocIds = new FileWriter("Data/Output/DocIds/docIds.txt");
-            myWriterFreq = new FileWriter("Data/Output/Frequencies/freq.txt");
-            myWriterLexicon = new FileWriter("Data/Output/Lexicon/lexicon.txt");
-            myWriterDocumentIndex = new FileWriter("Data/Output/DocumentIndex/documentIndex.txt");
-            myWriterDocIdsEncoded = new RandomAccessFile("Data/Output/DocIds/docIdsEncoded.txt", "rw");
-            myWriterFreqEncoded = new RandomAccessFile("Data/Output/Frequencies/freqEncoded.txt", "rw");
-            myWriterDocumentIndexEncoded = new RandomAccessFile("Data/Output/DocumentIndex/documentIndexEncoded.txt", "rw");
-            myWriterDocIdsCompressed = new RandomAccessFile("Data/Output/DocIds/docIdsCompressed.txt", "rw");
-            myWriterFreqCompressed = new RandomAccessFile("Data/Output/Frequencies/freqCompressed.txt", "rw");
-            myWriterDocumentIndexCompressed = new RandomAccessFile("Data/Output/DocumentIndex/documentIndexCompressed.txt", "rw");
+            myWriterDocIds = new BufferedWriter(new FileWriter("Data/Output/DocIds/docIds.txt"));
+            myWriterFreq = new BufferedWriter(new FileWriter("Data/Output/Frequencies/freq.txt"));
+            myWriterLexicon = new BufferedWriter(new FileWriter("Data/Output/Lexicon/lexicon.txt"));
+            myWriterDocumentIndex = new BufferedWriter(new FileWriter("Data/Output/DocumentIndex/documentIndex.txt"));
+            myWriterDocIdsCompressed = new BufferedOutputStream(new FileOutputStream("Data/Output/DocIds/docIdsCompressed.txt"));
+            myWriterFreqCompressed = new BufferedOutputStream(new FileOutputStream("Data/Output/Frequencies/freqCompressed.txt"));
+            myWriterDocumentIndexCompressed = new BufferedOutputStream(new FileOutputStream("Data/Output/DocumentIndex/documentIndexCompressed.txt"));
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -501,9 +390,6 @@ public class FileManager {
             myWriterFreq.close();
             myWriterLexicon.close();
             myWriterDocumentIndex.close();
-            myWriterDocIdsEncoded.close();
-            myWriterFreqEncoded.close();
-            myWriterDocumentIndexEncoded.close();
             myWriterDocIdsCompressed.close();
             myWriterFreqCompressed.close();
             myWriterDocumentIndexCompressed.close();
@@ -514,14 +400,11 @@ public class FileManager {
 
     public void openLookupFiles(){
         lexiconScanners = new Scanner[1];
-        docIdsCompressedScanners = new RandomAccessFile[1];
-        freqCompressedScanners = new RandomAccessFile[1];
-        documentIndexCompressedScanners = new RandomAccessFile[1];
         try{
             lexiconScanners[0] = new Scanner(new File("Data/Output/Lexicon/lexicon.txt"));
-            docIdsCompressedScanners[0] = new RandomAccessFile("Data/Output/DocIds/docIdsCompressed.txt", "r");
-            freqCompressedScanners[0] = new RandomAccessFile("Data/Output/Frequencies/freqCompressed.txt", "r");
-            documentIndexCompressedScanners[0] = new RandomAccessFile("Data/Output/DocumentIndex/documentIndexCompressed.txt", "r");
+            docIdsReader = new RandomAccessFile("Data/Output/DocIds/docIdsCompressed.txt", "r");
+            freqReader = new RandomAccessFile("Data/Output/Frequencies/freqCompressed.txt", "r");
+            documentIndexReader = new RandomAccessFile("Data/Output/DocumentIndex/documentIndexCompressed.txt", "r");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -530,9 +413,9 @@ public class FileManager {
     public void closeLookupFiles(){
         try{
             lexiconScanners[0].close();
-            docIdsCompressedScanners[0].close();
-            freqCompressedScanners[0].close();
-            documentIndexCompressedScanners[0].close();
+            docIdsReader.close();
+            freqReader.close();
+            documentIndexReader.close();
         }catch (IOException e){
             e.printStackTrace();
         }

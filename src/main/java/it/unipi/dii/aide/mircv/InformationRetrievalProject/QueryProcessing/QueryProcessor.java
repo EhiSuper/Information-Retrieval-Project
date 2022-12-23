@@ -62,12 +62,4 @@ public class QueryProcessor {
         }
         return null;
     }
-
-
-
-
-
-
-
-
 }

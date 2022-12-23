@@ -3,7 +3,6 @@ import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.Tex
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Utils;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -125,6 +124,7 @@ public class Index {
             // Close the zip input stream
             zin.closeEntry();
             zin.close();
+            reader.close();
 
             // Close the input stream
             in.close();
@@ -175,9 +175,6 @@ public class Index {
         fileManager.openBlockFiles(blockCounter);
         for(Integer docId : sortedDocIds){
             fileManager.writeOnFile(fileManager.getMyWriterDocumentIndex(), String.valueOf(docId) + " " + documentIndex.getDocumentIndex().get(docId) + "\n");
-            fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), docId);
-            fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), documentIndex.getDocumentIndex().get(docId).getDocNo());
-            fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), documentIndex.getDocumentIndex().get(docId).getSize());
             compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), docId);
             compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), documentIndex.getDocumentIndex().get(docId).getDocNo());
             compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), documentIndex.getDocumentIndex().get(docId).getSize());
@@ -187,10 +184,8 @@ public class Index {
             fileManager.writeOnFile(fileManager.getMyWriterLexicon(), term + " " + lexicon.getLexicon().get(term).toString() + "\n");
             for (Posting posting : invertedIndex.getInvertedIndex().get(term)){
                 fileManager.writeOnFile(fileManager.getMyWriterDocIds(), posting.getDocId() + " ");
-                fileManager.writeOnFile(fileManager.getMyWriterDocIdsEncoded(), posting.getDocId());
                 compressor.writeBytes(fileManager.getMyWriterDocIdsCompressed(), posting.getDocId());
                 fileManager.writeOnFile(fileManager.getMyWriterFreq(), posting.getFreq() + " ");
-                fileManager.writeOnFile(fileManager.getMyWriterFreqEncoded(), posting.getFreq());
                 compressor.writeBytes(fileManager.getMyWriterFreqCompressed(), posting.getFreq());
             }
         }
@@ -220,7 +215,6 @@ public class Index {
                 fileManager.writeLineOnFile(fileManager.getMyWriterDocumentIndex(), fileManager.readLineFromFile(fileManager.getDocumentIndexScanners()[i]));
                 for(int j = 0; j<3; j++) // 3 times because a documentIndex is saved as 3 int.
                 {
-                    fileManager.writeOnFile(fileManager.getMyWriterDocumentIndexEncoded(), fileManager.readFromFile(fileManager.getDocumentIndexEncodedScanners()[i]));
                     compressor.writeBytes(fileManager.getMyWriterDocumentIndexCompressed(), compressor.readBytes(fileManager.getDocumentIndexCompressedScanners()[i]));
                 }
             }
@@ -239,15 +233,11 @@ public class Index {
                     for(int j = 0; j<localPostingListLength; j++){
                         fileManager.writeOnFile(fileManager.getMyWriterDocIds(),
                                 fileManager.readFromFile(fileManager.getDocIdsScanners()[i]) + " ");
-                        fileManager.writeOnFile(fileManager.getMyWriterDocIdsEncoded(),
-                                fileManager.readFromFile(fileManager.getDocIdsEncodedScanners()[i]));
                         offsetDocIds += compressor.writeBytes(fileManager.getMyWriterDocIdsCompressed(),
                                 compressor.readBytes(fileManager.getDocIdsCompressedScanners()[i]));
 
                         fileManager.writeOnFile(fileManager.getMyWriterFreq(),
                                 fileManager.readFromFile(fileManager.getFreqScanners()[i]) + " ");
-                        fileManager.writeOnFile(fileManager.getMyWriterFreqEncoded(),
-                                fileManager.readFromFile(fileManager.getFreqEncodedScanners()[i]));
                         offsetFreq += compressor.writeBytes(fileManager.getMyWriterFreqCompressed(),
                                 compressor.readBytes(fileManager.getFreqCompressedScanners()[i]));
                     }
@@ -307,6 +297,5 @@ public class Index {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
