@@ -43,7 +43,6 @@ public class QueryEvaluator implements Runnable{
 
     public void processQuery(String query, int qid, QueryProcessor queryProcessor) throws IOException {
         BoundedPriorityQueue results = queryProcessor.processQuery(query);
-        results.printResults();
 
         PriorityQueue<FinalScore> queue = results.getQueue();
         Stack<FinalScore> stack = new Stack<>();
@@ -56,8 +55,10 @@ public class QueryEvaluator implements Runnable{
         int position = 1;
         while (!stack.isEmpty()) {
             FinalScore fs = stack.pop();
-            bw.write(qid + " " + "Q0" + " " + fs.getKey() + " " + position + " " +  fs.getValue() + " " + "STANDARD");
-            bw.newLine();
+            synchronized (bw) {
+                bw.write(qid + " " + "Q0" + " " + fs.getKey() + " " + position + " " + fs.getValue() + " " + "STANDARD");
+                bw.newLine();
+            }
             position+=1;
         }
     }

@@ -31,4 +31,9 @@ public class RandomAccessTextReader implements Reader{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public Object getReader() {
+        return randomAccessFile;
+    }
 }

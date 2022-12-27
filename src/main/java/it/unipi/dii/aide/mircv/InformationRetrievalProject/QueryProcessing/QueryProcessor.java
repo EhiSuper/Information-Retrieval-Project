@@ -17,11 +17,11 @@ public class QueryProcessor {
     public String scoringFunction;
     public String documentProcessor;
 
-    public QueryProcessor(int nResults, String scoringFunction, String documentProcessor){
+    public QueryProcessor(int nResults, String scoringFunction, String documentProcessor, String encodingType){
         this.k = nResults;
         this.scoringFunction = scoringFunction;
         this.documentProcessor = documentProcessor;
-        this.handleIndex = new HandleIndex();
+        this.handleIndex = new HandleIndex(encodingType);
     }
 
     public BoundedPriorityQueue processQuery(String query){

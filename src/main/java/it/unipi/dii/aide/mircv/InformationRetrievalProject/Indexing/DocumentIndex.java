@@ -15,7 +15,7 @@ public class DocumentIndex {
     public void setDocumentIndex(HashMap<Integer, DocumentInformation> documentIndex){ this.documentIndex = documentIndex;}
     public HashMap<Integer, DocumentInformation> getDocumentIndex(){ return this.documentIndex; }
 
-    public class DocumentInformation{
+    public static class DocumentInformation{
         public int docNo;
         public int size;
 

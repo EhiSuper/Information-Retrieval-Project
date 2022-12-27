@@ -96,9 +96,7 @@ public class FileManager {
         this.lexiconReader = lexiconReader;
     }
 
-    public Reader getDocIdsReader() {
-        return docIdsReader;
-    }
+    public Reader getDocIdsReader() { return docIdsReader; }
 
     public void setDocIdsReader(Reader docIdsReader) {
         this.docIdsReader = docIdsReader;

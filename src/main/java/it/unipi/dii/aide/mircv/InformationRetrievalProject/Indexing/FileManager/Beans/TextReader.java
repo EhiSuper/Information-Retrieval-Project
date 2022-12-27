@@ -28,6 +28,11 @@ public class TextReader implements Reader{
         scanner.close();
     }
 
+    @Override
+    public Object getReader() {
+        return scanner;
+    }
+
     public boolean hasNextLine(){
         return scanner.hasNextLine();
     }

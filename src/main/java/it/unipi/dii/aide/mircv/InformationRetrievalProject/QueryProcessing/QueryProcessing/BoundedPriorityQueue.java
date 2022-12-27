@@ -36,6 +36,10 @@ public class BoundedPriorityQueue {
         return queue.peek();
     }
 
+    public int size(){
+        return queue.size();
+    }
+
     public void printResults() {
         Stack<FinalScore> stack = new Stack<>();
         PriorityQueue<FinalScore> copy = new PriorityQueue<>(queue);

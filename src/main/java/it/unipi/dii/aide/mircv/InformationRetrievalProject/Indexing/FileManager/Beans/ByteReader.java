@@ -29,4 +29,9 @@ public class ByteReader implements Reader{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public Object getReader() {
+        return bufferedInputStream;
+    }
 }

@@ -28,5 +28,10 @@ public class RandomAccessByteReader implements Reader{
             e.printStackTrace();
         }
     }
+
+    public RandomAccessFile getReader(){
+        return randomAccessFile;
+    }
+
 }
 

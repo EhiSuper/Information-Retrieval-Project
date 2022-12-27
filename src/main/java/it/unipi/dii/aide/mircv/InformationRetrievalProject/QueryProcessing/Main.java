@@ -11,8 +11,9 @@ public class Main {
         int nResults = Integer.parseInt(args[0]); //Numeber of results
         String scoringFunction = args[1]; //Which scoring function to use
         String documentProcessor = args[2]; //How to process the postinglist
+        String encodingType = args[3]; //EncodingType
 
-        QueryProcessor queryProcessor = new QueryProcessor(nResults, scoringFunction, documentProcessor);
+        QueryProcessor queryProcessor = new QueryProcessor(nResults, scoringFunction, documentProcessor, encodingType);
 
         Scanner sc = new Scanner(System.in);
 

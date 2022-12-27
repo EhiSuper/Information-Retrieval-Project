@@ -31,7 +31,7 @@ public class EvaluateSearchEngine {
 
     public void processCollection(String file) throws IOException, InterruptedException {
 
-        QueryProcessor queryProcessor= new QueryProcessor(10, "tfidf", "daat");
+        QueryProcessor queryProcessor= new QueryProcessor(10, "tfidf", "daat", "bytes");
 
 
         // Open the input and output files

@@ -47,15 +47,13 @@ public class PostingListIterator implements Iterator<Posting> {
     public Posting nextGEQ(int docId) {
         // Iterate through the remaining postings in the list
         while (hasNext()) {
-            // Get the next posting in the list
-            Posting posting = next();
-
-            // If the posting is greater than or equal to the threshold, return it
-            if (docid() >= docId) {
+            Posting posting = PostingList.get(position);
+            if (posting.getDocId() >= docId) {
                 return posting;
             }
+
+            next();
         }
-        // If no posting is greater than or equal to the threshold, return null
         return null;
     }
 }

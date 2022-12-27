@@ -18,12 +18,12 @@ public class HandleIndex {
     public DocumentIndex documentIndex;
 
 
-    public HandleIndex(){
+    public HandleIndex(String encodingType){
         this.fileManager = new FileManager();
         this.lexicon = new Lexicon();
         this.documentIndex = new DocumentIndex();
 
-        fileManager.openLookupFiles("text");
+        fileManager.openLookupFiles(encodingType);
         obtainLexicon(lexicon, fileManager);
         obtainCollectionStatistics();
         obtainDocumentIndex();
@@ -42,8 +42,8 @@ public class HandleIndex {
                 offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
                 offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
                 postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
-                fileManager.goToOffset((RandomAccessFile) fileManager.getDocIdsReader(), offsetDocId);
-                fileManager.goToOffset((RandomAccessFile) fileManager.getFreqReader(), offsetFreq);
+                fileManager.goToOffset((RandomAccessFile) fileManager.getDocIdsReader().getReader(), offsetDocId);
+                fileManager.goToOffset((RandomAccessFile) fileManager.getFreqReader().getReader(), offsetFreq);
                 for (int i = 0; i < postingListLength; i++) {
                     docId = fileManager.readFromFile(fileManager.getDocIdsReader());
                     freq = fileManager.readFromFile(fileManager.getFreqReader());
