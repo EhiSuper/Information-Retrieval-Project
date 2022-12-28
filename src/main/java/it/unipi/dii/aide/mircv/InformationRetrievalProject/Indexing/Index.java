@@ -211,12 +211,9 @@ public class Index {
             int number = fileManager.readFromFile(fileManager.getDocumentIndexScanners()[i]);
             while(number != -1){
                 fileManager.writeOnFile(fileManager.getMyWriterDocumentIndex(), number);
-                for (int j = 0; j < 2; j++) // 3 times because a documentIndex is saved as 3 int.
+                for (int j = 0; j < 2; j++) // 2 times because a documentIndex is saved as 3 int.
                 {
                     fileManager.writeOnFile(fileManager.getMyWriterDocumentIndex(), fileManager.readFromFile(fileManager.getDocumentIndexScanners()[i]));
-                }
-                if (encodingType.equals("text")) {
-                    fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterDocumentIndex(), "\n");
                 }
                 number = fileManager.readFromFile(fileManager.getDocumentIndexScanners()[i]);
             }

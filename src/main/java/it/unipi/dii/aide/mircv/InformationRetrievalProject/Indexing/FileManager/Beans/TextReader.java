@@ -15,7 +15,9 @@ public class TextReader implements Reader{
     }
     @Override
     public int read() {
-        if(scanner.hasNext()) return Integer.valueOf(scanner.next());
+        if(scanner.hasNext()){
+            return Integer.parseInt(scanner.next());
+        }
         else return -1;
     }
 

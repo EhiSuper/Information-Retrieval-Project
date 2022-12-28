@@ -90,7 +90,7 @@ public class HandleIndex {
         String[] terms;
         terms = fileManager.readLineFromFile((TextReader) fileManager.getCollectionStatisticsReader()).split(" ");
         collectionStatistics = new CollectionStatistics(Integer.parseInt(terms[0]), Double.parseDouble(terms[1]),
-                2, lexicon.getLexicon().size());
+                lexicon.getLexicon().size(), Integer.valueOf(terms[2]));
     }
 
     public CollectionStatistics getCollectionStatistics() {

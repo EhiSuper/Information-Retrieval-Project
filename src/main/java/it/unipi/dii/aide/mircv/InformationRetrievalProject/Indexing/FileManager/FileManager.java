@@ -237,13 +237,13 @@ public class FileManager {
         if(encodingType.equals("text")){
             docIdsReader = new RandomAccessTextReader("Data/Output/DocIds/docIds.txt");
             freqReader = new RandomAccessTextReader("Data/Output/Frequencies/freq.txt");
-            documentIndexReader = new RandomAccessTextReader("Data/Output/DocumentIndex/documentIndex.txt");
+            documentIndexReader = new TextReader("Data/Output/DocumentIndex/documentIndex.txt");
         }
         else{
             Compressor compressor = new VariableByteCode();
             docIdsReader = new RandomAccessByteReader("Data/Output/DocIds/docIds.dat", compressor);
             freqReader = new RandomAccessByteReader("Data/Output/Frequencies/freq.dat", compressor);
-            documentIndexReader = new RandomAccessByteReader("Data/Output/DocumentIndex/documentIndex.dat", compressor);
+            documentIndexReader = new ByteReader("Data/Output/DocumentIndex/documentIndex.dat", compressor);
         }
     }
 
