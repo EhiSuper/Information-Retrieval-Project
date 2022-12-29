@@ -32,6 +32,14 @@ public class RandomAccessByteReader implements Reader{
     public RandomAccessFile getReader(){
         return randomAccessFile;
     }
+    public void goToOffset(int offset){
+        try{
+            randomAccessFile.seek(offset);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
 
 }
 

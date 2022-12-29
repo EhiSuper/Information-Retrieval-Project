@@ -1,14 +1,10 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing;
 
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.*;
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.Compressor;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.RandomAccessByteReader;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.TextReader;
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.VariableByteCode;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.FileManager;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.RandomAccessFile;
 import java.util.*;
 
 public class HandleIndex {
@@ -42,8 +38,8 @@ public class HandleIndex {
                 offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
                 offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
                 postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
-                fileManager.goToOffset((RandomAccessFile) fileManager.getDocIdsReader().getReader(), offsetDocId);
-                fileManager.goToOffset((RandomAccessFile) fileManager.getFreqReader().getReader(), offsetFreq);
+                fileManager.goToOffset((RandomAccessByteReader) fileManager.getDocIdsReader(), offsetDocId);
+                fileManager.goToOffset((RandomAccessByteReader) fileManager.getFreqReader(), offsetFreq);
                 for (int i = 0; i < postingListLength; i++) {
                     docId = fileManager.readFromFile(fileManager.getDocIdsReader());
                     freq = fileManager.readFromFile(fileManager.getFreqReader());
