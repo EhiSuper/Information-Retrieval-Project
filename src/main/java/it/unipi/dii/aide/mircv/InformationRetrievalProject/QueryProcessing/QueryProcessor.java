@@ -13,19 +13,25 @@ import java.util.HashMap;
 
 public class QueryProcessor {
     private final int k;
+    private String relationType;
     public HandleIndex handleIndex;
     public String scoringFunction;
     public String documentProcessor;
 
-    public QueryProcessor(int nResults, String scoringFunction, String documentProcessor, String encodingType){
+    public TextPreprocessing textPreprocessing;
+
+    public QueryProcessor(int nResults, String scoringFunction, String documentProcessor, String encodingType, String relationType, Boolean stopwordsRemoval, Boolean wordsStemming){
         this.k = nResults;
+        this.relationType = relationType;
         this.scoringFunction = scoringFunction;
         this.documentProcessor = documentProcessor;
         this.handleIndex = new HandleIndex(encodingType);
+
+        this.textPreprocessing = new TextPreprocessing(stopwordsRemoval, wordsStemming);
     }
 
     public BoundedPriorityQueue processQuery(String query){
-        String[] queryTerms = TextPreprocessing.parse(query).split(" "); //Parse the query
+        String[] queryTerms = textPreprocessing.parse(query).split(" "); //Parse the query
 
         HashMap<String, ArrayList<Posting>> postingLists = handleIndex.lookup(queryTerms); //Retrieve candidate postinglists
         for(String term : queryTerms){
@@ -42,7 +48,7 @@ public class QueryProcessor {
 
     public BoundedPriorityQueue scoreDocuments(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists){
         if(documentProcessor.equals("daat")){
-            DAAT daat = new DAAT();
+            DAAT daat = new DAAT(relationType);
             if(scoringFunction.equals("tfidf")) {
                 TFIDF tfidf = new TFIDF(postingLists, queryTerms, handleIndex.getCollectionStatistics().getDocuments());
                 return daat.scoreDocuments(queryTerms, postingLists, tfidf, k);
@@ -51,7 +57,7 @@ public class QueryProcessor {
                 return daat.scoreDocuments(queryTerms, postingLists, bm25, k);
             }
         }else if(documentProcessor.equals("maxscore")){
-            MaxScore maxScore = new MaxScore();
+            MaxScore maxScore = new MaxScore(relationType);
             if(scoringFunction.equals("tfidf")) {
                 TFIDF tfidf = new TFIDF(postingLists, queryTerms, handleIndex.getCollectionStatistics().getDocuments());
                 return maxScore.scoreDocuments(queryTerms, postingLists, tfidf, k);

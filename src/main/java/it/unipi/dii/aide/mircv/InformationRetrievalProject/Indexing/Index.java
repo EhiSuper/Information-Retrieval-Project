@@ -5,6 +5,7 @@ import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.FileManager;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Utils;
+import org.w3c.dom.Text;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -24,12 +25,16 @@ public class Index {
     public CollectionStatistics collectionStatistics;
     public String encodingType;
 
-    public Index(){
+    public TextPreprocessing textPreprocessing;
+
+    public Index(TextPreprocessing textPreprocessing){
         this.invertedIndex = new InvertedIndex();
         this.lexicon = new Lexicon();
         this.documentIndex = new DocumentIndex();
         this.fileManager = new FileManager();
         this.collectionStatistics = new CollectionStatistics(0, 0, 0, 0);
+
+        this.textPreprocessing = textPreprocessing;
     }
 
     public int getDocId() {
@@ -120,7 +125,7 @@ public class Index {
                 try{
                     docNo = Integer.parseInt(columns[0]); //Get docNo
                 }catch (NumberFormatException e){ continue; }
-                String document = TextPreprocessing.parse(columns[1]); //Get document
+                String document = textPreprocessing.parse(columns[1]); //Get document
                 createIndex(document, docNo);
             }
 

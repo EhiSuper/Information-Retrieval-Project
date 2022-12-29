@@ -9,6 +9,11 @@ import java.util.stream.Collectors;
 
 public class MaxScore {
 
+    String relationType;
+    public MaxScore(String relationType){
+        this.relationType = relationType;
+    }
+
     public BoundedPriorityQueue scoreDocuments(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists, ScoringFunction scoringFunction, int k){
         BoundedPriorityQueue scores = new BoundedPriorityQueue(k);
         HashMap<String, Double> termUpperBounds = new HashMap<>();
@@ -41,6 +46,8 @@ public class MaxScore {
 
         while(!notFinished(postingIterators, essentialPostingList)){
             int minDocid = minDocId(postingIterators, essentialPostingList); //Get minimum docID over all posting lists
+
+            boolean conjunctiveLike = true;
             double score = 0.0;
             boolean checkDocUpperBound = false;
             for(int i = termsOrder.length-1; i >= 0; i--){ //Foreach posting list check if the current posting correspond to the minimum docID
@@ -59,9 +66,18 @@ public class MaxScore {
                     if (term_iterator.docid() == minDocid) { //If the current posting has the docID equal to the minimum docID
                         score += term_iterator.score(queryTerms[i]); //Compute the score using the posting score function
                         term_iterator.next(); //Go to the next element of the posting list
+                    }else{
+                        conjunctiveLike = false;
                     }
+                }else{
+                    conjunctiveLike = false;
                 }
             }
+
+            if(relationType.equals("conjunctive") && !conjunctiveLike){
+                continue;
+            }
+
             scores.add(new FinalScore(minDocid,score)); //Add the final score to the priorityQueue
             if(scores.isFull()){
                 threshold = scores.peek().getValue();

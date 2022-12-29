@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DAAT {
+    String relationType;
+    public DAAT(String relationType){
+        this.relationType = relationType;
+    }
 
     public BoundedPriorityQueue scoreDocuments(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists, ScoringFunction scoringFunction, int k){
         BoundedPriorityQueue scores = new BoundedPriorityQueue(k);
@@ -18,6 +22,8 @@ public class DAAT {
 
         while(!notFinished(postingIterators)){
             int minDocid = minDocId(postingIterators); //Get minimum docID over all posting lists
+
+            boolean conjunctiveLike = true;
             double score = 0.0;
             for(int i = 0; i < queryTerms.length; i++){ //Foreach posting list check if the current posting correspond to the minimum docID
                 PostingListIterator term_iterator = postingIterators.get(i);
@@ -25,9 +31,18 @@ public class DAAT {
                     if (term_iterator.docid() == minDocid) { //If the current posting has the docID equal to the minimum docID
                         score += term_iterator.score(queryTerms[i]); //Compute the score using the posting score function
                         term_iterator.next(); //Go to the next element of the posting list
+                    }else{
+                        conjunctiveLike = false;
                     }
+                }else{
+                    conjunctiveLike = false;
                 }
             }
+
+            if(relationType.equals("conjunctive") && !conjunctiveLike){
+                continue;
+            }
+
             scores.add(new FinalScore(minDocid,score)); //Add the final score to the priorityQueue
         }
         return scores; //Return the top K scores
