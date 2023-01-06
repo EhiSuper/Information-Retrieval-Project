@@ -16,7 +16,7 @@ public class Main {
         Boolean stopwordsRemoval = Boolean.valueOf(args[5]); //Stopwords Removal
         Boolean wordsStemming = Boolean.valueOf(args[6]); //Stemming
 
-        QueryProcessor queryProcessor = new QueryProcessor(nResults, scoringFunction, documentProcessor, encodingType, relationType, stopwordsRemoval, wordsStemming);
+        QueryProcessor queryProcessor = new QueryProcessor(nResults, scoringFunction, documentProcessor, encodingType, stopwordsRemoval, wordsStemming);
 
         Scanner sc = new Scanner(System.in);
 

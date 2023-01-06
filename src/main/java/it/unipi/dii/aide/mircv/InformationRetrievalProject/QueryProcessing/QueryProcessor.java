@@ -20,12 +20,12 @@ public class QueryProcessor {
 
     public TextPreprocessing textPreprocessing;
 
-    public QueryProcessor(int nResults, String scoringFunction, String documentProcessor, String encodingType, String relationType, Boolean stopwordsRemoval, Boolean wordsStemming){
+    public QueryProcessor(int nResults, String scoringFunction, String documentProcessor, String relationType, Boolean stopwordsRemoval, Boolean wordsStemming){
         this.k = nResults;
         this.relationType = relationType;
         this.scoringFunction = scoringFunction;
         this.documentProcessor = documentProcessor;
-        this.handleIndex = new HandleIndex(encodingType);
+        this.handleIndex = new HandleIndex();
 
         this.textPreprocessing = new TextPreprocessing(stopwordsRemoval, wordsStemming);
     }

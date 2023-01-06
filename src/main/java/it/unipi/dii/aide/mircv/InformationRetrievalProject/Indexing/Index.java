@@ -24,6 +24,7 @@ public class Index {
     public FileManager fileManager;
     public CollectionStatistics collectionStatistics;
     public String encodingType;
+    public int postingListBlockLength;
 
     public TextPreprocessing textPreprocessing;
 
@@ -35,6 +36,7 @@ public class Index {
         this.collectionStatistics = new CollectionStatistics(0, 0, 0, 0);
 
         this.textPreprocessing = textPreprocessing;
+        this.postingListBlockLength = 10;
     }
 
     public int getDocId() {
@@ -91,6 +93,14 @@ public class Index {
 
     public void setCollectionStatistics(CollectionStatistics collectionStatistics) {
         this.collectionStatistics = collectionStatistics;
+    }
+
+    public int getPostingListBlockLength() {
+        return postingListBlockLength;
+    }
+
+    public void setPostingListBlockLength(int postingListBlockLength) {
+        this.postingListBlockLength = postingListBlockLength;
     }
 
     public String getEncodingType() {
@@ -166,7 +176,7 @@ public class Index {
             counter.put(term, counter.containsKey(term) ? counter.get(term) + 1 : 1);
         }
         for (String term : counter.keySet()) {
-            lexicon.addInformation(term, 0, 0, 0);
+            lexicon.addInformation(term, 0, 0, 0, 0, 0);
             invertedIndex.addPosting(term, docId, counter.get(term));
             collectionStatistics.setPostings(collectionStatistics.getPostings() + 1);
         }
@@ -200,6 +210,7 @@ public class Index {
         String[][] terms = new String[blockCounter][];
         boolean[] scannerToRead = new boolean[blockCounter];
         boolean[] scannerFinished = new boolean[blockCounter];
+        int postingBlockCounter = 0;
         for(int i = 0; i<blockCounter; i++){
             scannerToRead[i] = true;
             scannerFinished[i] = false;
@@ -208,6 +219,9 @@ public class Index {
         int postingListLength;
         int offsetDocIds = 0;
         int offsetFreq = 0;
+        int offsetLastDocIds = 0;
+        int offsetSkipPointers = 0;
+        int docId = 0;
         String minTerm;
 
         fileManager.openScanners(blockCounter, encodingType);
@@ -228,23 +242,38 @@ public class Index {
             if(!continueMerging(scannerFinished)){break;}
             minTerm = minTerm(terms, scannerFinished);
             postingListLength = 0;
-            fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), minTerm + " " + offsetDocIds + " " + offsetFreq + " ");
+            postingBlockCounter = 0;
+            fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), minTerm + " "
+                    + offsetDocIds + " " + offsetFreq + " " + offsetLastDocIds + " " + offsetSkipPointers + " ");
             for(int i = 0; i<blockCounter; i++){
                 if(terms[i][0].equals(minTerm)){
                     scannerToRead[i] = true;
                     localPostingListLength = Integer.parseInt(terms[i][3]);
                     postingListLength += localPostingListLength;
                     for(int j = 0; j<localPostingListLength; j++){
-                        offsetDocIds += fileManager.writeOnFile(fileManager.getMyWriterDocIds(),
-                                fileManager.readFromFile(fileManager.getDocIdsScanners()[i]));
+                        if(postingBlockCounter == 0){
+                            offsetSkipPointers += fileManager.writeOnFile(fileManager.getMyWriterSkipPointers(), offsetDocIds);
+                            offsetSkipPointers += fileManager.writeOnFile(fileManager.getMyWriterSkipPointers(), offsetFreq);
+                        }
 
+                        docId = fileManager.readFromFile(fileManager.getDocIdsScanners()[i]);
+                        offsetDocIds += fileManager.writeOnFile(fileManager.getMyWriterDocIds(), docId);
                         offsetFreq += fileManager.writeOnFile(fileManager.getMyWriterFreq(),
                                 fileManager.readFromFile(fileManager.getFreqScanners()[i]));
+
+                        postingBlockCounter += 1;
+                        if (postingBlockCounter == postingListBlockLength){
+                            offsetLastDocIds += fileManager.writeOnFile(fileManager.getMyWriterLastDocIds(), docId);
+                            postingBlockCounter = 0;
+                        }
                     }
                 }
                 else{
                     scannerToRead[i] = false;
                 }
+            }
+            if(postingBlockCounter != postingListBlockLength){
+                offsetLastDocIds += fileManager.writeOnFile(fileManager.getMyWriterLastDocIds(), docId);
             }
             fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), postingListLength + "\n");
         }

@@ -12,6 +12,8 @@ public class FileManager {
     public Writer myWriterDocIds;
     public Writer myWriterFreq;
     public Writer myWriterDocumentIndex;
+    public Writer myWriterLastDocIds;
+    public Writer myWriterSkipPointers;
 
     Reader[] lexiconScanners;
     Reader[] docIdsScanners;
@@ -23,6 +25,8 @@ public class FileManager {
     Reader freqReader;
     Reader documentIndexReader;
     Reader collectionStatisticsReader;
+    Reader lastDocIdsReader;
+    Reader skipPointersReader;
 
     public Writer getMyWriterLexicon() {
         return myWriterLexicon;
@@ -126,6 +130,38 @@ public class FileManager {
         this.collectionStatisticsReader = collectionStatisticsReader;
     }
 
+    public Writer getMyWriterLastDocIds() {
+        return myWriterLastDocIds;
+    }
+
+    public void setMyWriterLastDocIds(Writer myWriterLastDocIds) {
+        this.myWriterLastDocIds = myWriterLastDocIds;
+    }
+
+    public Writer getMyWriterSkipPointers() {
+        return myWriterSkipPointers;
+    }
+
+    public void setMyWriterSkipPointers(Writer myWriterSkipPointers) {
+        this.myWriterSkipPointers = myWriterSkipPointers;
+    }
+
+    public Reader getLastDocIdsReader() {
+        return lastDocIdsReader;
+    }
+
+    public void setLastDocIdsReader(Reader lastDocIdsReader) {
+        this.lastDocIdsReader = lastDocIdsReader;
+    }
+
+    public Reader getSkipPointersReader() {
+        return skipPointersReader;
+    }
+
+    public void setSkipPointersReader(Reader skipPointersReader) {
+        this.skipPointersReader = skipPointersReader;
+    }
+
     public void openBlockFiles(int blockCounter, String encodingType){
         myWriterLexicon = new TextWriter("Data/Output/Lexicon/lexicon" + blockCounter + ".txt");
         if(encodingType.equals("text")){
@@ -211,12 +247,16 @@ public class FileManager {
             myWriterDocIds = new TextWriter("Data/Output/DocIds/docIds.txt");
             myWriterFreq = new TextWriter("Data/Output/Frequencies/freq.txt");
             myWriterDocumentIndex = new TextWriter("Data/Output/DocumentIndex/documentIndex.txt");
+            myWriterLastDocIds = new TextWriter("Data/Output/Skipping/lastDocIds.txt");
+            myWriterSkipPointers = new TextWriter("Data/Output/Skipping/skipPointers.txt");
         }
         else{
             Compressor compressor = new VariableByteCode();
             myWriterDocIds = new ByteWriter("Data/Output/DocIds/docIds.dat", compressor);
             myWriterFreq = new ByteWriter("Data/Output/Frequencies/freq.dat", compressor);
             myWriterDocumentIndex = new ByteWriter("Data/Output/DocumentIndex/documentIndex.dat", compressor);
+            myWriterLastDocIds = new ByteWriter("Data/Output/Skipping/lastDocIds.dat", compressor);
+            myWriterSkipPointers = new ByteWriter("Data/Output/Skipping/skipPointers.dat", compressor);
         }
     }
 
@@ -225,9 +265,11 @@ public class FileManager {
         myWriterFreq.close();
         myWriterLexicon.close();
         myWriterDocumentIndex.close();
+        myWriterLastDocIds.close();
+        myWriterSkipPointers.close();
     }
 
-    public void openLookupFiles(String encodingType) {
+    public void openLookupFiles() {
         lexiconReader = new TextReader("Data/Output/Lexicon/lexicon.txt");
         collectionStatisticsReader = new TextReader("Data/Output/CollectionStatistics/collectionStatistics.txt");
 
@@ -235,6 +277,8 @@ public class FileManager {
         docIdsReader = new RandomAccessByteReader("Data/Output/DocIds/docIds.dat", compressor);
         freqReader = new RandomAccessByteReader("Data/Output/Frequencies/freq.dat", compressor);
         documentIndexReader = new ByteReader("Data/Output/DocumentIndex/documentIndex.dat", compressor);
+        lastDocIdsReader = new RandomAccessByteReader("Data/Output/Skipping/lastDocIds.dat", compressor);
+        skipPointersReader = new RandomAccessByteReader("Data/Output/Skipping/skipPointers.dat", compressor);
     }
 
     public void closeLookupFiles(){
@@ -243,6 +287,8 @@ public class FileManager {
         freqReader.close();
         documentIndexReader.close();
         collectionStatisticsReader.close();
+        lastDocIdsReader.close();
+        skipPointersReader.close();
     }
 
     public boolean hasNextLine(TextReader reader) {
