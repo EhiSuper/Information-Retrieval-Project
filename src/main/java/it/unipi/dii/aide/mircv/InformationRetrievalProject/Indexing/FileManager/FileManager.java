@@ -6,8 +6,10 @@ import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.
 
 import java.io.*;
 
+//class that manages the interaction with files.
 public class FileManager {
 
+    //writers used to write to blocks during indexing and then for merging.
     public Writer myWriterLexicon;
     public Writer myWriterDocIds;
     public Writer myWriterFreq;
@@ -15,11 +17,13 @@ public class FileManager {
     public Writer myWriterLastDocIds;
     public Writer myWriterSkipPointers;
 
+    //readers used during the merging phase
     Reader[] lexiconScanners;
     Reader[] docIdsScanners;
     Reader[] freqScanners;
     Reader[] documentIndexScanners;
 
+    //readers used during the query processing lookup phase
     Reader lexiconReader;
     Reader docIdsReader;
     Reader freqReader;
@@ -162,6 +166,7 @@ public class FileManager {
         this.skipPointersReader = skipPointersReader;
     }
 
+    //function that opens the right block files during indexing
     public void openBlockFiles(int blockCounter, String encodingType){
         myWriterLexicon = new TextWriter("Data/Output/Lexicon/lexicon" + blockCounter + ".txt");
         if(encodingType.equals("text")){
@@ -177,6 +182,7 @@ public class FileManager {
         }
     }
 
+    //function that closes block files during indexing
     public void closeBlockFiles(){
         myWriterDocIds.close();
         myWriterFreq.close();
@@ -184,26 +190,33 @@ public class FileManager {
         myWriterDocumentIndex.close();
     }
 
+    //function used to write to a file an int. The function accept a writer so it is independent of the encoding type
     public int writeOnFile(Writer writer, int number){
         return writer.write(number);
     }
 
+    //function used to specifically write a string to a text file.
     public void writeLineOnFile(TextWriter writer, String line){
         writer.write(line);
     }
 
+    //function used to read an int from a provided reader.
     public int readFromFile(Reader reader){
         return reader.read();
     }
 
+    //function used to specifically read a text line from a text file.
     public String readLineFromFile(TextReader reader){
         return reader.readLine();
     }
 
+    //function used to skip to a specific offset passed as int of the specified file.
     public void goToOffset(RandomAccessByteReader file, int offset){
         file.goToOffset(offset);
     }
 
+    //function that opens the block scanners during the merging phase.
+    //depending on the encoding used it opens the right files.
     public void openScanners(int blockCounter, String encodingType){
         lexiconScanners = new TextReader[blockCounter];
         for(int i = 0; i<blockCounter; i++){
@@ -232,6 +245,7 @@ public class FileManager {
         }
     }
 
+    //function that closes the scanners used during merging.
     public void closeScanners() {
         for (int i = 0; i<lexiconScanners.length; i++){
             lexiconScanners[i].close();
@@ -241,6 +255,8 @@ public class FileManager {
         }
     }
 
+    //function that opens the final files for the merge phase.
+    //Depending on the encoding it opens the right files.
     public void openMergeFiles(String encodingType){
         myWriterLexicon = new TextWriter("Data/Output/Lexicon/lexicon.txt");
         if(encodingType.equals("text")){
@@ -260,6 +276,7 @@ public class FileManager {
         }
     }
 
+    //function that closes the merge files.
     public void closeMergeFiles(){
         myWriterDocIds.close();
         myWriterFreq.close();
@@ -269,6 +286,7 @@ public class FileManager {
         myWriterSkipPointers.close();
     }
 
+    //function that opens the lookup files for the lookup phase.
     public void openLookupFiles() {
         lexiconReader = new TextReader("Data/Output/Lexicon/lexicon.txt");
         collectionStatisticsReader = new TextReader("Data/Output/CollectionStatistics/collectionStatistics.txt");
@@ -281,6 +299,7 @@ public class FileManager {
         skipPointersReader = new RandomAccessByteReader("Data/Output/Skipping/skipPointers.dat", compressor);
     }
 
+    //function that closes the lookup files.
     public void closeLookupFiles(){
         lexiconReader.close();
         docIdsReader.close();
@@ -291,6 +310,7 @@ public class FileManager {
         skipPointersReader.close();
     }
 
+    //function that checks if a text file has a next line.
     public boolean hasNextLine(TextReader reader) {
         return reader.hasNextLine();
     }

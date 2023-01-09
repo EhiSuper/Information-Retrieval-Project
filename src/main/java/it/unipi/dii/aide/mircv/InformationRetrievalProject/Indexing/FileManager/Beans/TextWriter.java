@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+//class that writes to text files using a BufferedWriter.
 public class TextWriter implements Writer{
 
     public BufferedWriter bufferedWriter;

@@ -4,6 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+//class that reads encoded integers using a buffered input stream and a specific
+//compressor taken as argument.
 public class ByteReader implements Reader{
 
     public BufferedInputStream bufferedInputStream;

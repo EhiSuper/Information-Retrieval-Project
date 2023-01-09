@@ -3,6 +3,7 @@ package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+//class that reads from encoded integers using a RandomAccessFile and a taken compressor
 public class RandomAccessByteReader implements Reader{
 
     public RandomAccessFile randomAccessFile;

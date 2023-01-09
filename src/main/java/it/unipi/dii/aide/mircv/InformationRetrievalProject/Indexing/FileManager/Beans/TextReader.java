@@ -3,6 +3,7 @@ package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager
 import java.io.*;
 import java.util.Scanner;
 
+//class that reads from a text file using a Scanner.
 public class TextReader implements Reader{
     public Scanner scanner;
 

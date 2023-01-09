@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 
+//class that represent the statistics upon the document collection
 public class CollectionStatistics {
 
     public int documents;

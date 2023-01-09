@@ -2,6 +2,7 @@ package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
 
+//main class of the indexing program.
 public class Main {
     public static void main(String[] args) {
 

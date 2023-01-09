@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+//class that writes encoded integers using a taken compressor
 public class ByteWriter implements Writer{
     public BufferedOutputStream bufferedOutputStream;
     public Compressor compressor;

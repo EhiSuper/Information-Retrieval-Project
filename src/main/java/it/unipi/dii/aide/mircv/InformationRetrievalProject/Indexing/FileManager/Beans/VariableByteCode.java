@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
+//class that implements the variable byte code encoding algorithm.
 public class VariableByteCode implements Compressor{
 
+    //function that takes an int and return an encoded integer in the form of a list of integers
     public ArrayList<Integer> encode(int number){
         ArrayList<Integer> numbers = new ArrayList<>();
         ArrayList<Integer> reversed = new ArrayList<>();
@@ -25,6 +27,7 @@ public class VariableByteCode implements Compressor{
         return reversed;
     }
 
+    //function that takes a list of integers and decodes them in the encoded integer
     public int decode(ArrayList<Integer> bytes){
         int n = 0;
         for(Integer number : bytes){
@@ -38,12 +41,13 @@ public class VariableByteCode implements Compressor{
         return n;
     }
 
+    //function that takes a file to read from and return an integer using the decode function
     public int readBytes(BufferedInputStream file){
         ArrayList<Integer> bytes = new ArrayList<>();
         int byteRead;
         int n = 0;
         try{
-            while(true){
+            while(true){ //it reads until it finds the end of the file or an integer that is the end of the code
                 byteRead = file.read();
                 if(byteRead == -1) break;
                 bytes.add(byteRead);
@@ -59,6 +63,7 @@ public class VariableByteCode implements Compressor{
         return n;
     }
 
+    //function that takes a file to read from and return an integer using the decode function
     public int readBytes(RandomAccessFile file){
         ArrayList<Integer> bytes = new ArrayList<>();
         int byteRead;
@@ -78,6 +83,7 @@ public class VariableByteCode implements Compressor{
         return n;
     }
 
+    //function that taken a file and an int write the codification of that integer to that file using the encode function
     public int writeBytes(BufferedOutputStream file, int number){
         ArrayList<Integer> bytes;
         bytes = encode(number);

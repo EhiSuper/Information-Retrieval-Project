@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+//class that represents the document index of the document collection.
 public class DocumentIndex {
 
+    //the document index is an hashmap between docId and document informations.
     public HashMap<Integer, DocumentInformation> documentIndex;
 
     public DocumentIndex(){
@@ -46,10 +48,12 @@ public class DocumentIndex {
         }
     }
 
+    //function that adds a document to the document index.
     public void addDocument(int docId, int docNo, int size ){
         documentIndex.put(docId, new DocumentInformation(docNo, size));
     }
 
+    //function that returns a list of sorted integers representing the docIds of the document index
     public ArrayList<Integer> sortDocumentIndex(){
         ArrayList<Integer> sortedDocIds = new ArrayList<>(documentIndex.keySet());
         Collections.sort(sortedDocIds);

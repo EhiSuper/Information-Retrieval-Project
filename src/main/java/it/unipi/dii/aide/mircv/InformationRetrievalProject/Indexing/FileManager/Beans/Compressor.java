@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
+//interface that a compression class has to implement
 public interface Compressor {
     public ArrayList<Integer> encode(int number);
     public int decode(ArrayList<Integer> bytes);

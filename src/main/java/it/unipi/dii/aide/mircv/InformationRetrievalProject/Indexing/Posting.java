@@ -1,5 +1,7 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 
+//class that represents a posting.
+//A posting is represented as a couple of docId, term frequency.
 public class Posting {
 
     public int docId;

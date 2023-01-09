@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+//class that represents the lexicon of the document collection.
 public class Lexicon {
 
+    //the lexicon is represented as a hashmap  between a term and the posting list information.
     private HashMap<String, PostingListInformation> lexicon = new HashMap<>();
 
     public class PostingListInformation{
@@ -78,6 +80,7 @@ public class Lexicon {
         }
     }
 
+    //function that returns a list of sorted terms taken from the lexicon.
     public ArrayList<String> sortLexicon(){
         ArrayList<String> sortedTerms = new ArrayList<>(lexicon.keySet());
         Collections.sort(sortedTerms);
