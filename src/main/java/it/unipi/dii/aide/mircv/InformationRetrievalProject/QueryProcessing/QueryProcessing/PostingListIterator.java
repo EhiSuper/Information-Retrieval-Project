@@ -45,6 +45,7 @@ public class PostingListIterator implements Iterator<Posting> {
 
     // Returns the next element in the iteration
     public Posting nextGEQ(int docId) {
+
         // Iterate through the remaining postings in the list
         while (hasNext()) {
             Posting posting = PostingList.get(position);

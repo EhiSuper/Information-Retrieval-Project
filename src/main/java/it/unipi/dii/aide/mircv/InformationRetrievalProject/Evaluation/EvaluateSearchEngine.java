@@ -1,18 +1,23 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.Evaluation;
 
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.BoundedPriorityQueue;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.FinalScore;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessor;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+import java.util.Stack;
 
 public class EvaluateSearchEngine {
 
     private File resultFile;
+    private PrintWriter writer;
 
     public EvaluateSearchEngine(){
         try {
@@ -26,42 +31,64 @@ public class EvaluateSearchEngine {
             System.out.println("An error occurred during the creation of the output file.");
             e.printStackTrace();
         }
-    }
 
-
-    public void processCollection(String file) throws IOException, InterruptedException {
-
-        QueryProcessor queryProcessor= new QueryProcessor(10, "tfidf", "daat",  "disjunctive", true, false);
-
-
-        // Open the input and output files
-        BufferedReader br = Files.newBufferedReader(Paths.get(file), StandardCharsets.UTF_8);
-        BufferedWriter bw = new BufferedWriter(new FileWriter(resultFile));
-
-
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-
-        int counter = 0;
-        String line;
-        while ((line = br.readLine()) != null){
-            System.out.println("Processing Query number: " + counter );
-            try{
-                executorService.execute(new QueryEvaluator(line, bw, queryProcessor));
-            }catch (NumberFormatException e) {
-                System.out.println("Not a valid qid");
-            }
-            counter += 1;
+        try{
+            writer = new PrintWriter(resultFile);
+        }catch (FileNotFoundException e){
+            System.out.println("Query result file not founded");
+            e.printStackTrace();
         }
 
-        // Shut down the thread pool
-        executorService.shutdown();
+    }
 
-        // Wait for all tasks to complete
-        executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
-        // Close the input and output files
-        br.close();
-        bw.close();
+    public void processCollection(String file) {
+        try {
+            File myFile = new File(file);
+            Scanner myReader = new Scanner(myFile, StandardCharsets.UTF_8);
+            QueryProcessor queryProcessor= new QueryProcessor(10, "tfidf", "daat", "disjunctive", true, false);
+            int counter = 0;
+            while (myReader.hasNextLine()) {
+                System.out.println("Processing Query number: " + counter );
+                String[] line = myReader.nextLine().split("\t", 2); //Read the line and split it (cause the line is composed by (docNo \t document))
+
+                int qid;
+                try {
+                    qid = Integer.parseInt(line[0]); //Get docNo
+                } catch (NumberFormatException e) {
+                    continue;
+                }
+                String query = TextPreprocessing.parse(line[1]); //Get document
+                processQuery(query, qid, queryProcessor);
+                counter += 1;
+            }
+            myReader.close();
+            writer.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("The specified file is not found. Please try again.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void processQuery(String query, int qid, QueryProcessor queryProcessor){
+        BoundedPriorityQueue results = queryProcessor.processQuery(query);
+        results.printResults();
+
+        PriorityQueue<FinalScore> queue = results.getQueue();
+        Stack<FinalScore> stack = new Stack<>();
+
+        // Iterate through the priority queue and add each element to the stack
+        while (!queue.isEmpty()) {
+            stack.push(queue.poll());
+        }
+
+        int position = 1;
+        while (!stack.isEmpty()) {
+            FinalScore fs = stack.pop();
+            writer.println(qid + " " + "Q0" + " " + fs.getKey() + " " + position + " " +  fs.getValue() + " " + "STANDARD");
+            position+=1;
+        }
     }
 }
-

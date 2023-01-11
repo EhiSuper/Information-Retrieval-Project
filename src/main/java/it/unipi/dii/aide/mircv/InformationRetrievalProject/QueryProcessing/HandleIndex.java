@@ -25,7 +25,7 @@ public class HandleIndex {
         obtainLexicon(lexicon, fileManager);
         obtainCollectionStatistics();
         obtainDocumentIndex();
-        postingListBlockLength = 10;
+        postingListBlockLength = 500;
     }
 
     //function that given a query returns a hashmap between the term and the relative whole posting list.
@@ -60,7 +60,7 @@ public class HandleIndex {
     }
 
     //lookup function that given a query returns a hashmap between the term and the first block on the relative posting list
-    public HashMap<String, ArrayList<Posting>> initialLookUp(String queryTerms){
+    public HashMap<String, ArrayList<Posting>> initialLookUp(String[] queryTerms){
         int offsetDocId;
         int offsetFreq;
         int postingListLength;

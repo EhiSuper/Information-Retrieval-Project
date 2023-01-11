@@ -36,7 +36,7 @@ public class Index {
         this.collectionStatistics = new CollectionStatistics(0, 0, 0, 0);
 
         this.textPreprocessing = textPreprocessing;
-        this.postingListBlockLength = 10;
+        this.postingListBlockLength = 500;
     }
 
     public int getDocId() {
@@ -133,9 +133,9 @@ public class Index {
                 String[] columns = line.split("\t",2); //Read the line and split it (cause the line is composed by (docNo \t document))
 
                 int docNo;
-                try{
-                    docNo = Integer.parseInt(columns[0]); //Get docNo
-                }catch (NumberFormatException e){ continue; }
+                try{ docNo = Integer.parseInt(columns[0]); }catch (NumberFormatException e){continue;}
+                if(columns[1].length() == 0) continue;
+
                 //preprocess the document
                 String document = textPreprocessing.parse(columns[1]); //Get document
                 //elaborate the document

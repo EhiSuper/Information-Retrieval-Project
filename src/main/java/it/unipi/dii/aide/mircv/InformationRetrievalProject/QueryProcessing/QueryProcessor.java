@@ -32,8 +32,14 @@ public class QueryProcessor {
 
     public BoundedPriorityQueue processQuery(String query){
         String[] queryTerms = textPreprocessing.parse(query).split(" "); //Parse the query
+        HashMap<String, ArrayList<Posting>> postingLists;
 
-        HashMap<String, ArrayList<Posting>> postingLists = handleIndex.lookup(queryTerms); //Retrieve candidate postinglists
+        if (documentProcessor.equals("daat")){
+            postingLists = handleIndex.lookup(queryTerms);
+        }else{
+            postingLists = handleIndex.initialLookUp(queryTerms); //Retrieve candidate postinglists
+        }
+
         for(String term : queryTerms){
             System.out.println(term + ": " + postingLists.get(term).size());
         }
