@@ -16,13 +16,15 @@ public class Lexicon {
         public int postingListOffsetLastDocIds;
         public int postingListOffsetSkipPointers;
         public int postingListLength;
+        public int termUpperBound;
 
-        public PostingListInformation(int postingListOffsetDocId, int postingListOffsetFreq, int postingListOffsetLastDocIds, int postingListOffsetSkipPointers, int postingListLength) {
+        public PostingListInformation(int postingListOffsetDocId, int postingListOffsetFreq, int postingListOffsetLastDocIds, int postingListOffsetSkipPointers, int postingListLength, int termUpperBound) {
             this.postingListOffsetDocId = postingListOffsetDocId;
             this.postingListOffsetFreq = postingListOffsetFreq;
             this.postingListOffsetLastDocIds = postingListOffsetLastDocIds;
             this.postingListOffsetSkipPointers = postingListOffsetSkipPointers;
             this.postingListLength = postingListLength;
+            this.termUpperBound = termUpperBound;
         }
 
         public int getPostingListOffsetDocId() {
@@ -65,18 +67,30 @@ public class Lexicon {
             this.postingListLength = postingListLength;
         }
 
+        public int getTermUpperBound() {
+            return termUpperBound;
+        }
+
+        public void setTermUpperBound(int termUpperBound) {
+            this.termUpperBound = termUpperBound;
+        }
+
         @Override
         public String toString() {
-            return postingListOffsetDocId + " " + postingListOffsetFreq + " " + postingListLength;
+            return postingListOffsetDocId + " " + postingListOffsetFreq + " " + postingListOffsetLastDocIds + " "
+                    + postingListOffsetSkipPointers + " " + postingListLength + " " + termUpperBound;
         }
     }
 
     public void setLexicon(HashMap<String, PostingListInformation> lexicon){ this.lexicon = lexicon; }
     public HashMap<String, PostingListInformation> getLexicon(){ return lexicon; }
 
-    public void addInformation(String term, int offsetDocIds, int offsetFreq, int offsetLastDocIds, int offsetSkipPointers, int postingListLength){
+    public void addInformation(String term, int offsetDocIds, int offsetFreq, int offsetLastDocIds, int offsetSkipPointers, int postingListLength, int termUpperBound){
         if(!lexicon.containsKey(term)){
-            lexicon.put(term, new PostingListInformation(offsetDocIds, offsetFreq, offsetLastDocIds, offsetSkipPointers, postingListLength));
+            lexicon.put(term, new PostingListInformation(offsetDocIds, offsetFreq, offsetLastDocIds, offsetSkipPointers, postingListLength, termUpperBound));
+        }
+        else{ //it computes the highest term frequency
+            lexicon.get(term).setTermUpperBound(Math.max(termUpperBound, lexicon.get(term).getTermUpperBound()));
         }
     }
 

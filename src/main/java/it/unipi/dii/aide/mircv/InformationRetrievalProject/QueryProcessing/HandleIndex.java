@@ -193,7 +193,8 @@ public class HandleIndex {
         while (fileManager.hasNextLine((TextReader) fileManager.getLexiconReader())) {
             line = fileManager.readLineFromFile((TextReader) fileManager.getLexiconReader());
             terms = line.split(" ");
-            lexicon.addInformation(terms[0], Integer.parseInt(terms[1]), Integer.parseInt(terms[2]), Integer.parseInt(terms[3]), Integer.parseInt(terms[4]), Integer.parseInt(terms[5]));
+            lexicon.addInformation(terms[0], Integer.parseInt(terms[1]), Integer.parseInt(terms[2]),
+                    Integer.parseInt(terms[3]), Integer.parseInt(terms[4]), Integer.parseInt(terms[5]), Integer.parseInt(terms[6]));
         }
     }
 

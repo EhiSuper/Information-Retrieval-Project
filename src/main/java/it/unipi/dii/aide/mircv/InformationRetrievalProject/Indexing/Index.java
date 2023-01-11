@@ -184,7 +184,8 @@ public class Index {
         }
         // update the index information for every term.
         for (String term : counter.keySet()) {
-            lexicon.addInformation(term, 0, 0, 0, 0, 0);
+            lexicon.addInformation(term, 0, 0, 0,
+                    0, 0, counter.get(term));
             invertedIndex.addPosting(term, docId, counter.get(term));
             collectionStatistics.setPostings(collectionStatistics.getPostings() + 1);
         }
@@ -268,7 +269,7 @@ public class Index {
                 if(terms[i][0].equals(minTerm)){
                     scannerToRead[i] = true; //we are using the information so the next time we need to read new information.
                     //obtain the posting list length of the current block
-                    localPostingListLength = Integer.parseInt(terms[i][3]);
+                    localPostingListLength = Integer.parseInt(terms[i][5]);
                     //update the global posting list length
                     postingListLength += localPostingListLength;
                     for(int j = 0; j<localPostingListLength; j++){
@@ -303,8 +304,9 @@ public class Index {
             if(postingBlockCounter != postingListBlockLength){
                 offsetLastDocIds += fileManager.writeOnFile(fileManager.getMyWriterLastDocIds(), docId);
             }
-            //we conclude the lexicon merging adding the global posting list length information.
-            fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), postingListLength + "\n");
+            //we conclude the lexicon merging adding the global posting list length and the term upper bound information.
+            fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), postingListLength + " "
+                    + ((float) Integer.parseInt(terms[0][6])/postingListLength) + "\n");
         }
         fileManager.closeMergeFiles();
         fileManager.closeScanners();
