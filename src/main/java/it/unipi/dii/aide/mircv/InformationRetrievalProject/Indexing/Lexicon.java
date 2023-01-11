@@ -16,9 +16,9 @@ public class Lexicon {
         public int postingListOffsetLastDocIds;
         public int postingListOffsetSkipPointers;
         public int postingListLength;
-        public int termUpperBound;
+        public float termUpperBound;
 
-        public PostingListInformation(int postingListOffsetDocId, int postingListOffsetFreq, int postingListOffsetLastDocIds, int postingListOffsetSkipPointers, int postingListLength, int termUpperBound) {
+        public PostingListInformation(int postingListOffsetDocId, int postingListOffsetFreq, int postingListOffsetLastDocIds, int postingListOffsetSkipPointers, int postingListLength, float termUpperBound) {
             this.postingListOffsetDocId = postingListOffsetDocId;
             this.postingListOffsetFreq = postingListOffsetFreq;
             this.postingListOffsetLastDocIds = postingListOffsetLastDocIds;
@@ -67,11 +67,11 @@ public class Lexicon {
             this.postingListLength = postingListLength;
         }
 
-        public int getTermUpperBound() {
+        public float getTermUpperBound() {
             return termUpperBound;
         }
 
-        public void setTermUpperBound(int termUpperBound) {
+        public void setTermUpperBound(float termUpperBound) {
             this.termUpperBound = termUpperBound;
         }
 
@@ -85,7 +85,7 @@ public class Lexicon {
     public void setLexicon(HashMap<String, PostingListInformation> lexicon){ this.lexicon = lexicon; }
     public HashMap<String, PostingListInformation> getLexicon(){ return lexicon; }
 
-    public void addInformation(String term, int offsetDocIds, int offsetFreq, int offsetLastDocIds, int offsetSkipPointers, int postingListLength, int termUpperBound){
+    public void addInformation(String term, int offsetDocIds, int offsetFreq, int offsetLastDocIds, int offsetSkipPointers, int postingListLength, float termUpperBound){
         if(!lexicon.containsKey(term)){
             lexicon.put(term, new PostingListInformation(offsetDocIds, offsetFreq, offsetLastDocIds, offsetSkipPointers, postingListLength, termUpperBound));
         }

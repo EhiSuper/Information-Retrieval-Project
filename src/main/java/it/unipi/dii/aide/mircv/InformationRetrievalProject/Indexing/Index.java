@@ -306,7 +306,7 @@ public class Index {
             }
             //we conclude the lexicon merging adding the global posting list length and the term upper bound information.
             fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), postingListLength + " "
-                    + ((float) Integer.parseInt(terms[0][6])/postingListLength) + "\n");
+                    + (Float.parseFloat(terms[0][6])/postingListLength) + "\n");
         }
         fileManager.closeMergeFiles();
         fileManager.closeScanners();
