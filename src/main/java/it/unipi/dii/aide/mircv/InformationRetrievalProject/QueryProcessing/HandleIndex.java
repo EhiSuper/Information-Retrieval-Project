@@ -1,7 +1,7 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing;
 
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.*;
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.RandomAccessByteReader;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.ByteReader;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.Beans.TextReader;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager.FileManager;
 
@@ -38,15 +38,13 @@ public class HandleIndex {
         HashMap<String, ArrayList<Posting>> postingLists = new HashMap<>();
         Set<String> queryTermsSet = new HashSet<>(List.of(queryTerms));
         for(String term : queryTermsSet){
-            fileManager.changeReaderTypeToRandomAccess();
             try {
                 //it gets the offset information from the lexicon to read in the docIds and freq files.
                 offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
                 offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
                 postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
-                fileManager.goToOffset((RandomAccessByteReader) fileManager.getDocIdsReader(), offsetDocId);
-                fileManager.goToOffset((RandomAccessByteReader) fileManager.getFreqReader(), offsetFreq);
-                fileManager.changeReaderTypeToByteReader();
+                fileManager.goToOffset((ByteReader) fileManager.getDocIdsReader(), offsetDocId);
+                fileManager.goToOffset((ByteReader) fileManager.getFreqReader(), offsetFreq);
                 for (int i = 0; i < postingListLength; i++) {
                     //for the length of the posting list it reads docId and frequency from the relative files
                     //and adds a posting to the relative posting list.
@@ -72,15 +70,13 @@ public class HandleIndex {
         HashMap<String, ArrayList<Posting>> postingLists = new HashMap<>();
         Set<String> queryTermsSet = new HashSet<>(List.of(queryTerms));
         for(String term : queryTermsSet){
-            fileManager.changeReaderTypeToRandomAccess();
             try {
                 //it gets the offset information from the lexicon to read in the docIds and freq files.
                 offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
                 offsetFreq = lexicon.getLexicon().get(term).getPostingListOffsetFreq();
                 postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
-                fileManager.goToOffset((RandomAccessByteReader) fileManager.getDocIdsReader(), offsetDocId);
-                fileManager.goToOffset((RandomAccessByteReader) fileManager.getFreqReader(), offsetFreq);
-                fileManager.changeReaderTypeToByteReader();
+                fileManager.goToOffset((ByteReader) fileManager.getDocIdsReader(), offsetDocId);
+                fileManager.goToOffset((ByteReader) fileManager.getFreqReader(), offsetFreq);
                 postingToRead = Math.min(postingListLength, postingListBlockLength);
                 for (int i = 0; i < postingToRead; i++) {
                     //for the number of posting to read it reads docId and frequency from the relative files
@@ -109,9 +105,8 @@ public class HandleIndex {
         searchBlock(skipPointers, term, docId); //search the block to read.
         //if a posting with a docId greater or equal to the one passed as argument doesn't exist the returned hash map is empty.
         if(skipPointers[3] == 0) return postingLists;
-        fileManager.goToOffset((RandomAccessByteReader) fileManager.getDocIdsReader(), skipPointers[0]);
-        fileManager.goToOffset((RandomAccessByteReader) fileManager.getFreqReader(), skipPointers[1]);
-        fileManager.changeReaderTypeToByteReader();
+        fileManager.goToOffset((ByteReader) fileManager.getDocIdsReader(), skipPointers[0]);
+        fileManager.goToOffset((ByteReader) fileManager.getFreqReader(), skipPointers[1]);
         postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
         //skiPointers[2] == 0 if the docId is not contained in the last block of the posting list, 1 otherwise.
         if(skipPointers[2] == 0){
@@ -145,8 +140,8 @@ public class HandleIndex {
         int blockNumber = (lexicon.getLexicon().get(term).getPostingListLength() / postingListBlockLength) + 1;
         offsetLastDocIds = lexicon.getLexicon().get(term).getPostingListOffsetLastDocIds();
         offsetSkipPointers = lexicon.getLexicon().get(term).getPostingListOffsetSkipPointers();
-        fileManager.goToOffset((RandomAccessByteReader) fileManager.getLastDocIdsReader(), offsetLastDocIds);
-        fileManager.goToOffset((RandomAccessByteReader) fileManager.getSkipPointersReader(), offsetSkipPointers);
+        fileManager.goToOffset((ByteReader) fileManager.getLastDocIdsReader(), offsetLastDocIds);
+        fileManager.goToOffset((ByteReader) fileManager.getSkipPointersReader(), offsetSkipPointers);
         for(int i = 0; i<blockNumber; i++){
             //for the number of blocks it reads and add to the relative array the posting list block information.
             docIds.add(fileManager.readFromFile(fileManager.getLastDocIdsReader()));

@@ -211,7 +211,7 @@ public class FileManager {
     }
 
     //function used to skip to a specific offset passed as int of the specified file.
-    public void goToOffset(RandomAccessByteReader file, int offset){
+    public void goToOffset(ByteReader file, int offset){
         file.goToOffset(offset);
     }
 
@@ -292,11 +292,11 @@ public class FileManager {
         collectionStatisticsReader = new TextReader("Data/Output/CollectionStatistics/collectionStatistics.txt");
 
         Compressor compressor = new VariableByteCode();
-        docIdsReader = new RandomAccessByteReader("Data/Output/DocIds/docIds.dat", compressor);
-        freqReader = new RandomAccessByteReader("Data/Output/Frequencies/freq.dat", compressor);
+        docIdsReader = new ByteReader("Data/Output/DocIds/docIds.dat", compressor);
+        freqReader = new ByteReader("Data/Output/Frequencies/freq.dat", compressor);
         documentIndexReader = new ByteReader("Data/Output/DocumentIndex/documentIndex.dat", compressor);
-        lastDocIdsReader = new RandomAccessByteReader("Data/Output/Skipping/lastDocIds.dat", compressor);
-        skipPointersReader = new RandomAccessByteReader("Data/Output/Skipping/skipPointers.dat", compressor);
+        lastDocIdsReader = new ByteReader("Data/Output/Skipping/lastDocIds.dat", compressor);
+        skipPointersReader = new ByteReader("Data/Output/Skipping/skipPointers.dat", compressor);
     }
 
     //function that closes the lookup files.
@@ -313,17 +313,5 @@ public class FileManager {
     //function that checks if a text file has a next line.
     public boolean hasNextLine(TextReader reader) {
         return reader.hasNextLine();
-    }
-
-    public void changeReaderTypeToByteReader(){
-        Compressor compressor = new VariableByteCode();
-        docIdsReader = new ByteReader("Data/Output/DocIds/docIds.dat", compressor);
-        freqReader = new ByteReader("Data/Output/Frequencies/freq.dat", compressor);
-    }
-
-    public void changeReaderTypeToRandomAccess(){
-        Compressor compressor = new VariableByteCode();
-        docIdsReader = new RandomAccessByteReader("Data/Output/DocIds/docIds.dat", compressor);
-        freqReader = new RandomAccessByteReader("Data/Output/Frequencies/freq.dat", compressor);
     }
 }

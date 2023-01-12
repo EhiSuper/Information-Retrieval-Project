@@ -36,4 +36,12 @@ public class ByteReader implements Reader{
     public Object getReader() {
         return bufferedInputStream;
     }
+
+    public void goToOffset(int offset) {
+        try{
+            bufferedInputStream.skip(offset);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 }
