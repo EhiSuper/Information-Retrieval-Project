@@ -314,4 +314,16 @@ public class FileManager {
     public boolean hasNextLine(TextReader reader) {
         return reader.hasNextLine();
     }
+
+    public void changeReaderTypeToByteReader(){
+        Compressor compressor = new VariableByteCode();
+        docIdsReader = new ByteReader("Data/Output/DocIds/docIds.dat", compressor);
+        freqReader = new ByteReader("Data/Output/Frequencies/freq.dat", compressor);
+    }
+
+    public void changeReaderTypeToRandomAccess(){
+        Compressor compressor = new VariableByteCode();
+        docIdsReader = new RandomAccessByteReader("Data/Output/DocIds/docIds.dat", compressor);
+        freqReader = new RandomAccessByteReader("Data/Output/Frequencies/freq.dat", compressor);
+    }
 }

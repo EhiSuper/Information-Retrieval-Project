@@ -38,6 +38,7 @@ public class HandleIndex {
         HashMap<String, ArrayList<Posting>> postingLists = new HashMap<>();
         Set<String> queryTermsSet = new HashSet<>(List.of(queryTerms));
         for(String term : queryTermsSet){
+            fileManager.changeReaderTypeToRandomAccess();
             try {
                 //it gets the offset information from the lexicon to read in the docIds and freq files.
                 offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
@@ -45,6 +46,7 @@ public class HandleIndex {
                 postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
                 fileManager.goToOffset((RandomAccessByteReader) fileManager.getDocIdsReader(), offsetDocId);
                 fileManager.goToOffset((RandomAccessByteReader) fileManager.getFreqReader(), offsetFreq);
+                fileManager.changeReaderTypeToByteReader();
                 for (int i = 0; i < postingListLength; i++) {
                     //for the length of the posting list it reads docId and frequency from the relative files
                     //and adds a posting to the relative posting list.
@@ -70,6 +72,7 @@ public class HandleIndex {
         HashMap<String, ArrayList<Posting>> postingLists = new HashMap<>();
         Set<String> queryTermsSet = new HashSet<>(List.of(queryTerms));
         for(String term : queryTermsSet){
+            fileManager.changeReaderTypeToRandomAccess();
             try {
                 //it gets the offset information from the lexicon to read in the docIds and freq files.
                 offsetDocId = lexicon.getLexicon().get(term).getPostingListOffsetDocId();
@@ -77,6 +80,7 @@ public class HandleIndex {
                 postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
                 fileManager.goToOffset((RandomAccessByteReader) fileManager.getDocIdsReader(), offsetDocId);
                 fileManager.goToOffset((RandomAccessByteReader) fileManager.getFreqReader(), offsetFreq);
+                fileManager.changeReaderTypeToByteReader();
                 postingToRead = Math.min(postingListLength, postingListBlockLength);
                 for (int i = 0; i < postingToRead; i++) {
                     //for the number of posting to read it reads docId and frequency from the relative files
@@ -107,6 +111,7 @@ public class HandleIndex {
         if(skipPointers[3] == 0) return postingLists;
         fileManager.goToOffset((RandomAccessByteReader) fileManager.getDocIdsReader(), skipPointers[0]);
         fileManager.goToOffset((RandomAccessByteReader) fileManager.getFreqReader(), skipPointers[1]);
+        fileManager.changeReaderTypeToByteReader();
         postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
         //skiPointers[2] == 0 if the docId is not contained in the last block of the posting list, 1 otherwise.
         if(skipPointers[2] == 0){
