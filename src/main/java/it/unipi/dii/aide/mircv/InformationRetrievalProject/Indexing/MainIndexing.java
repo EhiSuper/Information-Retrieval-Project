@@ -3,7 +3,7 @@ package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
 
 //main class of the indexing program.
-public class Main {
+public class MainIndexing {
     public static void main(String[] args) {
 
         System.out.println("Welcome");

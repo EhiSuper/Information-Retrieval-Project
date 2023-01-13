@@ -10,6 +10,5 @@ public interface Compressor {
     public ArrayList<Integer> encode(int number);
     public int decode(ArrayList<Integer> bytes);
     public int readBytes(BufferedInputStream file);
-    public int readBytes(RandomAccessFile file);
     public int writeBytes(BufferedOutputStream file, int number);
 }
