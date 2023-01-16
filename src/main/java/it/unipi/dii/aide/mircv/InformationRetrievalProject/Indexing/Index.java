@@ -234,6 +234,7 @@ public class Index {
         int offsetLastDocIds = 0;
         int offsetSkipPointers = 0;
         int docId = 0;
+        float termUpperBound;
         String minTerm;
 
         fileManager.openScanners(blockCounter, encodingType); //open the scanners of the block files
@@ -305,8 +306,9 @@ public class Index {
                 offsetLastDocIds += fileManager.writeOnFile(fileManager.getMyWriterLastDocIds(), docId);
             }
             //we conclude the lexicon merging adding the global posting list length and the term upper bound information.
+            termUpperBound = (float) ((1+Math.log(Float.parseFloat(terms[0][6]))) * Math.log(collectionStatistics.getDocuments()/postingListLength));
             fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), postingListLength + " "
-                    + (Float.parseFloat(terms[0][6])/postingListLength) + "\n");
+                    + termUpperBound + "\n");
         }
         fileManager.closeMergeFiles();
         fileManager.closeScanners();

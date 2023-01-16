@@ -241,4 +241,69 @@ public class HandleIndex {
     public void setLexicon(Lexicon lexicon) {
         this.lexicon = lexicon;
     }
+
+    public HashMap<String, ArrayList<Posting>> loadNextBlock(String term, int docId){
+        HashMap<String, ArrayList<Posting>> postingLists = new HashMap<>();
+        int[] skipPointers = new int[3];
+        int postingListLength;
+        int postingToRead;
+        int numberOfBlocks;
+        int newFreq;
+        int newDocId;
+        searchNextBlock(skipPointers, term, docId);
+        if (skipPointers[0] == 0) return postingLists;
+        fileManager.goToOffset((RandomByteReader) fileManager.getDocIdsReader(), skipPointers[0]);
+        fileManager.goToOffset((RandomByteReader) fileManager.getFreqReader(), skipPointers[1]);
+        postingListLength = lexicon.getLexicon().get(term).getPostingListLength();
+        //skiPointers[2] == 0 if the docId is not contained in the last block of the posting list, 1 otherwise.
+        if(skipPointers[2] == 0){
+            postingToRead = Math.min(postingListLength, postingListBlockLength);
+        }
+        else {
+            //if the posting containing the docId is the last block of the posting list it computes the right
+            //length to read.
+            numberOfBlocks = (lexicon.getLexicon().get(term).getPostingListLength() / postingListBlockLength) + 1;
+            postingToRead = postingListLength - (numberOfBlocks - 1) * postingListBlockLength;
+        }
+        for(int i = 0; i<postingToRead; i++){
+            //for the number of posting to read it reads docId and frequency from the relative files
+            //and adds a posting to the relative posting list.
+            newDocId = fileManager.readFromFile(fileManager.getDocIdsReader());
+            newFreq = fileManager.readFromFile(fileManager.getFreqReader());
+            addPosting(postingLists, term, newDocId, newFreq);
+        }
+        return postingLists;
+    }
+
+    //function to search the skipPointers for the next posting list block
+    public void searchNextBlock(int[] skipPointers, String term, int docId){
+        ArrayList<Integer> pointersDocIds = new ArrayList<>();
+        ArrayList<Integer> pointerFreq = new ArrayList<>();
+        ArrayList<Integer> docIds = new ArrayList<>();
+        int offsetLastDocIds;
+        int offsetSkipPointers;
+        //it gets the number of blocks of the term's posting list
+        int blockNumber = (lexicon.getLexicon().get(term).getPostingListLength() / postingListBlockLength) + 1;
+        offsetLastDocIds = lexicon.getLexicon().get(term).getPostingListOffsetLastDocIds();
+        offsetSkipPointers = lexicon.getLexicon().get(term).getPostingListOffsetSkipPointers();
+        fileManager.goToOffset((RandomByteReader) fileManager.getLastDocIdsReader(), offsetLastDocIds);
+        fileManager.goToOffset((RandomByteReader) fileManager.getSkipPointersReader(), offsetSkipPointers);
+        for(int i = 0; i<blockNumber; i++){
+            //for the number of blocks it reads and add to the relative array the posting list block information.
+            docIds.add(fileManager.readFromFile(fileManager.getLastDocIdsReader()));
+            pointersDocIds.add(fileManager.readFromFile(fileManager.getSkipPointersReader()));
+            pointerFreq.add(fileManager.readFromFile(fileManager.getSkipPointersReader()));
+        }
+
+        for(int i = 0; i<docIds.size(); i++){
+            if (docId == docIds.get(i)){
+                //if the docId passed belongs to the last block it returns 0 0 as skipPointers
+                if (i == (docIds.size() - 1)) return;
+                //if the next block is the last block
+                if (i == (docIds.size() - 2)) skipPointers[2] = 1;
+                skipPointers[0] = pointersDocIds.get(i+1);
+                skipPointers[1] = pointerFreq.get(i+1);
+            }
+        }
+    }
 }
