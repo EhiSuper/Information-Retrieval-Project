@@ -211,7 +211,7 @@ public class FileManager {
     }
 
     //function used to skip to a specific offset passed as int of the specified file.
-    public void goToOffset(ByteReader file, int offset){
+    public void goToOffset(RandomByteReader file, int offset){
         file.goToOffset(offset);
     }
 
@@ -288,26 +288,32 @@ public class FileManager {
 
     //function that opens the lookup files for the lookup phase.
     public void openLookupFiles() {
-        lexiconReader = new TextReader("Data/Output/Lexicon/lexicon.txt");
-        collectionStatisticsReader = new TextReader("Data/Output/CollectionStatistics/collectionStatistics.txt");
-
         Compressor compressor = new VariableByteCode();
-        docIdsReader = new ByteReader("Data/Output/DocIds/docIds.dat", compressor);
-        freqReader = new ByteReader("Data/Output/Frequencies/freq.dat", compressor);
-        documentIndexReader = new ByteReader("Data/Output/DocumentIndex/documentIndex.dat", compressor);
-        lastDocIdsReader = new ByteReader("Data/Output/Skipping/lastDocIds.dat", compressor);
-        skipPointersReader = new ByteReader("Data/Output/Skipping/skipPointers.dat", compressor);
+        docIdsReader = new RandomByteReader("Data/Output/DocIds/docIds.dat", compressor);
+        freqReader = new RandomByteReader("Data/Output/Frequencies/freq.dat", compressor);
+        lastDocIdsReader = new RandomByteReader("Data/Output/Skipping/lastDocIds.dat", compressor);
+        skipPointersReader = new RandomByteReader("Data/Output/Skipping/skipPointers.dat", compressor);
     }
 
     //function that closes the lookup files.
     public void closeLookupFiles(){
-        lexiconReader.close();
         docIdsReader.close();
         freqReader.close();
-        documentIndexReader.close();
-        collectionStatisticsReader.close();
         lastDocIdsReader.close();
         skipPointersReader.close();
+    }
+
+    public void openObtainFiles(){
+        Compressor compressor = new VariableByteCode();
+        lexiconReader = new TextReader("Data/Output/Lexicon/lexicon.txt");
+        collectionStatisticsReader = new TextReader("Data/Output/CollectionStatistics/collectionStatistics.txt");
+        documentIndexReader = new ByteReader("Data/Output/DocumentIndex/documentIndex.dat", compressor);
+    }
+
+    public void closeObtainFiles(){
+        lexiconReader.close();
+        collectionStatisticsReader.close();
+        documentIndexReader.close();
     }
 
     //function that checks if a text file has a next line.

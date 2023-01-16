@@ -15,7 +15,6 @@ public class ByteReader implements Reader{
         this.compressor = compressor;
         try{
             this.bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-            this.bufferedInputStream.mark(Integer.MAX_VALUE);
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -36,14 +35,5 @@ public class ByteReader implements Reader{
     @Override
     public Object getReader() {
         return bufferedInputStream;
-    }
-
-    public void goToOffset(int offset) {
-        try{
-            bufferedInputStream.reset();
-            bufferedInputStream.skip(offset);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
     }
 }
