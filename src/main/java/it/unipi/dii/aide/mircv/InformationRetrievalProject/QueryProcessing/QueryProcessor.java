@@ -63,7 +63,7 @@ public class QueryProcessor {
                 return daat.scoreDocuments(queryTerms, postingLists, bm25, k);
             }
         }else if(documentProcessor.equals("maxscore")){
-            MaxScore maxScore = new MaxScore(relationType);
+            MaxScore maxScore = new MaxScore(relationType, handleIndex.getLexicon());
             if(scoringFunction.equals("tfidf")) {
                 TFIDF tfidf = new TFIDF(postingLists, queryTerms, handleIndex.getCollectionStatistics().getDocuments());
                 return maxScore.scoreDocuments(queryTerms, postingLists, tfidf, k);

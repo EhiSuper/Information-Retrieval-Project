@@ -17,7 +17,7 @@ public class DAAT {
         ArrayList<PostingListIterator> postingIterators = new ArrayList<>(); //List of iterators
         //Create an iterator foreach posting list related to each query term (like a pointer)
         for(String term : queryTerms){
-            postingIterators.add(new PostingListIterator(postingLists.get(term), scoringFunction));
+            postingIterators.add(new PostingListIterator(term, postingLists.get(term), scoringFunction));
         }
 
         while(!notFinished(postingIterators)){

@@ -8,6 +8,7 @@ import java.util.Iterator;
 
 //Custom iterator for traversing the posting lists
 public class PostingListIterator implements Iterator<Posting> {
+    private final String term;
     private final ArrayList<Posting> PostingList;
     private final ScoringFunction scoringFunction;
 
@@ -15,10 +16,11 @@ public class PostingListIterator implements Iterator<Posting> {
     private int position;
 
     // Constructor
-    public PostingListIterator(ArrayList<Posting> PostingList, ScoringFunction scoringFunction) {
+    public PostingListIterator(String term, ArrayList<Posting> PostingList, ScoringFunction scoringFunction) {
         this.PostingList = PostingList;
         this.position = 0;
         this.scoringFunction = scoringFunction;
+        this.term = term;
     }
 
     @Override
@@ -35,6 +37,9 @@ public class PostingListIterator implements Iterator<Posting> {
     }
 
     public boolean isFinished(){
+        //Devo controllare che sia l'ultimo blocco chiamando la loadNextBlock che mi ritorna ->
+        //Hashmap con un termine - arrayListPosting
+        //Altrimenti vuota
         return position >= PostingList.size();
     }
 
@@ -45,7 +50,9 @@ public class PostingListIterator implements Iterator<Posting> {
 
     // Returns the next element in the iteration
     public Posting nextGEQ(int docId) {
+        //Controllare se nel blocco attuale ho già il docID (confronto con l'ultimo DOCID dell'arraylist attuale associata all'iterator)
 
+        //se ce l'ho
         // Iterate through the remaining postings in the list
         while (hasNext()) {
             Posting posting = PostingList.get(position);
@@ -55,6 +62,11 @@ public class PostingListIterator implements Iterator<Posting> {
 
             next();
         }
+
+        //Se non ce l'ho -> chiama lookup docID(term, docID) -> Mi ritorna un hashmap -> PS: controlla che ci sia il termine all'interno dell'hashmap ->
+        // chiamo la get sul termine -> ArrayList di postings
+        //Sostituisci postingList con quella nuova e setta position a 0 e poi riesegui da while(hasNext())
+
         return null;
     }
 }

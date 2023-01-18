@@ -1,5 +1,6 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing;
 
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Lexicon;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.ScoringFunction;
 
@@ -10,8 +11,11 @@ import java.util.stream.Collectors;
 public class MaxScore {
 
     String relationType;
-    public MaxScore(String relationType){
+    Lexicon lexicon;
+
+    public MaxScore(String relationType, Lexicon lexicon){
         this.relationType = relationType;
+        this.lexicon = lexicon;
     }
 
     public BoundedPriorityQueue scoreDocuments(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists, ScoringFunction scoringFunction, int k){
@@ -21,8 +25,7 @@ public class MaxScore {
 
         //Compute termUpperBounds
         for(String term : queryTerms){
-            double termUpperBound = computeTermUpperBound(term, postingLists.get(term), scoringFunction);
-            termUpperBounds.put(term,termUpperBound);
+            termUpperBounds.put(term,(double) lexicon.getLexicon().get(term).getTermUpperBound());
         }
 
         postingLists = postingLists.entrySet().stream()
@@ -41,7 +44,7 @@ public class MaxScore {
         ArrayList<PostingListIterator> postingIterators = new ArrayList<>(); //List of iterators
         //Create an iterator foreach posting list related to each query term (like a pointer)
         for(String term : termsOrder){
-            postingIterators.add(new PostingListIterator(postingLists.get(term), scoringFunction));
+            postingIterators.add(new PostingListIterator(term, postingLists.get(term), scoringFunction));
         }
 
         while(!notFinished(postingIterators, essentialPostingList)){

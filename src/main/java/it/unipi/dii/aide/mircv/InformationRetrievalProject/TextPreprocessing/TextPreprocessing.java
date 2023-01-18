@@ -12,8 +12,7 @@ public class TextPreprocessing {
 
     public static String parse(String document){
         document = document.toLowerCase(); //Lowercase text
-        document = document.replaceAll("\\p{Punct}", " "); //Remove punctualization
-        document = document.replaceAll("[^\\x00-\\x7F]", ""); //Remove non-ascii chars
+        document = document.replaceAll("[^a-zA-Z0-9]", " "); //Remove punctualization and non-ascii chars
         document = document.trim().replaceAll(" +"," "); //Remove useless whitespaces (starting-ending and double+)
 
         if(stopwordsRemoval){
