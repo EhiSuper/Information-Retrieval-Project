@@ -235,6 +235,10 @@ public class Index {
         int offsetSkipPointers = 0;
         int docId = 0;
         float termUpperBound;
+        float maxTermFrequency;
+        float localTermFrequency;
+        float tf;
+        float idf;
         String minTerm;
 
         fileManager.openScanners(blockCounter, encodingType); //open the scanners of the block files
@@ -262,6 +266,7 @@ public class Index {
             minTerm = minTerm(terms, scannerFinished);
             postingListLength = 0;
             postingBlockCounter = 0;
+            maxTermFrequency = 0;
             //it writes the term information to the lexicon in text format.
             fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), minTerm + " "
                     + offsetDocIds + " " + offsetFreq + " " + offsetLastDocIds + " " + offsetSkipPointers + " ");
@@ -273,6 +278,8 @@ public class Index {
                     localPostingListLength = Integer.parseInt(terms[i][5]);
                     //update the global posting list length
                     postingListLength += localPostingListLength;
+                    localTermFrequency = Float.parseFloat(terms[i][6]);
+                    if(localTermFrequency > maxTermFrequency) maxTermFrequency = localTermFrequency;
                     for(int j = 0; j<localPostingListLength; j++){
                         //if it is at the start of the posting list block it saves the skip pointers for the block
                         if(postingBlockCounter == 0){
@@ -306,7 +313,9 @@ public class Index {
                 offsetLastDocIds += fileManager.writeOnFile(fileManager.getMyWriterLastDocIds(), docId);
             }
             //we conclude the lexicon merging adding the global posting list length and the term upper bound information.
-            termUpperBound = (float) ((1+Math.log(Float.parseFloat(terms[0][6]))) * Math.log(collectionStatistics.getDocuments()/postingListLength));
+            tf = (float) (1+Math.log(maxTermFrequency));
+            idf = (float) Math.log((double) collectionStatistics.getDocuments()/postingListLength);
+            termUpperBound = tf * idf;
             fileManager.writeLineOnFile((TextWriter) fileManager.getMyWriterLexicon(), postingListLength + " "
                     + termUpperBound + "\n");
         }
