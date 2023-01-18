@@ -16,7 +16,7 @@ public abstract class ScoringFunction {
         this.idf = new HashMap<>();
         for (String term : postingLists.keySet()){
             double df = postingLists.get(term).size();
-            idf.put(term, Math.log(nDocuments/df));
+            idf.put(term, Math.log((double) nDocuments/df));
         }
     }
 
