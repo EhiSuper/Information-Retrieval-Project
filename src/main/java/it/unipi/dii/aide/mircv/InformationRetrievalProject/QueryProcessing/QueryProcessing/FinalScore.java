@@ -1,7 +1,7 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing;
 
 
-//Class used to save the pair (docID, final_score)
+//Class used to save the pair (docNo, final_score)
 public class FinalScore implements Comparable<FinalScore>{
     private int key;
     private double value;

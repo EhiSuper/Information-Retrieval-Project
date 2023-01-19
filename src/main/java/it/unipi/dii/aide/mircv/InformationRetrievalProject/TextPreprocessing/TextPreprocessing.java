@@ -10,7 +10,7 @@ public class TextPreprocessing {
         this.wordsStemming = wordsStemming;
     }
 
-    public static String parse(String document){
+    public String parse(String document){
         document = document.toLowerCase(); //Lowercase text
         document = document.replaceAll("[^a-zA-Z0-9]", " "); //Remove punctualization and non-ascii chars
         document = document.trim().replaceAll(" +"," "); //Remove useless whitespaces (starting-ending and double+)

@@ -1,10 +1,8 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing;
 
-import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Lexicon;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.HandleIndex;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.ScoringFunction;
-
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,27 +12,32 @@ public class MaxScore {
     String relationType;
     HandleIndex handleIndex;
 
+
     public MaxScore(String relationType, HandleIndex handleIndex){
         this.relationType = relationType;
         this.handleIndex = handleIndex;
     }
 
+    //Main function for scoring documents
     public BoundedPriorityQueue scoreDocuments(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists, ScoringFunction scoringFunction, int k){
-        BoundedPriorityQueue scores = new BoundedPriorityQueue(k);
-        HashMap<String, Double> termUpperBounds = new HashMap<>();
+        BoundedPriorityQueue scores = new BoundedPriorityQueue(k); //Initialize a new BoundedPriorityQueue with a capacity of k
+        HashMap<String, Double> termUpperBounds = new HashMap<>(); //Create a HashMap of term upper bounds
         double threshold = 0;
 
-        //Compute termUpperBounds
+        //Find term upper bounds for each query term
         for(String term : queryTerms){
             termUpperBounds.put(term,(double) handleIndex.getLexicon().getLexicon().get(term).getTermUpperBound());
         }
 
+        //Sort the posting lists based on the term upper bounds
         postingLists = postingLists.entrySet().stream()
                 .sorted(Comparator.comparingDouble(e -> termUpperBounds.get(e.getKey())))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
+        //Create an array of terms in the order they appear in the posting lists
         String[] termsOrder = postingLists.keySet().toArray(new String[0]);
 
+        //Create an array of booleans to keep track of which posting lists are "essential" and mark which posting lists are "essential"
         boolean[] essentialPostingList = new boolean[termsOrder.length];
         double counter = 0;
         for(int i = 0; i < termsOrder.length; i++){
@@ -42,46 +45,49 @@ public class MaxScore {
             essentialPostingList[i] = counter >= threshold;
         }
 
-        ArrayList<PostingListIterator> postingIterators = new ArrayList<>(); //List of iterators
-        //Create an iterator foreach posting list related to each query term (like a pointer)
+        //Create an array list of PostingListIterators, one for each query term
+        ArrayList<PostingListIterator> postingIterators = new ArrayList<>();
         for(String term : termsOrder){
             postingIterators.add(new PostingListIterator(term, postingLists.get(term), scoringFunction, handleIndex, "maxscore"));
         }
 
+        //Check if the query is conjunctive and execute it conjunctive in case
         if(relationType.equals("conjunctive")){
             processConjunctive(scores,postingIterators);
             return scores;
         }
 
+        //Iterate through the posting lists until all are finished
         while(!notFinished(postingIterators, essentialPostingList)){
             int minDocid = minDocId(postingIterators, essentialPostingList); //Get minimum docID over all posting lists
-
-
             double score = 0.0;
             boolean checkDocUpperBound = false;
-            for(int i = termsOrder.length-1; i >= 0; i--){ //Foreach posting list check if the current posting correspond to the minimum docID
+            // Loop through the posting lists in reverse order
+            for(int i = termsOrder.length-1; i >= 0; i--){ //Foreach posting list check if the current posting corresponds to the minimum docID
                 PostingListIterator term_iterator = postingIterators.get(i);
+                // If the current posting list is not essential
                 if (!essentialPostingList[i]) {
-                    if(!checkDocUpperBound) {
+                    if(!checkDocUpperBound) { // Check if the document upper bound has been reached
                         if(!checkDocumentUpperBound(score, termUpperBounds, termsOrder,  i, threshold)){
-                            break;
+                            break; // If it has been reached, break out of the loop
                         }else{
                             checkDocUpperBound = true;
                         }
                     }
-                    term_iterator.nextGEQ(minDocid);
+                    term_iterator.nextGEQ(minDocid); // Move the iterator to the next element with a docID greater or equal to the minimum docID
                 }
+                // If the iterator has not reached the end of the posting list
                 if (!term_iterator.isFinished()) {
-                    if (term_iterator.docid() == minDocid) { //If the current posting has the docID equal to the minimum docID
-                        score += term_iterator.score(termsOrder[i]); //Compute the score using the posting score function
-                        term_iterator.next(); //Go to the next element of the posting list
+                    if (term_iterator.docid() == minDocid) {  // If the current posting has the same docID as the minimum docID
+                        score += term_iterator.score(termsOrder[i]); // Add the score for the posting to the total score for the document
+                        term_iterator.next(); // Move the iterator to the next element
                     }
                 }
             }
 
-            scores.add(new FinalScore(minDocid,score)); //Add the final score to the priorityQueue
-            if(scores.isFull()){
-                threshold = scores.peek().getValue();
+            scores.add(new FinalScore(minDocid,score)); // Add the final score for the document to the priority queue
+            if(scores.isFull()){ // If the priority queue is full
+                threshold = scores.peek().getValue();  // Set the threshold to the minimum score in the priority queue
             }
 
             counter = 0;
@@ -109,12 +115,12 @@ public class MaxScore {
         }
 
         PostingListIterator minPostingListIterator = postingListIterators.get(minPostingListIndex);
-        while(!minPostingListIterator.isFinished()){
+        while(!minPostingListIterator.isFinished()){//While there are posting to be processed
             boolean toAdd = true;
             int docId = minPostingListIterator.docid();
             double score = minPostingListIterator.score(minPostingListIterator.getTerm());
             minPostingListIterator.next();
-            for(int i=0;i<postingListIterators.size();i++){
+            for(int i=0;i<postingListIterators.size();i++){ //foreach other posting list call the nextGEQ on the docID of the smallest postingList
                 if(i!=minPostingListIndex){
                     postingListIterators.get(i).nextGEQ(docId);
                     if(docId == postingListIterators.get(i).docid()){
@@ -132,7 +138,7 @@ public class MaxScore {
 
     }
 
-
+    //Check if the remaining upper bound score of the terms is greater than the current threshold
     public boolean checkDocumentUpperBound(double score, HashMap<String, Double> termUpperBounds, String[] termsOrder, int i, double threshold){
         for(int j=i; j>=0; j--){
             score += termUpperBounds.get(termsOrder[j]);
@@ -142,7 +148,7 @@ public class MaxScore {
 
     //Get the minimum docID over all the posting lists
     public int minDocId(ArrayList<PostingListIterator> postingIterators, boolean[] essentialPostingList){
-        int minDocId = Integer.MAX_VALUE; //N° docs in the collection (maximum docID)
+        int minDocId = Integer.MAX_VALUE;
 
         for(int i=essentialPostingList.length-1; i>=0; i--){
             if(essentialPostingList[i]){

@@ -11,9 +11,12 @@ import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.Tex
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ *  QueryProcessor class is responsible for processing a query and returning the top-k results
+ */
 public class QueryProcessor {
     private final int k;
-    private String relationType;
+    private final String relationType;
     public HandleIndex handleIndex;
     public String scoringFunction;
     public String documentProcessor;
@@ -21,15 +24,29 @@ public class QueryProcessor {
     public TextPreprocessing textPreprocessing;
 
     public QueryProcessor(int nResults, String scoringFunction, String documentProcessor, String relationType, Boolean stopwordsRemoval, Boolean wordsStemming){
+        /**
+         * Constructor for QueryProcessor
+         * @param nResults number of results to return
+         * @param scoringFunction scoring function to use
+         * @param documentProcessor document processing method to use
+         * @param relationType type of relation between query terms
+         * @param stopwordsRemoval flag to indicate if stopwords should be removed
+         * @param wordsStemming flag to indicate if words should be stemmed
+         */
         this.k = nResults;
         this.relationType = relationType;
         this.scoringFunction = scoringFunction;
         this.documentProcessor = documentProcessor;
         this.handleIndex = new HandleIndex();
-
         this.textPreprocessing = new TextPreprocessing(stopwordsRemoval, wordsStemming);
     }
 
+
+    /**
+     * processQuery method is used to process a query and return top-k results
+     * @param query the query to process
+     * @return BoundedPriorityQueue of top-k results
+     */
     public BoundedPriorityQueue processQuery(String query){
         String[] queryTerms = textPreprocessing.parse(query).split(" "); //Parse the query
         HashMap<String, ArrayList<Posting>> postingLists;
@@ -43,11 +60,20 @@ public class QueryProcessor {
         return scoreDocuments(queryTerms, postingLists); //Return scores
     }
 
+    /**
+     * exitQueryProcessing method is used to close lookup files
+     */
     public void exitQueryProcessing(){
         handleIndex.getFileManager().closeLookupFiles();
     }
 
 
+    /**
+     * scoreDocuments method is used to score the documents using the specified scoring function
+     * @param queryTerms terms of the query
+     * @param postingLists postinglists of the query terms
+     * @return BoundedPriorityQueue of top-k results
+     */
     public BoundedPriorityQueue scoreDocuments(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists){
         if(documentProcessor.equals("daat")){
             DAAT daat = new DAAT(relationType, handleIndex);

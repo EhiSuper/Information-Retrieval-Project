@@ -16,7 +16,7 @@ public class DAAT {
     }
 
     public BoundedPriorityQueue scoreDocuments(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists, ScoringFunction scoringFunction, int k){
-        BoundedPriorityQueue scores = new BoundedPriorityQueue(k);
+        BoundedPriorityQueue scores = new BoundedPriorityQueue(k); //Initialize a new BoundedPriorityQueue with a capacity of k
 
         ArrayList<PostingListIterator> postingIterators = new ArrayList<>(); //List of iterators
         //Create an iterator foreach posting list related to each query term (like a pointer)
@@ -24,6 +24,7 @@ public class DAAT {
             postingIterators.add(new PostingListIterator(term, postingLists.get(term), scoringFunction, handleIndex, "daat"));
         }
 
+        //Check if the query is conjunctive and execute it conjunctive in case
         if(relationType.equals("conjunctive")){
             processConjunctive(scores,postingIterators);
             return scores;
@@ -60,12 +61,12 @@ public class DAAT {
         }
 
         PostingListIterator minPostingListIterator = postingListIterators.get(minPostingListIndex);
-        while(!minPostingListIterator.isFinished()){
+        while(!minPostingListIterator.isFinished()){ //While there are posting to be processed
             boolean toAdd = true;
             int docId = minPostingListIterator.docid();
             double score = minPostingListIterator.score(minPostingListIterator.getTerm());
             minPostingListIterator.next();
-            for(int i=0;i<postingListIterators.size();i++){
+            for(int i=0;i<postingListIterators.size();i++){ //foreach other posting list call the nextGEQ on the docID of the smallest postingList
                 if(i!=minPostingListIndex){
                     postingListIterators.get(i).nextGEQ(docId);
                     if(docId == postingListIterators.get(i).docid()){
