@@ -126,7 +126,7 @@ public class MaxScore {
                 }
             }
             if(toAdd){
-                scores.add(new FinalScore(docId,score));
+                scores.add(new FinalScore(handleIndex.getDocumentIndex().getDocumentIndex().get(docId).getDocNo(),score));
             }
         }
 

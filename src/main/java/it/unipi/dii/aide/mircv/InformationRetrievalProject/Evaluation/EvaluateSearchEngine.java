@@ -4,6 +4,7 @@ import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Query
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessing.FinalScore;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.QueryProcessor;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.TextPreprocessing.TextPreprocessing;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,7 +39,6 @@ public class EvaluateSearchEngine {
             System.out.println("Query result file not founded");
             e.printStackTrace();
         }
-
     }
 
 
@@ -61,8 +61,7 @@ public class EvaluateSearchEngine {
                 if(line[1].equals("varicose veins spiritual meaning")){
                     System.out.println("ciao");
                 }
-                String query = TextPreprocessing.parse(line[1]); //Get document
-                processQuery(query, qid, queryProcessor);
+                processQuery(line[1], qid, queryProcessor);
                 counter += 1;
             }
             myReader.close();
