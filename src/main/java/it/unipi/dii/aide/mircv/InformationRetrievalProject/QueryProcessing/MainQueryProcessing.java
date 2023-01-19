@@ -4,7 +4,7 @@ import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Query
 
 import java.util.Scanner;
 
-public class Main {
+public class MainQueryProcessing {
     public static void main(String[] args) {
 
         System.out.println("Welcome to Query Processing ");

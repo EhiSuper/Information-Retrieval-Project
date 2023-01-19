@@ -40,10 +40,6 @@ public class QueryProcessor {
             postingLists = handleIndex.initialLookUp(queryTerms); //Retrieve candidate postinglists
         }
 
-        for(String term : queryTerms){
-            System.out.println(term + ": " + postingLists.get(term).size());
-        }
-
         return scoreDocuments(queryTerms, postingLists); //Return scores
     }
 
@@ -54,21 +50,21 @@ public class QueryProcessor {
 
     public BoundedPriorityQueue scoreDocuments(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists){
         if(documentProcessor.equals("daat")){
-            DAAT daat = new DAAT(relationType);
+            DAAT daat = new DAAT(relationType, handleIndex);
             if(scoringFunction.equals("tfidf")) {
-                TFIDF tfidf = new TFIDF(postingLists, queryTerms, handleIndex.getCollectionStatistics().getDocuments());
+                TFIDF tfidf = new TFIDF(postingLists, queryTerms, handleIndex);
                 return daat.scoreDocuments(queryTerms, postingLists, tfidf, k);
             }else if(scoringFunction.equals("bm25")){
-                BM25 bm25 = new BM25(postingLists, queryTerms, handleIndex.getDocumentIndex().getDocumentIndex(), 1.2, 0.75, handleIndex.getCollectionStatistics().getDocuments(), handleIndex.getCollectionStatistics().getAvgDocumentLength());
+                BM25 bm25 = new BM25(postingLists, queryTerms, handleIndex, 1.2, 0.75);
                 return daat.scoreDocuments(queryTerms, postingLists, bm25, k);
             }
         }else if(documentProcessor.equals("maxscore")){
-            MaxScore maxScore = new MaxScore(relationType, handleIndex.getLexicon());
+            MaxScore maxScore = new MaxScore(relationType, handleIndex);
             if(scoringFunction.equals("tfidf")) {
-                TFIDF tfidf = new TFIDF(postingLists, queryTerms, handleIndex.getCollectionStatistics().getDocuments());
+                TFIDF tfidf = new TFIDF(postingLists, queryTerms, handleIndex);
                 return maxScore.scoreDocuments(queryTerms, postingLists, tfidf, k);
             }else if(scoringFunction.equals("bm25")){
-                BM25 bm25 = new BM25(postingLists, queryTerms, handleIndex.getDocumentIndex().getDocumentIndex(), 1.2, 0.75, handleIndex.getCollectionStatistics().getDocuments(), handleIndex.getCollectionStatistics().getAvgDocumentLength());
+                BM25 bm25 = new BM25(postingLists, queryTerms, handleIndex, 1.2, 0.75);
                 return maxScore.scoreDocuments(queryTerms, postingLists, bm25, k);
             }
         }

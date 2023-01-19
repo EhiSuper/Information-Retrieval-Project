@@ -2,6 +2,7 @@ package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scor
 
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.DocumentIndex;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.HandleIndex;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,14 +13,13 @@ public class BM25 extends ScoringFunction{
     private final double b;
     private final double avgDocumentLength;
 
-    public BM25(HashMap<String, ArrayList<Posting>> postingLists, String[] queryTerms, HashMap<Integer, DocumentIndex.DocumentInformation> documentInformations, double k1, double b, long nDocuments, double avgDocumentLength) {
-
-        super(postingLists, queryTerms, nDocuments);
+    public BM25(HashMap<String, ArrayList<Posting>> postingLists, String[] queryTerms, HandleIndex handleIndex, double k1, double b) {
+        super(postingLists, queryTerms, handleIndex);
 
         this.k1 = k1;
         this.b = b;
-        this.avgDocumentLength = avgDocumentLength;
-        this.documentInformations = documentInformations;
+        this.avgDocumentLength = handleIndex.getCollectionStatistics().getAvgDocumentLength();
+        this.documentInformations = handleIndex.getDocumentIndex().getDocumentIndex();
     }
 
     public double documentWeight(String term, Posting posting){

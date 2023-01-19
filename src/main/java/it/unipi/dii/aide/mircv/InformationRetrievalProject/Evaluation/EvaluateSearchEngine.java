@@ -46,7 +46,7 @@ public class EvaluateSearchEngine {
         try {
             File myFile = new File(file);
             Scanner myReader = new Scanner(myFile, StandardCharsets.UTF_8);
-            QueryProcessor queryProcessor= new QueryProcessor(10, "tfidf", "daat", "disjunctive", true, false);
+            QueryProcessor queryProcessor= new QueryProcessor(10, "tfidf", "daat", "disjunctive", true, true);
             int counter = 0;
             while (myReader.hasNextLine()) {
                 System.out.println("Processing Query number: " + counter );
@@ -57,6 +57,9 @@ public class EvaluateSearchEngine {
                     qid = Integer.parseInt(line[0]); //Get docNo
                 } catch (NumberFormatException e) {
                     continue;
+                }
+                if(line[1].equals("varicose veins spiritual meaning")){
+                    System.out.println("ciao");
                 }
                 String query = TextPreprocessing.parse(line[1]); //Get document
                 processQuery(query, qid, queryProcessor);

@@ -2,6 +2,7 @@ package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Quer
 
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Lexicon;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.HandleIndex;
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring.ScoringFunction;
 
 
@@ -11,11 +12,11 @@ import java.util.stream.Collectors;
 public class MaxScore {
 
     String relationType;
-    Lexicon lexicon;
+    HandleIndex handleIndex;
 
-    public MaxScore(String relationType, Lexicon lexicon){
+    public MaxScore(String relationType, HandleIndex handleIndex){
         this.relationType = relationType;
-        this.lexicon = lexicon;
+        this.handleIndex = handleIndex;
     }
 
     public BoundedPriorityQueue scoreDocuments(String[] queryTerms, HashMap<String, ArrayList<Posting>> postingLists, ScoringFunction scoringFunction, int k){
@@ -25,7 +26,7 @@ public class MaxScore {
 
         //Compute termUpperBounds
         for(String term : queryTerms){
-            termUpperBounds.put(term,(double) lexicon.getLexicon().get(term).getTermUpperBound());
+            termUpperBounds.put(term,(double) handleIndex.getLexicon().getLexicon().get(term).getTermUpperBound());
         }
 
         postingLists = postingLists.entrySet().stream()
@@ -44,13 +45,18 @@ public class MaxScore {
         ArrayList<PostingListIterator> postingIterators = new ArrayList<>(); //List of iterators
         //Create an iterator foreach posting list related to each query term (like a pointer)
         for(String term : termsOrder){
-            postingIterators.add(new PostingListIterator(term, postingLists.get(term), scoringFunction));
+            postingIterators.add(new PostingListIterator(term, postingLists.get(term), scoringFunction, handleIndex, "maxscore"));
+        }
+
+        if(relationType.equals("conjunctive")){
+            processConjunctive(scores,postingIterators);
+            return scores;
         }
 
         while(!notFinished(postingIterators, essentialPostingList)){
             int minDocid = minDocId(postingIterators, essentialPostingList); //Get minimum docID over all posting lists
 
-            boolean conjunctiveLike = true;
+
             double score = 0.0;
             boolean checkDocUpperBound = false;
             for(int i = termsOrder.length-1; i >= 0; i--){ //Foreach posting list check if the current posting correspond to the minimum docID
@@ -67,18 +73,10 @@ public class MaxScore {
                 }
                 if (!term_iterator.isFinished()) {
                     if (term_iterator.docid() == minDocid) { //If the current posting has the docID equal to the minimum docID
-                        score += term_iterator.score(queryTerms[i]); //Compute the score using the posting score function
+                        score += term_iterator.score(termsOrder[i]); //Compute the score using the posting score function
                         term_iterator.next(); //Go to the next element of the posting list
-                    }else{
-                        conjunctiveLike = false;
                     }
-                }else{
-                    conjunctiveLike = false;
                 }
-            }
-
-            if(relationType.equals("conjunctive") && !conjunctiveLike){
-                continue;
             }
 
             scores.add(new FinalScore(minDocid,score)); //Add the final score to the priorityQueue
@@ -98,16 +96,42 @@ public class MaxScore {
 
     }
 
-    public double computeTermUpperBound(String term, ArrayList<Posting> postings, ScoringFunction scoringFunction){
-        double termUpperBound = Double.MIN_VALUE;
-        for(Posting posting : postings){
-            double score = scoringFunction.score(term, posting);
-            if(termUpperBound<score){
-                termUpperBound = score;
+
+    public void processConjunctive(BoundedPriorityQueue scores, ArrayList<PostingListIterator> postingListIterators){
+        //Find the smallest postingList
+        int minPostingListIndex = 0;
+        int minPostingListLength = handleIndex.getLexicon().getLexicon().get(postingListIterators.get(0).getTerm()).getPostingListLength();
+        for(int i=1; i<postingListIterators.size(); i++){
+            if(minPostingListLength>handleIndex.getLexicon().getLexicon().get(postingListIterators.get(i).getTerm()).getPostingListLength()){
+                minPostingListIndex = i;
+                minPostingListLength = handleIndex.getLexicon().getLexicon().get(postingListIterators.get(i).getTerm()).getPostingListLength();
             }
         }
-        return termUpperBound;
+
+        PostingListIterator minPostingListIterator = postingListIterators.get(minPostingListIndex);
+        while(!minPostingListIterator.isFinished()){
+            boolean toAdd = true;
+            int docId = minPostingListIterator.docid();
+            double score = minPostingListIterator.score(minPostingListIterator.getTerm());
+            minPostingListIterator.next();
+            for(int i=0;i<postingListIterators.size();i++){
+                if(i!=minPostingListIndex){
+                    postingListIterators.get(i).nextGEQ(docId);
+                    if(docId == postingListIterators.get(i).docid()){
+                        score += postingListIterators.get(i).score(postingListIterators.get(i).getTerm());
+                    }else{
+                        toAdd = false;
+                        break;
+                    }
+                }
+            }
+            if(toAdd){
+                scores.add(new FinalScore(docId,score));
+            }
+        }
+
     }
+
 
     public boolean checkDocumentUpperBound(double score, HashMap<String, Double> termUpperBounds, String[] termsOrder, int i, double threshold){
         for(int j=i; j>=0; j--){

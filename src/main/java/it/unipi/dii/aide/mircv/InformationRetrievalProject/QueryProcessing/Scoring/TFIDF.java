@@ -1,14 +1,15 @@
 package it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.Scoring;
 
 import it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.Posting;
+import it.unipi.dii.aide.mircv.InformationRetrievalProject.QueryProcessing.HandleIndex;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TFIDF extends ScoringFunction{
 
-    public TFIDF(HashMap<String, ArrayList<Posting>> postingLists, String[] queryTerms, long nDocuments){
-        super(postingLists, queryTerms, nDocuments);
+    public TFIDF(HashMap<String, ArrayList<Posting>> postingLists, String[] queryTerms, HandleIndex handleIndex){
+        super(postingLists, queryTerms, handleIndex);
     }
 
     public double documentWeight(String term, Posting posting){
