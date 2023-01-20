@@ -58,9 +58,6 @@ public class EvaluateSearchEngine {
                 } catch (NumberFormatException e) {
                     continue;
                 }
-                if(line[1].equals("varicose veins spiritual meaning")){
-                    System.out.println("ciao");
-                }
                 processQuery(line[1], qid, queryProcessor);
                 counter += 1;
             }

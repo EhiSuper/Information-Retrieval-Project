@@ -16,7 +16,7 @@ public class BoundedPriorityQueue {
     }
 
     public void add(FinalScore score){
-        if(queue.size() == dimension){
+        if(queue.size() == dimension){ //Check if the last element in the priorityQueue is lower then the element that i want to insert
             assert queue.peek() != null;
             if(queue.peek().getValue() < score.getValue()){
                 queue.poll();

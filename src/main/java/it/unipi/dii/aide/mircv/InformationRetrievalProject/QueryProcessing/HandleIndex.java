@@ -90,6 +90,7 @@ public class HandleIndex {
                 }
             }catch (NullPointerException e){
                 postingLists.put(term, new ArrayList<>());
+                lexicon.addInformation(term, 0, 0, 0, 0, 0, 0);
             }
         }
         return postingLists;

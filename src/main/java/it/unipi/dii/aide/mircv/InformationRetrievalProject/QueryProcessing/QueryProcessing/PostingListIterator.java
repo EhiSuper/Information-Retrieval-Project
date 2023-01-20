@@ -18,17 +18,17 @@ public class PostingListIterator implements Iterator<Posting> {
 
     // The current position of the iterator
     private int position;
-    private int globalCounter;
+    private boolean isFinished;
 
     // Constructor
     public PostingListIterator(String term, ArrayList<Posting> PostingList, ScoringFunction scoringFunction, HandleIndex handleIndex, String documentProcessor) {
         this.postingList = PostingList;
         this.position = 0;
-        this.globalCounter = 0;
         this.scoringFunction = scoringFunction;
         this.term = term;
         this.handleIndex = handleIndex;
         this.documentProcessor = documentProcessor;
+        this.isFinished = false;
     }
 
     @Override
@@ -45,17 +45,24 @@ public class PostingListIterator implements Iterator<Posting> {
     }
 
     public boolean isFinished(){
+        if (this.postingList.size() == 0) {
+            return true;
+        }
+        //check if it's the last block or there are other blocks to load and then it's not "really" finished
         if (documentProcessor.equals("maxscore")) {
+            if(this.isFinished) {
+                return true;
+            }
             if (position >= postingList.size()) {
-                if (globalCounter >= this.handleIndex.getLexicon().getLexicon().get(term).postingListLength) {
+                int docId = postingList.get(postingList.size() - 1).getDocId(); //Gets the docID of the last posting to use it to load the nextBlock (using loadNextBlock)
+                HashMap<String, ArrayList<Posting>> newBlock = handleIndex.loadNextBlock(this.term, docId);
+                if(!newBlock.containsKey(term)){
+                    this.isFinished = true;
                     return true;
-                } else {
-                    int docId = postingList.get(postingList.size() - 1).getDocId();
-                    HashMap<String, ArrayList<Posting>> newBlock = handleIndex.loadNextBlock(this.term, docId);
-                    postingList = newBlock.get(term);
-                    position = 0;
-                    return false;
                 }
+                postingList = newBlock.get(term);
+                position = 0;
+                return false;
             }
             return false;
 
@@ -66,17 +73,11 @@ public class PostingListIterator implements Iterator<Posting> {
 
     // Returns the next element in the iteration
     public Posting next() {
-        this.globalCounter++;
         return postingList.get(position++);
     }
 
-    // Returns the next element in the iteration
     public void nextGEQ(int docId) {
-        //Controllare se nel blocco attuale ho già il docID (confronto con l'ultimo DOCID dell'arraylist attuale associata all'iterator)
-        //Se non ce l'ho -> chiama lookup docID(term, docID) -> Mi ritorna un hashmap -> PS: controlla che ci sia il termine all'interno dell'hashmap ->
-        // chiamo la get sul termine -> ArrayList di postings
-        //Sostituisci postingList con quella nuova e setta position a 0 e poi riesegui da while(hasNext())
-
+        //Load another block if the docID searched is not in the currentBlock
         if (docId > postingList.get(postingList.size()-1).getDocId()){
             HashMap<String,ArrayList<Posting>> newBlock =  handleIndex.lookupDocId(this.term, docId);
             if (newBlock.containsKey(term)){

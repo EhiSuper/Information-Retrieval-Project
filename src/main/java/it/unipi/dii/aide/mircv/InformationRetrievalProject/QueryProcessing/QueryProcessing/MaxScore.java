@@ -65,6 +65,7 @@ public class MaxScore {
             // Loop through the posting lists in reverse order
             for(int i = termsOrder.length-1; i >= 0; i--){ //Foreach posting list check if the current posting corresponds to the minimum docID
                 PostingListIterator term_iterator = postingIterators.get(i);
+                if (term_iterator.getPostingList().size() == 0) continue;
                 // If the current posting list is not essential
                 if (!essentialPostingList[i]) {
                     if(!checkDocUpperBound) { // Check if the document upper bound has been reached
@@ -77,7 +78,7 @@ public class MaxScore {
                     term_iterator.nextGEQ(minDocid); // Move the iterator to the next element with a docID greater or equal to the minimum docID
                 }
                 // If the iterator has not reached the end of the posting list
-                if (!term_iterator.isFinished()) {
+                if (term_iterator.hasNext()) {
                     if (term_iterator.docid() == minDocid) {  // If the current posting has the same docID as the minimum docID
                         score += term_iterator.score(termsOrder[i]); // Add the score for the posting to the total score for the document
                         term_iterator.next(); // Move the iterator to the next element
@@ -169,7 +170,7 @@ public class MaxScore {
         boolean finished = true;
         for(int i=essentialPostingList.length-1; i>=0; i--){
             if(essentialPostingList[i]){
-                if(postingIterators.get(i).hasNext()) {
+                if(!postingIterators.get(i).isFinished()) {
                     finished = false;
                     break;
                 }
