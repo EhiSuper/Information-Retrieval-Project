@@ -243,6 +243,7 @@ public class HandleIndex {
         this.lexicon = lexicon;
     }
 
+    //function to load the next block of a posting list.
     public HashMap<String, ArrayList<Posting>> loadNextBlock(String term, int docId){
         HashMap<String, ArrayList<Posting>> postingLists = new HashMap<>();
         int[] skipPointers = new int[3];

@@ -2,6 +2,8 @@ package it.unipi.dii.aide.mircv.InformationRetrievalProject.Indexing.FileManager
 
 import java.io.*;
 
+//class that reads encoded integers using a buffered input stream and a specific
+//compressor taken as argument. It wraps a randomAccessFile with a BufferedInputStream
 public class RandomByteReader implements Reader{
 
     public RandomAccessFile randomAccessFile;
