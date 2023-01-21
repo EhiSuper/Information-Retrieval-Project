@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: it.unipi.dii.aide.mircv.InformationRetrievalProject.Evaluati
+ on.MainQueryEvalutation
+
